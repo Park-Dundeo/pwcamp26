@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026 강동 파워웨이브 여름캠프 — 프로그램팀 대시보드</title>
+<style>
+  :root {
+    --navy: #1a2744;
+    --navy-mid: #243460;
+    --blue: #3b5bdb;
+    --blue-light: #4c6ef5;
+    --sky: #e8eeff;
+    --gold: #f59f00;
+    --gold-light: #fff3bf;
+    --red: #e03131;
+    --red-light: #fff5f5;
+    --green: #2f9e44;
+    --green-light: #ebfbee;
+    --gray: #868e96;
+    --gray-light: #f8f9fa;
+    --border: #dee2e6;
+    --text: #212529;
+    --text-soft: #495057;
+    --radius: 10px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    background: #f0f2f8;
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .site-header {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 60%, #2d4a9e 100%);
+    color: #fff;
+    padding: 28px 32px 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+  }
+  .header-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .header-badge {
+    background: var(--gold);
+    color: var(--navy);
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+  }
+  .header-title { flex: 1; }
+  .header-title h1 { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+  .header-title p { font-size: 13px; opacity: 0.75; margin-top: 2px; }
+  .header-meta { display: flex; gap: 20px; font-size: 13px; opacity: 0.85; flex-wrap: wrap; }
+  .header-meta span { display: flex; align-items: center; gap: 5px; }
+
+  /* ── Overall Progress ── */
+  .progress-banner {
+    background: var(--navy-mid);
+    color: #fff;
+    padding: 14px 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .progress-banner-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .progress-label { font-size: 13px; opacity: 0.8; white-space: nowrap; }
+  .progress-bar-wrap { flex: 1; min-width: 200px; background: rgba(255,255,255,0.15); border-radius: 20px; height: 10px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold), #ffc078); border-radius: 20px; transition: width 0.5s ease; }
+  .progress-pct { font-size: 16px; font-weight: 800; color: var(--gold); white-space: nowrap; }
+  .last-updated { font-size: 11px; opacity: 0.6; white-space: nowrap; }
+
+  /* ── Nav Tabs ── */
+  .tab-nav {
+    background: #fff;
+    border-bottom: 2px solid var(--border);
+    position: sticky;
+    top: 88px;
+    z-index: 90;
+  }
+  .tab-nav-inner { max-width: 1100px; margin: 0 auto; display: flex; overflow-x: auto; }
+  .tab-btn {
+    padding: 14px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray);
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+  .tab-btn:hover { color: var(--blue); background: var(--sky); }
+  .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+  .tab-btn .tab-icon { margin-right: 6px; }
+
+  /* ── Main ── */
+  .main { max-width: 1100px; margin: 0 auto; padding: 28px 20px 60px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── Cards ── */
+  .card {
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .card-header h2 { font-size: 16px; font-weight: 700; flex: 1; }
+  .card-header h3 { font-size: 15px; font-weight: 700; flex: 1; }
+  .card-body { padding: 20px; }
+  .card-sub { font-size: 12px; color: var(--gray); font-weight: 400; }
+
+  /* ── Section grid ── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  /* ── Status badges ── */
+  .badge {
+    display: inline-block;
+    padding: 2px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .badge-pending  { background: #f1f3f5; color: var(--gray); }
+  .badge-progress { background: var(--gold-light); color: #b7600d; }
+  .badge-done     { background: var(--green-light); color: var(--green); }
+  .badge-hold     { background: var(--red-light); color: var(--red); }
+
+  /* ── Checklist ── */
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f3f5;
+    font-size: 14px;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist li label { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; flex: 1; }
+  .checklist li input[type="checkbox"] {
+    width: 17px; height: 17px;
+    accent-color: var(--blue);
+    flex-shrink: 0;
+    margin-top: 2px;
+    cursor: pointer;
+  }
+  .checklist li .item-text { flex: 1; }
+  .checklist li .item-text.checked { text-decoration: line-through; color: var(--gray); }
+  .checklist li .item-owner {
+    font-size: 12px;
+    color: #fff;
+    background: var(--blue-light);
+    border-radius: 12px;
+    padding: 1px 8px;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+  .checklist li .item-owner:empty { background: #e9ecef; color: var(--gray); }
+  .checklist li .item-owner:empty::before { content: '담당자'; }
+
+  /* ── Gate cards (Day 2) ── */
+  .gate-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
+  .gate-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .gate-card:hover { box-shadow: var(--shadow); }
+  .gate-card-header {
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .gate-num {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .gate-title { font-size: 14px; font-weight: 700; flex: 1; }
+  .gate-card-body { padding: 12px 14px; background: var(--gray-light); }
+  .gate-meta { font-size: 12px; color: var(--text-soft); margin-bottom: 6px; }
+  .gate-meta b { color: var(--text); }
+  .gate-msg { font-size: 12px; color: var(--navy-mid); font-style: italic; border-left: 3px solid var(--blue); padding-left: 8px; margin: 8px 0; }
+  .gate-supplies { font-size: 12px; color: var(--gray); }
+  .gate-card-footer {
+    padding: 10px 14px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .gate-owner-input {
+    font-size: 12px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 3px 8px;
+    flex: 1;
+    min-width: 80px;
+    outline: none;
+    font-family: inherit;
+  }
+  .gate-owner-input:focus { border-color: var(--blue); }
+
+  /* ── Location table ── */
+  .loc-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .loc-table th { background: var(--navy); color: #fff; padding: 10px 12px; text-align: left; font-size: 12px; letter-spacing: 0.5px; }
+  .loc-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .loc-table tr:last-child td { border-bottom: none; }
+  .loc-table tr:hover td { background: var(--sky); }
+  .zone-tag {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    background: var(--sky);
+    color: var(--blue);
+  }
+
+  /* ── Memo area ── */
+  .memo-area {
+    width: 100%;
+    min-height: 100px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 13px;
+    font-family: inherit;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s;
+    line-height: 1.7;
+  }
+  .memo-area:focus { border-color: var(--blue); }
+
+  /* ── Timeline ── */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before { content: ''; position: absolute; left: 8px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+  .tl-item { position: relative; margin-bottom: 20px; }
+  .tl-dot {
+    position: absolute;
+    left: -24px;
+    top: 4px;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    background: #fff;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tl-dot.done { background: var(--green); border-color: var(--green); }
+  .tl-dot.active { background: var(--gold); border-color: var(--gold); }
+  .tl-date { font-size: 11px; color: var(--gray); margin-bottom: 3px; font-weight: 600; letter-spacing: 0.5px; }
+  .tl-content { font-size: 14px; font-weight: 600; }
+  .tl-detail { font-size: 12px; color: var(--text-soft); margin-top: 2px; }
+
+  /* ── Summary boxes ── */
+  .summary-row { display: flex; gap: 14px; margin-bottom: 20px; flex-wrap: wrap; }
+  .summary-box {
+    flex: 1;
+    min-width: 150px;
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 16px 18px;
+    border-top: 4px solid var(--blue);
+  }
+  .summary-box.gold { border-top-color: var(--gold); }
+  .summary-box.green { border-top-color: var(--green); }
+  .summary-box.red { border-top-color: var(--red); }
+  .summary-box .num { font-size: 28px; font-weight: 800; color: var(--navy); line-height: 1; }
+  .summary-box .lbl { font-size: 12px; color: var(--gray); margin-top: 4px; }
+
+  /* ── Update log ── */
+  .update-log { list-style: none; }
+  .update-log li {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f3f5;
+    font-size: 13px;
+  }
+  .update-log li:last-child { border-bottom: none; }
+  .log-date { color: var(--gray); font-size: 12px; white-space: nowrap; }
+  .log-text { flex: 1; }
+
+  /* ── Buttons ── */
+  .btn {
+    padding: 7px 16px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .btn-primary { background: var(--blue); color: #fff; }
+  .btn-primary:hover { background: var(--blue-light); }
+  .btn-ghost { background: var(--gray-light); color: var(--text-soft); border: 1px solid var(--border); }
+  .btn-ghost:hover { background: var(--sky); color: var(--blue); }
+  .btn-sm { padding: 4px 10px; font-size: 12px; }
+
+  /* ── Divider ── */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin: 24px 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* ── Print ── */
+  @media print {
+    .tab-nav, .site-header, .progress-banner { position: static; }
+    .tab-panel { display: block !important; }
+    .btn { display: none; }
+  }
+
+  /* ── Tooltip helper ── */
+  .tip { font-size: 12px; color: var(--gray); margin-top: 6px; }
+  .highlight-box {
+    background: var(--sky);
+    border-left: 4px solid var(--blue);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-bottom: 16px;
+    color: var(--navy-mid);
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="site-header">
+  <div class="header-inner">
+    <span class="header-badge">Program Team</span>
+    <div class="header-title">
+      <h1>2026 강동 파워웨이브 여름캠프</h1>
+      <p>주제: 돌파 / Breakthrough — 프로그램팀 준비 대시보드</p>
+    </div>
+    <div class="header-meta">
+      <span>📍 도봉숲속마을</span>
+      <span>📅 2026.07.17~</span>
+      <span>📖 여호수아 24:15</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ PROGRESS BANNER ═══ -->
+<div class="progress-banner">
+  <div class="progress-banner-inner">
+    <span class="progress-label">전체 준비율</span>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="globalBar" style="width:0%"></div>
+    </div>
+    <span class="progress-pct" id="globalPct">0%</span>
+    <span class="last-updated" id="lastUpdated"></span>
+  </div>
+</div>
+
+<!-- ═══ TABS ═══ -->
+<nav class="tab-nav">
+  <div class="tab-nav-inner">
+    <button class="tab-btn active" onclick="switchTab('overview')"><span class="tab-icon">🗂</span>전체 현황</button>
+    <button class="tab-btn" onclick="switchTab('day1')"><span class="tab-icon">🗺</span>Day1 가나안 정탐</button>
+    <button class="tab-btn" onclick="switchTab('day2')"><span class="tab-icon">🏰</span>Day2 돌파 순례길</button>
+    <button class="tab-btn" onclick="switchTab('checklist')"><span class="tab-icon">✅</span>회의 체크리스트</button>
+    <button class="tab-btn" onclick="switchTab('log')"><span class="tab-icon">📝</span>업데이트 로그</button>
+  </div>
+</nav>
+
+<!-- ═══ MAIN ═══ -->
+<main class="main">
+
+  <!-- ─── TAB: OVERVIEW ─── -->
+  <div class="tab-panel active" id="panel-overview">
+
+    <div class="summary-row">
+      <div class="summary-box">
+        <div class="num" id="sum-total">0</div>
+        <div class="lbl">전체 항목</div>
+      </div>
+      <div class="summary-box green">
+        <div class="num" id="sum-done">0</div>
+        <div class="lbl">완료</div>
+      </div>
+      <div class="summary-box gold">
+        <div class="num" id="sum-remain">0</div>
+        <div class="lbl">남은 항목</div>
+      </div>
+      <div class="summary-box red">
+        <div class="num">12</div>
+        <div class="lbl">D-Day까지 남은 날</div>
+      </div>
+    </div>
+
+    <div class="highlight-box">
+      "정탐은 세상을 보는 시간이고, 정복은 내 안의 장벽을 믿음으로 돌파하는 시간."
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <h2>🗺 전체 흐름</h2>
+        </div>
+        <div class="card-body">
+          <div class="timeline">
+            <div class="tl-item">
+              <div class="tl-dot active"></div>
+              <div class="tl-date">DAY 1 — 오전·오후</div>
+              <div class="tl-content">가나안 정탐</div>
+              <div class="tl-detail">조별 이동 미션 · 키워드: 두려움 돌파</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-date">DAY 2 — 오전 (90분)</div>
+              <div class="tl-content">가나안 정복: 돌파의 순례길</div>
+              <div class="tl-detail">7관문 센터학습 · 키워드: 불가능 돌파</div>
+            </div>
+            <div class="tl-item">
+              <div class="tl-dot"></div>
+              <div class="tl-date">DAY 2 — 폐회</div>
+              <div class="tl-content">폐회예배</div>
+              <div class="tl-detail">여호수아 24:15 · 망설임 → 결단</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h2>📊 영역별 진행률</h2></div>
+        <div class="card-body">
+          <div id="areaProgress"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>📌 팀 메모</h2>
+        <button class="btn btn-ghost btn-sm" onclick="saveMemo('overview-memo')">저장</button>
+      </div>
+      <div class="card-body">
+        <textarea class="memo-area" id="overview-memo" placeholder="전체 공지사항, 팀 메모, 회의 내용 등을 여기에 입력하세요..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── TAB: DAY1 ─── -->
+  <div class="tab-panel" id="panel-day1">
+
+    <div class="highlight-box">
+      여호수아가 정탐꾼을 보내듯, 학생들이 팀별로 서울 역사 현장을 돌며 <b>"하나님의 시선으로 세상 보기"</b>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>📍 정탐 장소 — 최종 6곳</h2>
+        <span class="card-sub">7/17 광화문 집회 변수 → 광화문 제외 | 도봉 동선 → 합정·양화진 제외</span>
+      </div>
+      <div class="card-body" style="overflow-x:auto;">
+        <table class="loc-table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>장소</th>
+              <th>권역</th>
+              <th>암호명</th>
+              <th>정탐 키워드</th>
+              <th>담당 조</th>
+              <th>상태</th>
+            </tr>
+          </thead>
+          <tbody id="loc-table-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header"><h2>📋 조별 미션지 형식</h2></div>
+        <div class="card-body">
+          <ul class="checklist" id="checklist-mission"></ul>
+          <div class="section-title">미션지 예시</div>
+          <div style="background:var(--gray-light); border-radius:8px; padding:14px; font-size:13px; line-height:1.8;">
+            <b>우리가 본 것:</b> 많은 사람이 바쁘게 살아가지만, 각자의 삶 안에 외로움과 두려움이 있어 보였다.<br>
+            <b>우리의 기도:</b> 하나님, 우리가 세상을 판단하기보다 하나님의 마음으로 바라보게 해주세요.
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><h2>🛡 안전 운영 확정 항목</h2></div>
+        <div class="card-body">
+          <ul class="checklist" id="checklist-safety"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>📝 Day1 메모</h2>
+        <button class="btn btn-ghost btn-sm" onclick="saveMemo('day1-memo')">저장</button>
+      </div>
+      <div class="card-body">
+        <textarea class="memo-area" id="day1-memo" placeholder="Day1 관련 논의사항, 아이디어, 변경사항 등..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── TAB: DAY2 ─── -->
+  <div class="tab-panel" id="panel-day2">
+
+    <div class="highlight-box">
+      <b>천로역정 × 여호수아 가나안 정복</b> — 도봉숲속마을 공간을 순례 경로로 활용, 7개 관문을 통과하며 내 안의 장벽을 돌파
+    </div>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-header"><h2>⏱ 운영 시간표 (90분 기준)</h2></div>
+      <div class="card-body">
+        <table class="loc-table">
+          <thead><tr><th>시간</th><th>내용</th></tr></thead>
+          <tbody>
+            <tr><td>0–10분</td><td>오프닝 / 세계관 설명</td></tr>
+            <tr><td>10–70분</td><td>7관문 순환 (관문당 약 8–10분)</td></tr>
+            <tr><td>70–80분</td><td>최종 여리고 성벽 미션</td></tr>
+            <tr><td>80–90분</td><td>조별 결단문 발표 / 기도</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section-title">7관문 준비 현황</div>
+    <div class="gate-grid" id="gate-grid"></div>
+
+    <div class="card" style="margin-top:20px;">
+      <div class="card-header">
+        <h2>📝 Day2 메모</h2>
+        <button class="btn btn-ghost btn-sm" onclick="saveMemo('day2-memo')">저장</button>
+      </div>
+      <div class="card-body">
+        <textarea class="memo-area" id="day2-memo" placeholder="Day2 관련 논의사항, 공간 배치, 준비물 수량 등..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── TAB: CHECKLIST ─── -->
+  <div class="tab-panel" id="panel-checklist">
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header"><h2>🗺 가나안 정탐 확정 항목</h2></div>
+        <div class="card-body">
+          <ul class="checklist" id="checklist-confirm-d1"></ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><h2>🏰 가나안 정복 확정 항목</h2></div>
+        <div class="card-body">
+          <ul class="checklist" id="checklist-confirm-d2"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h2>📌 공통 확정 항목</h2></div>
+      <div class="card-body">
+        <ul class="checklist" id="checklist-common"></ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>💬 단톡방 회의 안내문</h2>
+        <button class="btn btn-ghost btn-sm" onclick="copyNotice()">복사</button>
+      </div>
+      <div class="card-body">
+        <div id="notice-text" style="background:var(--gray-light); border-radius:8px; padding:16px; font-size:13px; line-height:1.9; white-space:pre-wrap;">이번 주 금요일 줌회의에서는 여름캠프 프로그램 중
+조별 이동미션 '가나안 정탐'과
+센터학습 '가나안 정복'을 중심으로 논의하려고 합니다.
+
+이번 수련회 주제가 돌파인 만큼, 두 프로그램이 단순한 미션이나 게임으로 끝나지 않고 학생들이 말씀을 자기 삶으로 연결하는 시간이 되도록 방향을 잡아보면 좋겠습니다.
+
+회의 때는
+• 가나안 정탐 장소 및 운영 방식
+• 조별 이동 안전관리
+• 가나안 정복 센터 구성
+• 센터별 돌파 키워드와 미니게임
+• 준비물과 담당자
+를 정리하려고 합니다.
+
+각자 생각나는 장소나 미션 아이디어가 있으면 미리 가져와 주세요!</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── TAB: LOG ─── -->
+  <div class="tab-panel" id="panel-log">
+    <div class="card">
+      <div class="card-header">
+        <h2>📝 업데이트 로그 추가</h2>
+      </div>
+      <div class="card-body">
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end;">
+          <div style="flex:1; min-width:200px;">
+            <div style="font-size:12px; color:var(--gray); margin-bottom:4px;">업데이트 내용</div>
+            <input type="text" id="log-input" class="memo-area" style="min-height:unset; height:38px; padding:8px 12px;"
+              placeholder="예: 가나안 정탐 장소 6곳 확정" onkeydown="if(event.key==='Enter')addLog()">
+          </div>
+          <button class="btn btn-primary" onclick="addLog()">기록 추가</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>📋 변경 이력</h2>
+        <button class="btn btn-ghost btn-sm" onclick="clearLog()">전체 삭제</button>
+      </div>
+      <div class="card-body">
+        <ul class="update-log" id="update-log-list">
+          <li><span class="log-date">2026.07.05</span><span class="log-text">프로젝트 대시보드 최초 생성 — ChatGPT 기획 내용 기반</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+// ═══════════════════════════════════════
+//  DATA
+// ═══════════════════════════════════════
+
+const LOCATIONS = [
+  { id:'loc1', name:'효창공원 / 백범김구기념관', zone:'용산', code:'꿈꾸는 나라의 흔적', keywords:'비전, 나라, 사명' },
+  { id:'loc2', name:'전쟁기념관', zone:'용산', code:'평화를 산 사람들의 자리', keywords:'희생, 평화, 감사' },
+  { id:'loc3', name:'서대문형무소 / 독립공원', zone:'서대문', code:'갇혔지만 꺾이지 않은 곳', keywords:'고난, 신념, 믿음' },
+  { id:'loc4', name:'국립대한민국임시정부기념관', zone:'서대문', code:'나라를 기다린 사람들의 집', keywords:'기다림, 소망, 공동체' },
+  { id:'loc5', name:'국립4·19민주묘지', zone:'강북', code:'정의를 외친 언덕', keywords:'용기, 정의, 다음세대' },
+  { id:'loc6', name:'근현대사기념관', zone:'강북', code:'시대를 읽는 사람들', keywords:'역사, 분별, 책임' },
+];
+
+const GATES = [
+  {
+    num:1, name:'붉은 줄의 문',
+    ref:'라합의 붉은 줄 (수 2장)',
+    game:'빨간 실/끈 거미줄 레이저 미로 통과',
+    msg:'돌파는 내가 강해서가 아니라, 하나님이 주신 약속을 붙잡는 데서 시작된다.',
+    supplies:'빨간 털실/끈, 방울, 스톱워치, 성공 스티커',
+    theme:'약속 붙잡기'
+  },
+  {
+    num:2, name:'요단강',
+    ref:'요단강 도하 (수 3장)',
+    game:'제한된 발판으로 전원 건너기 — 언약궤(성경책 모형) 두 명이 들고 이동',
+    msg:'요단강은 먼저 갈라진 것이 아니라, 믿음으로 발을 디뎠을 때 열렸다.',
+    supplies:'파란 천/테이프, 발판(A4·신문지·폼블럭), 성경책 모형, 기념 돌 카드 12장',
+    theme:'믿음의 첫걸음'
+  },
+  {
+    num:3, name:'무거운 짐의 언덕',
+    ref:'천로역정',
+    game:'"두려움, 비교, 죄책감, 상처, 외로움, 미루기" 단어 카드를 붙인 짐을 들고 걷다가 십자가 앞에 내려놓기',
+    msg:'하나님 앞에 내려놓지 않은 짐은 돌파를 막는다.',
+    supplies:'가방, 물병·책·모래주머니, 단어 카드, 십자가 표시',
+    theme:'죄·상처·부담 내려놓기'
+  },
+  {
+    num:4, name:'의심의 숲',
+    ref:'천로역정',
+    game:'한 명 눈가림 — 나머지 조원이 말로만 안내해서 코스 통과 (넓은 마당/실내 진행)',
+    msg:'믿음의 길은 항상 선명하지 않지만, 하나님이 말씀하시면 걸을 수 있다.',
+    supplies:'눈가리개 1개, 장애물(의자·콘 등)',
+    theme:'두려움·불신 돌파'
+  },
+  {
+    num:5, name:'허영의 장터',
+    ref:'천로역정 허영시장 / 수 24:15',
+    game:'선택 카드 미션 — 조별로 상황카드 뽑고 토론 후 선택 (인기 vs 정직 / 편함 vs 순종 / 비교 vs 감사 등)',
+    msg:'돌파는 한 번의 감정이 아니라, 매 순간 하나님을 선택하는 것이다.',
+    supplies:'선택 카드 세트 (미리 제작 필요)',
+    theme:'유혹·가치관 분별'
+  },
+  {
+    num:6, name:'침묵의 성벽',
+    ref:'여리고성 (수 6장)',
+    game:'말하지 않고 정해진 코스를 돌거나 침묵으로 지시문 수행',
+    msg:'여리고성은 힘으로 무너진 것이 아니라, 순종으로 무너졌다.',
+    supplies:'지시문 카드, 말씀 카드',
+    theme:'순종 돌파'
+  },
+  {
+    num:7, name:'약속의 땅',
+    ref:'가나안 입성',
+    game:'박스 성벽(벽돌에 두려움·불신·비교·죄·상처·무기력·망설임 부착) → 결단문 외침 → 성벽 무너뜨리기',
+    msg:'"우리는 ______을 돌파하고, 하나님을 따라 ______하겠습니다."',
+    supplies:'박스 성벽(우드락/종이박스), 단어 카드, 성공 스티커, 결단문 종이',
+    theme:'결단과 파송'
+  },
+];
+
+const CHECKLISTS = {
+  mission: [
+    { id:'m1', text:'조별 미션지 초안 작성' },
+    { id:'m2', text:'미션지 인쇄 매수 결정' },
+    { id:'m3', text:'단톡방 인증 방식 확정 (해시태그/폼 등)' },
+  ],
+  safety: [
+    { id:'s1', text:'조별 담당 교사 배정' },
+    { id:'s2', text:'이동수단 결정 (지하철/버스/도보)' },
+    { id:'s3', text:'중간 체크인 시간 및 방식 확정' },
+    { id:'s4', text:'비 오는 경우 대체안 마련' },
+    { id:'s5', text:'점심식사 방식 확정' },
+    { id:'s6', text:'늦어질 경우 대응 매뉴얼' },
+  ],
+  confirmD1: [
+    { id:'cd1', text:'정탐 장소 6곳 최종 확정' },
+    { id:'cd2', text:'조별 이동 방식 결정' },
+    { id:'cd3', text:'안전 책임자 배정' },
+    { id:'cd4', text:'정탐 미션지 형식 확정' },
+  ],
+  confirmD2: [
+    { id:'cd5', text:'7관문 최종 확정' },
+    { id:'cd6', text:'관문별 담당자 배정' },
+    { id:'cd7', text:'준비물 목록 전체 작성' },
+    { id:'cd8', text:'비 오는 경우 대체안 (실내 이동)' },
+  ],
+  common: [
+    { id:'cc1', text:'마감 일정 확정 (준비물 구매 D-day)' },
+    { id:'cc2', text:'학생들에게 설명할 멘트 준비' },
+    { id:'cc3', text:'단톡방 회의 안내문 발송' },
+    { id:'cc4', text:'전체 예산 산출' },
+    { id:'cc5', text:'캠프 전날 준비물 최종 점검' },
+  ],
+};
+
+const AREAS = [
+  { label:'Day1 미션지', ids:['m1','m2','m3'] },
+  { label:'Day1 안전 운영', ids:['s1','s2','s3','s4','s5','s6'] },
+  { label:'회의 확정 (정탐)', ids:['cd1','cd2','cd3','cd4'] },
+  { label:'회의 확정 (정복)', ids:['cd5','cd6','cd7','cd8'] },
+  { label:'공통', ids:['cc1','cc2','cc3','cc4','cc5'] },
+];
+
+// ═══════════════════════════════════════
+//  STATE (localStorage)
+// ═══════════════════════════════════════
+
+function getState() {
+  try { return JSON.parse(localStorage.getItem('pwcamp26') || '{}'); } catch(e) { return {}; }
+}
+function setState(s) {
+  localStorage.setItem('pwcamp26', JSON.stringify(s));
+  updateLastUpdated();
+}
+
+function setChecked(id, val) {
+  const s = getState(); s[id] = val; setState(s);
+}
+function isChecked(id) { return !!getState()[id]; }
+
+function setMemo(id, val) {
+  const s = getState(); s['memo_'+id] = val; setState(s);
+}
+function getMemo(id) { return getState()['memo_'+id] || ''; }
+
+function setOwner(id, val) {
+  const s = getState(); s['owner_'+id] = val; setState(s);
+}
+function getOwner(id) { return getState()['owner_'+id] || ''; }
+
+function setLocStatus(id, val) {
+  const s = getState(); s['locst_'+id] = val; setState(s);
+}
+function getLocStatus(id) { return getState()['locst_'+id] || 'pending'; }
+
+function setLocOwner(id, val) {
+  const s = getState(); s['locown_'+id] = val; setState(s);
+}
+function getLocOwner(id) { return getState()['locown_'+id] || ''; }
+
+function setGateStatus(id, val) {
+  const s = getState(); s['gst_'+id] = val; setState(s);
+}
+function getGateStatus(id) { return getState()['gst_'+id] || 'pending'; }
+
+function setGateOwner(id, val) {
+  const s = getState(); s['gown_'+id] = val; setState(s);
+}
+function getGateOwner(id) { return getState()['gown_'+id] || ''; }
+
+function getLogs() {
+  try { return JSON.parse(localStorage.getItem('pwcamp26_logs') || '[]'); } catch(e) { return []; }
+}
+function saveLogs(arr) { localStorage.setItem('pwcamp26_logs', JSON.stringify(arr)); }
+
+// ═══════════════════════════════════════
+//  RENDER
+// ═══════════════════════════════════════
+
+const STATUS_LABELS = { pending:'준비 전', progress:'진행 중', done:'완료', hold:'보류' };
+const STATUS_CLASSES = { pending:'badge-pending', progress:'badge-progress', done:'badge-done', hold:'badge-hold' };
+const STATUS_CYCLE = ['pending','progress','done','hold'];
+
+function nextStatus(cur) {
+  const i = STATUS_CYCLE.indexOf(cur);
+  return STATUS_CYCLE[(i+1) % STATUS_CYCLE.length];
+}
+
+function renderChecklist(ulId, items) {
+  const ul = document.getElementById(ulId);
+  if (!ul) return;
+  ul.innerHTML = '';
+  items.forEach(item => {
+    const checked = isChecked(item.id);
+    const li = document.createElement('li');
+    li.innerHTML = `
+      <label>
+        <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleCheck('${item.id}', this.checked, '${ulId}')">
+        <span class="item-text ${checked ? 'checked' : ''}">${item.text}</span>
+      </label>
+      <span class="item-owner" contenteditable="true"
+        onblur="setOwner('${item.id}', this.textContent.trim())"
+        title="클릭해서 담당자 입력">${getOwner(item.id)}</span>
+    `;
+    ul.appendChild(li);
+  });
+}
+
+function toggleCheck(id, val, listId) {
+  setChecked(id, val);
+  updateProgress();
+  renderChecklist(listId, findItemList(listId));
+}
+
+function findItemList(listId) {
+  const map = {
+    'checklist-mission': CHECKLISTS.mission,
+    'checklist-safety': CHECKLISTS.safety,
+    'checklist-confirm-d1': CHECKLISTS.confirmD1,
+    'checklist-confirm-d2': CHECKLISTS.confirmD2,
+    'checklist-common': CHECKLISTS.common,
+  };
+  return map[listId] || [];
+}
+
+function renderLocTable() {
+  const tbody = document.getElementById('loc-table-body');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  LOCATIONS.forEach(loc => {
+    const st = getLocStatus(loc.id);
+    const own = getLocOwner(loc.id);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><b>${loc.id.replace('loc','')}</b></td>
+      <td>${loc.name}</td>
+      <td><span class="zone-tag">${loc.zone}</span></td>
+      <td style="font-size:12px;">${loc.code}</td>
+      <td style="font-size:12px; color:var(--text-soft);">${loc.keywords}</td>
+      <td>
+        <input type="text" value="${own}" placeholder="조 배정"
+          style="border:1px solid var(--border); border-radius:6px; padding:3px 8px; font-size:12px; width:70px; font-family:inherit;"
+          onblur="setLocOwner('${loc.id}', this.value)">
+      </td>
+      <td>
+        <span class="badge ${STATUS_CLASSES[st]}" onclick="cycleLocStatus('${loc.id}')">${STATUS_LABELS[st]}</span>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function cycleLocStatus(id) {
+  setLocStatus(id, nextStatus(getLocStatus(id)));
+  renderLocTable();
+}
+
+function renderGateGrid() {
+  const grid = document.getElementById('gate-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  GATES.forEach(g => {
+    const id = 'gate'+g.num;
+    const st = getGateStatus(id);
+    const own = getGateOwner(id);
+    const div = document.createElement('div');
+    div.className = 'gate-card';
+    div.innerHTML = `
+      <div class="gate-card-header">
+        <div class="gate-num">${g.num}</div>
+        <div class="gate-title">${g.name}</div>
+        <span class="badge ${STATUS_CLASSES[st]}" onclick="cycleGateStatus('${id}')" style="cursor:pointer;">${STATUS_LABELS[st]}</span>
+      </div>
+      <div class="gate-card-body">
+        <div class="gate-meta"><b>주제:</b> ${g.theme}</div>
+        <div class="gate-meta"><b>본문:</b> ${g.ref}</div>
+        <div class="gate-meta"><b>게임:</b> ${g.game}</div>
+        <div class="gate-msg">${g.msg}</div>
+        <div class="gate-supplies" style="margin-top:6px;"><b>준비물:</b> ${g.supplies}</div>
+      </div>
+      <div class="gate-card-footer">
+        <span style="font-size:12px; color:var(--gray);">담당:</span>
+        <input class="gate-owner-input" type="text" placeholder="담당자 입력" value="${own}"
+          onblur="setGateOwner('${id}', this.value)">
+      </div>
+    `;
+    grid.appendChild(div);
+  });
+}
+
+function cycleGateStatus(id) {
+  setGateStatus(id, nextStatus(getGateStatus(id)));
+  renderGateGrid();
+}
+
+function renderAreaProgress() {
+  const el = document.getElementById('areaProgress');
+  if (!el) return;
+  const allIds = Object.values(CHECKLISTS).flat().map(i=>i.id);
+  let html = '';
+  AREAS.forEach(area => {
+    const done = area.ids.filter(id => isChecked(id)).length;
+    const total = area.ids.length;
+    const pct = total ? Math.round(done/total*100) : 0;
+    const color = pct === 100 ? 'var(--green)' : pct > 0 ? 'var(--gold)' : 'var(--border)';
+    html += `
+      <div style="margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:5px;">
+          <span>${area.label}</span>
+          <span style="font-weight:700; color:${color};">${done}/${total}</span>
+        </div>
+        <div style="background:var(--border); border-radius:20px; height:8px; overflow:hidden;">
+          <div style="width:${pct}%; height:100%; background:${color}; border-radius:20px; transition:width 0.4s;"></div>
+        </div>
+      </div>
+    `;
+  });
+  el.innerHTML = html;
+}
+
+// ═══════════════════════════════════════
+//  PROGRESS
+// ═══════════════════════════════════════
+
+function updateProgress() {
+  const allItems = Object.values(CHECKLISTS).flat();
+  const total = allItems.length;
+  const done = allItems.filter(i => isChecked(i.id)).length;
+  const pct = total ? Math.round(done/total*100) : 0;
+
+  document.getElementById('globalBar').style.width = pct + '%';
+  document.getElementById('globalPct').textContent = pct + '%';
+  document.getElementById('sum-total').textContent = total;
+  document.getElementById('sum-done').textContent = done;
+  document.getElementById('sum-remain').textContent = total - done;
+
+  renderAreaProgress();
+}
+
+// ═══════════════════════════════════════
+//  MEMO
+// ═══════════════════════════════════════
+
+function saveMemo(id) {
+  const el = document.getElementById(id);
+  if (el) { setMemo(id, el.value); showToast('저장되었습니다.'); }
+}
+
+function loadMemos() {
+  ['overview-memo','day1-memo','day2-memo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = getMemo(id);
+  });
+}
+
+// ═══════════════════════════════════════
+//  LOG
+// ═══════════════════════════════════════
+
+function renderLog() {
+  const ul = document.getElementById('update-log-list');
+  if (!ul) return;
+  const logs = getLogs();
+  if (logs.length === 0) { ul.innerHTML = '<li><span class="log-text" style="color:var(--gray);">아직 기록이 없습니다.</span></li>'; return; }
+  ul.innerHTML = logs.slice().reverse().map(l =>
+    `<li><span class="log-date">${l.date}</span><span class="log-text">${l.text}</span></li>`
+  ).join('');
+}
+
+function addLog() {
+  const input = document.getElementById('log-input');
+  const text = input.value.trim();
+  if (!text) return;
+  const logs = getLogs();
+  const now = new Date();
+  const date = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
+  logs.push({ date, text });
+  saveLogs(logs);
+  input.value = '';
+  renderLog();
+  showToast('로그가 추가되었습니다.');
+}
+
+function clearLog() {
+  if (!confirm('전체 로그를 삭제하시겠습니까?')) return;
+  saveLogs([]);
+  renderLog();
+}
+
+// ═══════════════════════════════════════
+//  TABS
+// ═══════════════════════════════════════
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if (name === 'log') renderLog();
+}
+
+// ═══════════════════════════════════════
+//  MISC
+// ═══════════════════════════════════════
+
+function copyNotice() {
+  const text = document.getElementById('notice-text').innerText;
+  navigator.clipboard.writeText(text).then(() => showToast('클립보드에 복사되었습니다!'));
+}
+
+function updateLastUpdated() {
+  const el = document.getElementById('lastUpdated');
+  if (!el) return;
+  const now = new Date();
+  el.textContent = `마지막 업데이트: ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+}
+
+let toastTimeout;
+function showToast(msg) {
+  let t = document.getElementById('toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.style.cssText = 'position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:var(--navy); color:#fff; padding:10px 22px; border-radius:30px; font-size:14px; font-weight:600; z-index:9999; opacity:0; transition:opacity 0.3s; pointer-events:none;';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => { t.style.opacity = '0'; }, 2000);
+}
+
+// ═══════════════════════════════════════
+//  INIT
+// ═══════════════════════════════════════
+
+function init() {
+  // Checklists
+  renderChecklist('checklist-mission', CHECKLISTS.mission);
+  renderChecklist('checklist-safety', CHECKLISTS.safety);
+  renderChecklist('checklist-confirm-d1', CHECKLISTS.confirmD1);
+  renderChecklist('checklist-confirm-d2', CHECKLISTS.confirmD2);
+  renderChecklist('checklist-common', CHECKLISTS.common);
+
+  // Location table
+  renderLocTable();
+
+  // Gate grid
+  renderGateGrid();
+
+  // Progress
+  updateProgress();
+
+  // Memos
+  loadMemos();
+
+  // D-day counter
+  const dday = document.querySelector('.summary-box.red .num');
+  if (dday) {
+    const today = new Date();
+    const camp = new Date('2026-07-17');
+    const diff = Math.ceil((camp - today) / (1000*60*60*24));
+    dday.textContent = diff > 0 ? diff : 'D-Day';
+  }
+
+  // Last updated
+  updateLastUpdated();
+}
+
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
