@@ -3,577 +3,597 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2026 강동 파워웨이브 여름캠프 — 프로그램팀 대시보드</title>
+<title>2026 강동 파워웨이브 여름캠프 — 프로그램 기획</title>
 <style>
   :root {
-    --navy: #1a2744; --navy-mid: #243460; --blue: #3b5bdb; --blue-light: #4c6ef5;
-    --sky: #e8eeff; --gold: #f59f00; --gold-light: #fff3bf;
-    --red: #e03131; --red-light: #fff5f5; --green: #2f9e44; --green-light: #ebfbee;
+    --navy: #1a2744; --navy-mid: #243460; --blue: #3b5bdb;
+    --sky: #e8eeff; --gold: #f59f00; --gold-light: #fff9e6;
+    --green: #2f9e44; --green-light: #ebfbee;
+    --red: #e03131; --red-light: #fff5f5;
+    --orange: #e8590c; --orange-light: #fff4e6;
     --gray: #868e96; --gray-light: #f8f9fa; --border: #dee2e6;
-    --text: #212529; --text-soft: #495057; --radius: 10px; --shadow: 0 2px 12px rgba(0,0,0,0.08);
+    --text: #212529; --text-soft: #495057;
+    --radius: 10px; --shadow: 0 2px 12px rgba(0,0,0,0.07);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif; background:#f0f2f8; color:var(--text); line-height:1.6; min-height:100vh; }
+  body { font-family: -apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif; background: #f0f2f8; color: var(--text); line-height: 1.65; }
 
-  #loading-overlay { position:fixed;inset:0;background:#f0f2f8;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;gap:12px; }
-  .loading-spinner { width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin 0.8s linear infinite; }
-  @keyframes spin { to { transform:rotate(360deg); } }
-  .loading-text { font-size:14px;color:var(--navy-mid);font-weight:600; }
+  /* ── Header ── */
+  .site-header { background: linear-gradient(135deg, var(--navy) 0%, #2d4a9e 100%); color: #fff; padding: 22px 20px; }
+  .header-inner { max-width: 960px; margin: 0 auto; }
+  .header-tag { display: inline-block; background: var(--gold); color: var(--navy); font-size: 10px; font-weight: 800; letter-spacing: 1.5px; padding: 3px 9px; border-radius: 20px; margin-bottom: 8px; }
+  .header-title { font-size: 20px; font-weight: 800; letter-spacing: -0.5px; }
+  .header-sub { font-size: 13px; opacity: 0.75; margin-top: 3px; }
+  .header-meta { display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap; }
+  .header-meta span { font-size: 12px; opacity: 0.85; background: rgba(255,255,255,0.12); padding: 3px 10px; border-radius: 20px; }
 
-  .site-header { background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 60%,#2d4a9e 100%);color:#fff;padding:20px 24px;position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.25); }
-  .header-inner { max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap; }
-  .header-badge { background:var(--gold);color:var(--navy);font-weight:800;font-size:11px;letter-spacing:1.5px;padding:4px 10px;border-radius:20px;flex-shrink:0; }
-  .header-title { flex:1; }
-  .header-title h1 { font-size:18px;font-weight:800;letter-spacing:-0.5px; }
-  .header-title p { font-size:12px;opacity:0.75;margin-top:2px; }
-  .header-meta { display:flex;gap:14px;font-size:12px;opacity:0.85;flex-wrap:wrap;align-items:center; }
+  /* ── Tabs ── */
+  .tab-nav { background: #fff; border-bottom: 2px solid var(--border); position: sticky; top: 0; z-index: 90; }
+  .tab-nav-inner { max-width: 960px; margin: 0 auto; display: flex; overflow-x: auto; }
+  .tab-btn { padding: 13px 18px; font-size: 13px; font-weight: 600; color: var(--gray); background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer; white-space: nowrap; transition: all 0.2s; font-family: inherit; }
+  .tab-btn:hover { color: var(--blue); background: var(--sky); }
+  .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
 
-  .progress-banner { background:var(--navy-mid);color:#fff;padding:12px 24px; }
-  .progress-banner-inner { max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap; }
-  .progress-label { font-size:13px;opacity:0.8;white-space:nowrap; }
-  .progress-bar-wrap { flex:1;min-width:160px;background:rgba(255,255,255,0.15);border-radius:20px;height:10px;overflow:hidden; }
-  .progress-bar-fill { height:100%;background:linear-gradient(90deg,var(--gold),#ffc078);border-radius:20px;transition:width 0.5s ease; }
-  .progress-pct { font-size:16px;font-weight:800;color:var(--gold);white-space:nowrap; }
-  .last-updated { font-size:11px;opacity:0.6;white-space:nowrap; }
+  /* ── Main ── */
+  .main { max-width: 960px; margin: 0 auto; padding: 22px 16px 60px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
 
-  .tab-nav { background:#fff;border-bottom:2px solid var(--border);position:sticky;top:80px;z-index:90; }
-  .tab-nav-inner { max-width:1100px;margin:0 auto;display:flex;overflow-x:auto; }
-  .tab-btn { padding:12px 18px;font-size:13px;font-weight:600;color:var(--gray);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;transition:all 0.2s; }
-  .tab-btn:hover { color:var(--blue);background:var(--sky); }
-  .tab-btn.active { color:var(--blue);border-bottom-color:var(--blue); }
+  /* ── Cards ── */
+  .card { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 16px; overflow: hidden; }
+  .card-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .card-header h2 { font-size: 15px; font-weight: 700; flex: 1; }
+  .card-header h3 { font-size: 14px; font-weight: 700; flex: 1; }
+  .card-body { padding: 18px; }
+  .card-note { font-size: 12px; color: var(--gray); }
 
-  .main { max-width:1100px;margin:0 auto;padding:24px 16px 60px; }
-  .tab-panel { display:none; }
-  .tab-panel.active { display:block; }
+  /* ── Status badges ── */
+  .tag { display: inline-block; padding: 2px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+  .tag-done    { background: var(--green-light); color: var(--green); }
+  .tag-todo    { background: #f1f3f5; color: var(--gray); }
+  .tag-check   { background: var(--orange-light); color: var(--orange); }
+  .tag-key     { background: var(--sky); color: var(--blue); }
 
-  .card { background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:18px;overflow:hidden; }
-  .card-header { padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-wrap:wrap; }
-  .card-header h2 { font-size:15px;font-weight:700;flex:1; }
-  .card-body { padding:18px; }
-  .card-sub { font-size:11px;color:var(--gray); }
+  /* ── Phase blocks ── */
+  .phase { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 14px; }
+  .phase-header { padding: 13px 16px; display: flex; align-items: center; gap: 10px; }
+  .phase-header.p1 { background: linear-gradient(90deg, #e8eeff, #f8f9ff); }
+  .phase-header.p2 { background: linear-gradient(90deg, #ebfbee, #f5fff7); }
+  .phase-header.p3 { background: linear-gradient(90deg, #fff9e6, #fffdf5); }
+  .phase-num { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; flex-shrink: 0; }
+  .phase-num.p1 { background: var(--blue); }
+  .phase-num.p2 { background: var(--green); }
+  .phase-num.p3 { background: var(--gold); }
+  .phase-title { font-size: 14px; font-weight: 700; flex: 1; }
+  .phase-body { padding: 14px 16px; }
 
-  .grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:18px; }
-  @media(max-width:700px) { .grid-2 { grid-template-columns:1fr; } }
+  /* ── Item rows ── */
+  .item-list { list-style: none; }
+  .item-list li { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #f1f3f5; font-size: 13px; }
+  .item-list li:last-child { border-bottom: none; }
+  .item-label { flex: 1; }
+  .item-label b { color: var(--navy-mid); }
+  .item-label .sub { font-size: 12px; color: var(--text-soft); margin-top: 2px; }
 
-  .badge { display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;user-select:none;transition:all 0.2s;white-space:nowrap; }
-  .badge-pending  { background:#f1f3f5;color:var(--gray); }
-  .badge-progress { background:var(--gold-light);color:#b7600d; }
-  .badge-done     { background:var(--green-light);color:var(--green); }
-  .badge-hold     { background:var(--red-light);color:var(--red); }
+  /* ── Location cards ── */
+  .loc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .loc-card { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .loc-card-top { padding: 12px 14px; background: var(--navy); color: #fff; }
+  .loc-card-top .loc-num { font-size: 11px; opacity: 0.7; font-weight: 700; letter-spacing: 1px; margin-bottom: 3px; }
+  .loc-card-top .loc-name { font-size: 14px; font-weight: 700; }
+  .loc-card-top .loc-zone { font-size: 11px; opacity: 0.75; margin-top: 2px; }
+  .loc-card-body { padding: 12px 14px; background: var(--gray-light); }
+  .loc-detail { font-size: 12px; color: var(--text-soft); margin-bottom: 5px; }
+  .loc-detail b { color: var(--text); }
+  .loc-msg { font-size: 12px; color: var(--navy-mid); font-style: italic; border-left: 3px solid var(--blue); padding-left: 8px; margin-top: 8px; line-height: 1.6; }
+  .loc-card-footer { padding: 10px 14px; display: flex; gap: 6px; flex-wrap: wrap; border-top: 1px solid var(--border); }
 
-  .checklist { list-style:none; }
-  .checklist li { display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #f1f3f5;font-size:13px; }
-  .checklist li:last-child { border-bottom:none; }
-  .checklist li label { display:flex;align-items:flex-start;gap:10px;cursor:pointer;flex:1; }
-  .checklist li input[type="checkbox"] { width:16px;height:16px;accent-color:var(--blue);flex-shrink:0;margin-top:2px;cursor:pointer; }
-  .item-text.checked { text-decoration:line-through;color:var(--gray); }
-  .item-owner { font-size:11px;color:#fff;background:var(--blue-light);border-radius:12px;padding:1px 8px;white-space:nowrap;cursor:pointer;outline:none;min-width:40px; }
-  .item-owner:empty { background:#e9ecef;color:var(--gray); }
-  .item-owner:empty::before { content:'담당자'; }
+  /* ── Gate cards ── */
+  .gate-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .gate-card { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
+  .gate-card-top { padding: 11px 13px; display: flex; align-items: center; gap: 8px; background: #fff; }
+  .gate-num-badge { width: 26px; height: 26px; border-radius: 50%; background: var(--navy); color: #fff; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .gate-name { font-size: 13px; font-weight: 700; flex: 1; }
+  .gate-body { padding: 11px 13px; background: var(--gray-light); font-size: 12px; }
+  .gate-row { margin-bottom: 5px; color: var(--text-soft); }
+  .gate-row b { color: var(--text); }
+  .gate-msg { font-size: 12px; color: var(--navy-mid); font-style: italic; border-left: 3px solid var(--blue); padding-left: 8px; margin: 8px 0; line-height: 1.6; }
+  .gate-supplies { font-size: 11px; color: var(--gray); }
 
-  .loc-table { width:100%;border-collapse:collapse;font-size:13px; }
-  .loc-table th { background:var(--navy);color:#fff;padding:9px 11px;text-align:left;font-size:11px;letter-spacing:0.5px; }
-  .loc-table td { padding:9px 11px;border-bottom:1px solid var(--border);vertical-align:middle; }
-  .loc-table tr:last-child td { border-bottom:none; }
-  .loc-table tr:hover td { background:var(--sky); }
-  .zone-tag { display:inline-block;padding:1px 7px;border-radius:10px;font-size:11px;font-weight:600;background:var(--sky);color:var(--blue); }
-  .owner-input { border:1px solid var(--border);border-radius:6px;padding:3px 7px;font-size:12px;width:72px;font-family:inherit;outline:none; }
-  .owner-input:focus { border-color:var(--blue); }
+  /* ── Summary row ── */
+  .summary-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 18px; }
+  .summary-box { background: #fff; border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px 16px; border-top: 4px solid var(--blue); }
+  .summary-box.green { border-top-color: var(--green); }
+  .summary-box.gold  { border-top-color: var(--gold); }
+  .summary-box.red   { border-top-color: var(--red); }
+  .summary-box .num { font-size: 24px; font-weight: 800; color: var(--navy); line-height: 1.1; }
+  .summary-box .lbl { font-size: 11px; color: var(--gray); margin-top: 3px; }
 
-  .gate-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px; }
-  .gate-card { border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:box-shadow 0.2s; }
-  .gate-card:hover { box-shadow:var(--shadow); }
-  .gate-card-header { padding:11px 13px;display:flex;align-items:center;gap:8px; }
-  .gate-num { width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0; }
-  .gate-title { font-size:13px;font-weight:700;flex:1; }
-  .gate-card-body { padding:11px 13px;background:var(--gray-light); }
-  .gate-meta { font-size:12px;color:var(--text-soft);margin-bottom:4px; }
-  .gate-meta b { color:var(--text); }
-  .gate-msg { font-size:12px;color:var(--navy-mid);font-style:italic;border-left:3px solid var(--blue);padding-left:8px;margin:7px 0; }
-  .gate-supplies { font-size:11px;color:var(--gray); }
-  .gate-card-footer { padding:9px 13px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px; }
-  .gate-owner-input { font-size:12px;border:1px solid var(--border);border-radius:6px;padding:3px 8px;flex:1;min-width:60px;outline:none;font-family:inherit; }
-  .gate-owner-input:focus { border-color:var(--blue); }
+  /* ── Highlight ── */
+  .highlight { background: var(--sky); border-left: 4px solid var(--blue); border-radius: 0 8px 8px 0; padding: 11px 14px; font-size: 13px; color: var(--navy-mid); font-style: italic; margin-bottom: 16px; }
 
-  .summary-row { display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap; }
-  .summary-box { flex:1;min-width:130px;background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;border-top:4px solid var(--blue); }
-  .summary-box.gold { border-top-color:var(--gold); }
-  .summary-box.green { border-top-color:var(--green); }
-  .summary-box.red { border-top-color:var(--red); }
-  .summary-box .num { font-size:26px;font-weight:800;color:var(--navy);line-height:1; }
-  .summary-box .lbl { font-size:11px;color:var(--gray);margin-top:3px; }
+  /* ── Section title ── */
+  .section-title { font-size: 11px; font-weight: 700; color: var(--gray); letter-spacing: 1px; text-transform: uppercase; margin: 20px 0 10px; display: flex; align-items: center; gap: 8px; }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-  .timeline { position:relative;padding-left:26px; }
-  .timeline::before { content:'';position:absolute;left:7px;top:6px;bottom:6px;width:2px;background:var(--border); }
-  .tl-item { position:relative;margin-bottom:18px; }
-  .tl-dot { position:absolute;left:-22px;top:4px;width:15px;height:15px;border-radius:50%;border:2px solid var(--border);background:#fff; }
-  .tl-dot.active { background:var(--gold);border-color:var(--gold); }
-  .tl-date { font-size:11px;color:var(--gray);font-weight:600; }
-  .tl-content { font-size:13px;font-weight:600; }
-  .tl-detail { font-size:12px;color:var(--text-soft); }
+  /* ── Prep table ── */
+  .prep-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .prep-table th { background: var(--navy); color: #fff; padding: 9px 12px; text-align: left; font-size: 11px; letter-spacing: 0.5px; }
+  .prep-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  .prep-table tr:last-child td { border-bottom: none; }
+  .prep-table tr:hover td { background: var(--sky); }
 
-  .update-log { list-style:none; }
-  .update-log li { display:flex;gap:12px;padding:9px 0;border-bottom:1px solid #f1f3f5;font-size:13px; }
-  .update-log li:last-child { border-bottom:none; }
-  .log-date { color:var(--gray);font-size:12px;white-space:nowrap; }
+  /* ── Flow arrow ── */
+  .flow { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 12px 0; }
+  .flow-step { background: var(--navy); color: #fff; font-size: 12px; font-weight: 600; padding: 5px 12px; border-radius: 20px; }
+  .flow-step.done { background: var(--green); }
+  .flow-step.tbd  { background: var(--gray); }
+  .flow-arrow { color: var(--gray); font-size: 14px; }
 
-  .btn { padding:6px 14px;border-radius:7px;font-size:12px;font-weight:600;border:none;cursor:pointer;transition:all 0.2s;font-family:inherit; }
-  .btn-primary { background:var(--blue);color:#fff; }
-  .btn-primary:hover { background:var(--blue-light); }
-  .btn-ghost { background:var(--gray-light);color:var(--text-soft);border:1px solid var(--border); }
-  .btn-ghost:hover { background:var(--sky);color:var(--blue); }
-
-  .section-title { font-size:12px;font-weight:700;color:var(--gray);letter-spacing:0.8px;text-transform:uppercase;margin:20px 0 10px;display:flex;align-items:center;gap:8px; }
-  .section-title::after { content:'';flex:1;height:1px;background:var(--border); }
-  .highlight-box { background:var(--sky);border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:11px 14px;font-size:13px;margin-bottom:14px;color:var(--navy-mid);font-style:italic; }
-  .memo-area { width:100%;min-height:90px;border:1px solid var(--border);border-radius:8px;padding:11px;font-size:13px;font-family:inherit;resize:vertical;outline:none;transition:border-color 0.2s;line-height:1.7; }
-  .memo-area:focus { border-color:var(--blue); }
-  #toast { position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;padding:9px 20px;border-radius:30px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none; }
+  @media (max-width: 600px) {
+    .loc-grid, .gate-grid { grid-template-columns: 1fr; }
+    .summary-row { grid-template-columns: 1fr 1fr; }
+  }
 </style>
 </head>
 <body>
 
-<div id="loading-overlay">
-  <div class="loading-spinner"></div>
-  <div class="loading-text">데이터 연결 중...</div>
-</div>
-
 <header class="site-header">
   <div class="header-inner">
-    <span class="header-badge">Program Team</span>
-    <div class="header-title">
-      <h1>2026 강동 파워웨이브 여름캠프</h1>
-      <p>주제: 돌파 / Breakthrough — 프로그램팀 준비 대시보드</p>
-    </div>
+    <div class="header-tag">PROGRAM TEAM</div>
+    <div class="header-title">2026 강동 파워웨이브 여름캠프</div>
+    <div class="header-sub">주제: 돌파 / Breakthrough — 프로그램 기획 자료</div>
     <div class="header-meta">
       <span>📍 도봉숲속마을</span>
       <span>📅 2026.07.17~</span>
-      <span id="conn-status" style="color:#adb5bd;font-size:11px;font-weight:700;">● 연결 중</span>
+      <span>📖 여호수아 24:15</span>
+      <span>👥 학생 50명 · 6조</span>
     </div>
   </div>
 </header>
 
-<div class="progress-banner">
-  <div class="progress-banner-inner">
-    <span class="progress-label">전체 준비율</span>
-    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="globalBar" style="width:0%"></div></div>
-    <span class="progress-pct" id="globalPct">0%</span>
-    <span class="last-updated" id="lastUpdated"></span>
-  </div>
-</div>
-
 <nav class="tab-nav">
   <div class="tab-nav-inner">
-    <button class="tab-btn active" onclick="switchTab('overview',this)">🗂 전체 현황</button>
+    <button class="tab-btn active" onclick="switchTab('overview',this)">📋 전체 개요</button>
     <button class="tab-btn" onclick="switchTab('day1',this)">🗺 Day1 가나안 정탐</button>
     <button class="tab-btn" onclick="switchTab('day2',this)">🏰 Day2 돌파 순례길</button>
-    <button class="tab-btn" onclick="switchTab('checklist',this)">✅ 회의 체크리스트</button>
-    <button class="tab-btn" onclick="switchTab('log',this)">📝 업데이트 로그</button>
+    <button class="tab-btn" onclick="switchTab('prep',this)">✅ 준비 현황</button>
   </div>
 </nav>
 
 <main class="main">
 
-  <!-- OVERVIEW -->
+  <!-- ═══ 전체 개요 ═══ -->
   <div class="tab-panel active" id="panel-overview">
+
     <div class="summary-row">
-      <div class="summary-box"><div class="num" id="sum-total">-</div><div class="lbl">전체 항목</div></div>
-      <div class="summary-box green"><div class="num" id="sum-done">-</div><div class="lbl">완료</div></div>
-      <div class="summary-box gold"><div class="num" id="sum-remain">-</div><div class="lbl">남은 항목</div></div>
-      <div class="summary-box red"><div class="num" id="sum-dday">-</div><div class="lbl">D-Day까지</div></div>
+      <div class="summary-box"><div class="num">50명</div><div class="lbl">신청 학생 (목표)</div></div>
+      <div class="summary-box green"><div class="num">6조</div><div class="lbl">조 편성</div></div>
+      <div class="summary-box gold"><div class="num">3곳</div><div class="lbl">2차 견학 장소</div></div>
+      <div class="summary-box red"><div class="num" id="dday-num">-</div><div class="lbl">D-Day까지</div></div>
     </div>
-    <div class="highlight-box">"정탐은 세상을 보는 시간이고, 정복은 내 안의 장벽을 믿음으로 돌파하는 시간."</div>
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-header"><h2>🗺 전체 흐름</h2></div>
-        <div class="card-body">
-          <div class="timeline">
-            <div class="tl-item"><div class="tl-dot active"></div><div class="tl-date">DAY 1 — 오전·오후</div><div class="tl-content">가나안 정탐</div><div class="tl-detail">조별 이동 미션 · 두려움 돌파</div></div>
-            <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">DAY 2 — 오전 90분</div><div class="tl-content">가나안 정복: 돌파의 순례길</div><div class="tl-detail">7관문 센터학습 · 불가능 돌파</div></div>
-            <div class="tl-item"><div class="tl-dot"></div><div class="tl-date">DAY 2 — 폐회</div><div class="tl-content">폐회예배</div><div class="tl-detail">여호수아 24:15 · 망설임 → 결단</div></div>
+
+    <div class="highlight">"정탐은 세상을 보는 시간이고, 정복은 내 안의 장벽을 믿음으로 돌파하는 시간."</div>
+
+    <div class="card">
+      <div class="card-header"><h2>🗓 전체 흐름</h2></div>
+      <div class="card-body">
+        <ul class="item-list">
+          <li>
+            <span class="tag tag-done">확정</span>
+            <div class="item-label"><b>Day 1 오전·오후 — 가나안 정탐</b><div class="sub">3페이즈 이동 미션 · 키워드: 두려움 돌파</div></div>
+          </li>
+          <li>
+            <span class="tag tag-done">확정</span>
+            <div class="item-label"><b>Day 2 오전 — 가나안 정복: 돌파의 순례길</b><div class="sub">7관문 센터학습 90분 · 키워드: 불가능 돌파</div></div>
+          </li>
+          <li>
+            <span class="tag tag-done">확정</span>
+            <div class="item-label"><b>폐회예배</b><div class="sub">여호수아 24:15 · 망설임 → 결단</div></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><h2>👥 조 편성 기준</h2></div>
+      <div class="card-body">
+        <ul class="item-list">
+          <li><span class="tag tag-done">확정</span><div class="item-label"><b>6조 편성</b><div class="sub">조당 약 8~9명</div></div></li>
+          <li><span class="tag tag-done">확정</span><div class="item-label"><b>조별 인솔 교사 1명</b><div class="sub">Day1 이동 전담 · 총 6명</div></div></li>
+          <li><span class="tag tag-done">확정</span><div class="item-label"><b>2차 견학 장소 설명 교사 3명</b><div class="sub">각 장소에 1명 대기 · 2조씩 담당</div></div></li>
+          <li><span class="tag tag-todo">미정</span><div class="item-label"><b>조 명단 및 구성</b><div class="sub">성별·학년 균형 필요</div></div></li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══ Day 1 ═══ -->
+  <div class="tab-panel" id="panel-day1">
+
+    <div class="highlight">여호수아가 정탐꾼을 보내듯, 학생들이 팀별로 서울 역사 현장을 돌며 <b>"하나님의 시선으로 세상 보기"</b></div>
+
+    <div class="flow">
+      <span class="flow-step done">교회 출발</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step">1차 경유지 미션</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step done">2차 견학 장소</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step tbd">식사</span>
+      <span class="flow-arrow">→</span>
+      <span class="flow-step tbd">도봉숲속마을</span>
+    </div>
+
+    <!-- 1페이즈 -->
+    <div class="phase">
+      <div class="phase-header p1">
+        <div class="phase-num p1">1</div>
+        <div class="phase-title">1페이즈 — 이동 및 미션</div>
+        <span class="tag tag-check">고민 필요</span>
+      </div>
+      <div class="phase-body">
+        <ul class="item-list">
+          <li>
+            <span class="tag tag-todo">미정</span>
+            <div class="item-label"><b>이동 수단</b><div class="sub">지하철 / 버스 / 도보 혼합 — 조별 동선 확정 필요</div></div>
+          </li>
+          <li>
+            <span class="tag tag-todo">미정</span>
+            <div class="item-label"><b>교통비 처리</b><div class="sub">충전 교통카드 지급 / 현금 지급 / 본인 부담 후 정산 중 선택</div></div>
+          </li>
+          <li>
+            <span class="tag tag-todo">미정</span>
+            <div class="item-label"><b>1차 경유지 6곳 확정</b><div class="sub">나비쇼핑몰 → 2차 장소 이동 경로 상 중간 지점 · 네이버 로드뷰 스크린샷 미션지 제작</div></div>
+          </li>
+          <li>
+            <span class="tag tag-todo">미정</span>
+            <div class="item-label"><b>촬영 미션 방식</b>
+              <div class="sub">
+                후보: 로드뷰 재현샷 / 정탐꾼 포즈 사진 / 15초 현장 리포터 영상 / 조 구호 영상<br>
+                단톡방 인증 방식도 함께 결정
+              </div>
+            </div>
+          </li>
+          <li>
+            <span class="tag tag-todo">미정</span>
+            <div class="item-label"><b>이동 중 조 친해지기 활동</b>
+              <div class="sub">
+                후보: 조 이름·구호 만들기 / 조원 공통점 찾기 미션 / 지하철 안 릴레이 대화 미션지
+              </div>
+            </div>
+          </li>
+          <li>
+            <span class="tag tag-check">확인</span>
+            <div class="item-label"><b>안전 대응 매뉴얼</b><div class="sub">길 잃거나 지연 시 대응 · 인솔 교사 연락망 확보</div></div>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 2페이즈 -->
+    <div class="phase">
+      <div class="phase-header p2">
+        <div class="phase-num p2">2</div>
+        <div class="phase-title">2페이즈 — 장소 및 견학</div>
+        <span class="tag tag-done">장소 확정</span>
+      </div>
+      <div class="phase-body">
+
+        <div class="loc-grid" style="margin-bottom:14px;">
+
+          <div class="loc-card">
+            <div class="loc-card-top">
+              <div class="loc-num">SITE A · 1조 + 2조</div>
+              <div class="loc-name">전쟁기념관</div>
+              <div class="loc-zone">용산구</div>
+            </div>
+            <div class="loc-card-body">
+              <div class="loc-detail"><b>키워드:</b> 희생, 평화, 감사</div>
+              <div class="loc-detail"><b>암호명:</b> 평화를 산 사람들의 자리</div>
+              <div class="loc-msg">우리가 누리는 평화는 누군가의 희생 위에 있다. 하나님은 그 자리에서 무엇을 보게 하시는가?</div>
+            </div>
+            <div class="loc-card-footer">
+              <span class="tag tag-check">입장료 확인</span>
+              <span class="tag tag-todo">설명교사 미정</span>
+              <span class="tag tag-todo">주차 확인</span>
+            </div>
           </div>
+
+          <div class="loc-card">
+            <div class="loc-card-top">
+              <div class="loc-num">SITE B · 3조 + 4조</div>
+              <div class="loc-name">서대문형무소 / 독립공원</div>
+              <div class="loc-zone">서대문구</div>
+            </div>
+            <div class="loc-card-body">
+              <div class="loc-detail"><b>키워드:</b> 고난, 신념, 믿음</div>
+              <div class="loc-detail"><b>암호명:</b> 갇혔지만 꺾이지 않은 곳</div>
+              <div class="loc-msg">갇힌 곳에서도 꺾이지 않은 사람들. 나는 지금 무엇에 갇혀 있는가?</div>
+            </div>
+            <div class="loc-card-footer">
+              <span class="tag tag-check">입장료 확인</span>
+              <span class="tag tag-todo">설명교사 미정</span>
+              <span class="tag tag-todo">주차 확인</span>
+            </div>
+          </div>
+
+          <div class="loc-card">
+            <div class="loc-card-top">
+              <div class="loc-num">SITE C · 5조 + 6조</div>
+              <div class="loc-name">양화진 / 백주년기념교회</div>
+              <div class="loc-zone">합정</div>
+            </div>
+            <div class="loc-card-body">
+              <div class="loc-detail"><b>키워드:</b> 선교, 헌신, 복음의 유산</div>
+              <div class="loc-detail"><b>암호명:</b> 복음이 묻힌 땅</div>
+              <div class="loc-msg">이 땅에 복음을 심기 위해 묻힌 사람들. 나는 어디에 심겨질 것인가?</div>
+            </div>
+            <div class="loc-card-footer">
+              <span class="tag tag-check">입장료 확인</span>
+              <span class="tag tag-todo">설명교사 미정</span>
+              <span class="tag tag-todo">주차 확인</span>
+            </div>
+          </div>
+
+        </div>
+
+        <ul class="item-list">
+          <li>
+            <span class="tag tag-todo">미정</span>
+            <div class="item-label"><b>설명 교사 3명 배정</b><div class="sub">각 장소에 사전 이동 · 학생 도착 전 대기</div></div>
+          </li>
+          <li>
+            <span class="tag tag-todo">미정</span>
+            <div class="item-label"><b>견학 방식 결정</b><div class="sub">교사 직접 가이드 / 오디오 가이드 / 자유 관람 + 미션지 병행</div></div>
+          </li>
+          <li>
+            <span class="tag tag-todo">미정</span>
+            <div class="item-label"><b>얼음물·간식 준비</b><div class="sub">현장 담당 교사가 미리 구입 · 수량: 조당 10개 기준</div></div>
+          </li>
+          <li>
+            <span class="tag tag-todo">미정</span>
+            <div class="item-label"><b>정탐 보고서 작성 시점</b><div class="sub">견학 중 / 견학 직후 현장에서 — 제출 방식 결정 필요</div></div>
+          </li>
+        </ul>
+
+        <div style="background:var(--gray-light); border-radius:8px; padding:14px; margin-top:12px; font-size:13px; line-height:1.9;">
+          <b>📋 정탐 보고서 형식 (조별 제출)</b><br>
+          1. 인증샷 1장<br>
+          2. 이곳에서 본 세상의 모습 — 한 문장<br>
+          3. 이 영역을 위해 드리는 기도 — 한 문장
         </div>
       </div>
-      <div class="card">
-        <div class="card-header"><h2>📊 영역별 진행률</h2></div>
-        <div class="card-body"><div id="areaProgress"></div></div>
+    </div>
+
+    <!-- 3페이즈 -->
+    <div class="phase">
+      <div class="phase-header p3">
+        <div class="phase-num p3">3</div>
+        <div class="phase-title">3페이즈 — 식사 및 이동</div>
+        <span class="tag tag-todo">미정 항목 多</span>
+      </div>
+      <div class="phase-body">
+        <ul class="item-list">
+          <li>
+            <span class="tag tag-todo">미정</span>
+            <div class="item-label"><b>식사 방식</b><div class="sub">조별 자유 식사 / 지정 식당 / 도시락 중 선택</div></div>
+          </li>
+          <li>
+            <span class="tag tag-todo">미정</span>
+            <div class="item-label"><b>식사비 처리</b><div class="sub">지원 금액 or 본인 부담 · 알레르기·채식 학생 파악 필요</div></div>
+          </li>
+          <li>
+            <span class="tag tag-todo">미정</span>
+            <div class="item-label"><b>도봉숲속마을 집결 장소·시간</b><div class="sub">식사 후 집결 방식 · 조별 자율 이동 or 버스 이동</div></div>
+          </li>
+          <li>
+            <span class="tag tag-todo">미정</span>
+            <div class="item-label"><b>캠프 짐 이동</b><div class="sub">차량 미리 이동 / 직접 들고 이동 중 결정</div></div>
+          </li>
+          <li>
+            <span class="tag tag-todo">미정</span>
+            <div class="item-label"><b>이동 중 활동</b><div class="sub">버스 탑승 시 Day2 사전 안내 또는 자유시간</div></div>
+          </li>
+        </ul>
       </div>
     </div>
-    <div class="card">
-      <div class="card-header"><h2>📌 팀 메모</h2><button class="btn btn-ghost" onclick="saveMemo('overview-memo')">저장</button></div>
-      <div class="card-body"><textarea class="memo-area" id="overview-memo" placeholder="전체 공지사항, 팀 메모, 회의 내용 등..."></textarea></div>
+
+  </div>
+
+  <!-- ═══ Day 2 ═══ -->
+  <div class="tab-panel" id="panel-day2">
+
+    <div class="highlight"><b>천로역정 × 여호수아 가나안 정복</b> — 도봉숲속마을 공간을 순례 경로로 활용, 7개 관문 통과</div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-header"><h2>⏱ 운영 시간표 (90분)</h2></div>
+      <div class="card-body">
+        <ul class="item-list">
+          <li><span class="tag tag-key">0–10분</span><div class="item-label">오프닝 / 세계관 설명</div></li>
+          <li><span class="tag tag-key">10–70분</span><div class="item-label">7관문 순환 <span style="color:var(--gray);font-size:12px;">(관문당 약 8–10분)</span></div></li>
+          <li><span class="tag tag-key">70–80분</span><div class="item-label">최종 여리고 성벽 미션</div></li>
+          <li><span class="tag tag-key">80–90분</span><div class="item-label">조별 결단문 발표 / 기도</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-title">7관문 — 돌파의 순례길</div>
+
+    <div class="gate-grid">
+
+      <div class="gate-card">
+        <div class="gate-card-top">
+          <div class="gate-num-badge">1</div>
+          <div class="gate-name">붉은 줄의 문</div>
+          <span class="tag tag-todo">담당자 미정</span>
+        </div>
+        <div class="gate-body">
+          <div class="gate-row"><b>본문:</b> 라합의 붉은 줄 (수 2장)</div>
+          <div class="gate-row"><b>게임:</b> 빨간 실 거미줄 레이저 미로 통과</div>
+          <div class="gate-msg">돌파는 내가 강해서가 아니라, 하나님이 주신 약속을 붙잡는 데서 시작된다.</div>
+          <div class="gate-supplies">준비물: 빨간 털실/끈, 방울, 스톱워치, 성공 스티커</div>
+        </div>
+      </div>
+
+      <div class="gate-card">
+        <div class="gate-card-top">
+          <div class="gate-num-badge">2</div>
+          <div class="gate-name">요단강</div>
+          <span class="tag tag-todo">담당자 미정</span>
+        </div>
+        <div class="gate-body">
+          <div class="gate-row"><b>본문:</b> 요단강 도하 (수 3장)</div>
+          <div class="gate-row"><b>게임:</b> 제한된 발판으로 전원 건너기 — 언약궤 두 명이 들고 이동</div>
+          <div class="gate-msg">요단강은 먼저 갈라진 것이 아니라, 믿음으로 발을 디뎠을 때 열렸다.</div>
+          <div class="gate-supplies">준비물: 파란 천/테이프, 발판(A4·신문지·폼블럭), 성경책 모형, 기념 돌 카드</div>
+        </div>
+      </div>
+
+      <div class="gate-card">
+        <div class="gate-card-top">
+          <div class="gate-num-badge">3</div>
+          <div class="gate-name">무거운 짐의 언덕</div>
+          <span class="tag tag-todo">담당자 미정</span>
+        </div>
+        <div class="gate-body">
+          <div class="gate-row"><b>본문:</b> 천로역정</div>
+          <div class="gate-row"><b>게임:</b> 단어 카드 붙인 짐 들고 걷다가 십자가 앞에 내려놓기</div>
+          <div class="gate-msg">하나님 앞에 내려놓지 않은 짐은 돌파를 막는다.</div>
+          <div class="gate-supplies">준비물: 가방, 물병·모래주머니, 단어 카드(두려움/비교/죄책감/상처 등), 십자가 표시</div>
+        </div>
+      </div>
+
+      <div class="gate-card">
+        <div class="gate-card-top">
+          <div class="gate-num-badge">4</div>
+          <div class="gate-name">의심의 숲</div>
+          <span class="tag tag-todo">담당자 미정</span>
+        </div>
+        <div class="gate-body">
+          <div class="gate-row"><b>본문:</b> 천로역정</div>
+          <div class="gate-row"><b>게임:</b> 한 명 눈가림 — 조원 말로만 안내해서 코스 통과 (실내/마당)</div>
+          <div class="gate-msg">믿음의 길은 항상 선명하지 않지만, 하나님이 말씀하시면 걸을 수 있다.</div>
+          <div class="gate-supplies">준비물: 눈가리개 1개, 장애물(의자·콘 등)</div>
+        </div>
+      </div>
+
+      <div class="gate-card">
+        <div class="gate-card-top">
+          <div class="gate-num-badge">5</div>
+          <div class="gate-name">허영의 장터</div>
+          <span class="tag tag-todo">담당자 미정</span>
+        </div>
+        <div class="gate-body">
+          <div class="gate-row"><b>본문:</b> 천로역정 허영시장 / 수 24:15</div>
+          <div class="gate-row"><b>게임:</b> 선택 카드 미션 — 인기 vs 정직 / 편함 vs 순종 / 비교 vs 감사 등</div>
+          <div class="gate-msg">돌파는 한 번의 감정이 아니라, 매 순간 하나님을 선택하는 것이다.</div>
+          <div class="gate-supplies">준비물: 선택 카드 세트 (제작 필요)</div>
+        </div>
+      </div>
+
+      <div class="gate-card">
+        <div class="gate-card-top">
+          <div class="gate-num-badge">6</div>
+          <div class="gate-name">침묵의 성벽</div>
+          <span class="tag tag-todo">담당자 미정</span>
+        </div>
+        <div class="gate-body">
+          <div class="gate-row"><b>본문:</b> 여리고성 (수 6장)</div>
+          <div class="gate-row"><b>게임:</b> 말하지 않고 정해진 코스를 돌거나 침묵으로 지시문 수행</div>
+          <div class="gate-msg">여리고성은 힘으로 무너진 것이 아니라, 순종으로 무너졌다.</div>
+          <div class="gate-supplies">준비물: 지시문 카드, 말씀 카드</div>
+        </div>
+      </div>
+
+      <div class="gate-card">
+        <div class="gate-card-top">
+          <div class="gate-num-badge">7</div>
+          <div class="gate-name">약속의 땅</div>
+          <span class="tag tag-todo">담당자 미정</span>
+        </div>
+        <div class="gate-body">
+          <div class="gate-row"><b>본문:</b> 가나안 입성</div>
+          <div class="gate-row"><b>게임:</b> 박스 성벽(두려움·불신·비교·죄·상처 등) → 결단문 외침 → 성벽 무너뜨리기</div>
+          <div class="gate-msg">"우리는 ______을 돌파하고, 하나님을 따라 ______하겠습니다."</div>
+          <div class="gate-supplies">준비물: 박스 성벽(우드락/종이박스), 단어 카드, 스티커, 결단문 종이</div>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <!-- DAY 1 -->
-  <div class="tab-panel" id="panel-day1">
-    <div class="highlight-box">학생들이 팀별로 서울 역사 현장을 돌며 <b>"하나님의 시선으로 세상 보기"</b></div>
+  <!-- ═══ 준비 현황 ═══ -->
+  <div class="tab-panel" id="panel-prep">
+
+    <div class="section-title">확정 사항</div>
     <div class="card">
-      <div class="card-header"><h2>📍 2차 견학 장소 — 최종 3곳</h2><span class="card-sub">2조씩 배정 · 현장 설명 교사 3명 · 입장료 확인 필요</span></div>
-      <div class="card-body" style="overflow-x:auto;">
-        <table class="loc-table">
-          <thead><tr><th>#</th><th>장소</th><th>권역</th><th>암호명</th><th>정탐 키워드</th><th>배정 조 (2조씩)</th><th>설명 교사</th><th>상태</th></tr></thead>
-          <tbody id="loc-table-body"></tbody>
+      <div class="card-body">
+        <ul class="item-list">
+          <li><span class="tag tag-done">확정</span><div class="item-label"><b>수련회 주제:</b> 돌파 / Breakthrough — 여호수아 24:15</div></li>
+          <li><span class="tag tag-done">확정</span><div class="item-label"><b>학생 규모:</b> 50명 내외 · 6조 편성 (조당 약 8~9명)</div></li>
+          <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day1 2차 견학 장소 3곳:</b> 전쟁기념관 / 서대문형무소 / 양화진</div></li>
+          <li><span class="tag tag-done">확정</span><div class="item-label"><b>조 배정 방식:</b> 2조씩 3곳 / 설명 교사 3명 배치</div></li>
+          <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day1 구조:</b> 3페이즈 (이동 미션 → 견학 → 식사·이동)</div></li>
+          <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day2 구조:</b> 돌파의 순례길 — 7관문 90분</div></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="section-title">논의 필요</div>
+    <div class="card">
+      <div class="card-body">
+        <table class="prep-table">
+          <thead><tr><th>항목</th><th>내용</th><th>담당</th></tr></thead>
+          <tbody>
+            <tr><td>조별 이동 수단·교통비</td><td>지하철 기준 동선 확정 / 교통카드 지급 방식</td><td>—</td></tr>
+            <tr><td>1차 경유지 6곳 확정</td><td>나비쇼핑몰 → 2차 장소 이동 중 중간 지점</td><td>—</td></tr>
+            <tr><td>촬영 미션 방식</td><td>로드뷰 재현샷 / 포즈 사진 / 영상 중 선택</td><td>—</td></tr>
+            <tr><td>이동 중 조 활동</td><td>조 이름·구호 만들기 / 릴레이 대화 미션지</td><td>—</td></tr>
+            <tr><td>설명 교사 3명 배정</td><td>전쟁기념관 / 서대문형무소 / 양화진 각 1명</td><td>—</td></tr>
+            <tr><td>견학 방식</td><td>교사 가이드 / 오디오 가이드 / 자유 관람</td><td>—</td></tr>
+            <tr><td>입장료 확인</td><td>3곳 모두 확인 필요 (전쟁기념관 무료 추정)</td><td>—</td></tr>
+            <tr><td>얼음물·간식</td><td>현장 교사가 사전 구입 / 수량 결정</td><td>—</td></tr>
+            <tr><td>식사 방식·비용</td><td>조별 자유 식사 / 지원 금액 결정</td><td>—</td></tr>
+            <tr><td>도봉숲속마을 집결</td><td>집결 시간·장소·이동 수단</td><td>—</td></tr>
+            <tr><td>캠프 짐 이동</td><td>차량 미리 이동 여부</td><td>—</td></tr>
+            <tr><td>Day2 관문별 담당자</td><td>7관문 각 1명 배정</td><td>—</td></tr>
+            <tr><td>Day2 준비물 구매</td><td>성벽 박스·줄·발판 등 전체 목록 후 구매</td><td>—</td></tr>
+          </tbody>
         </table>
       </div>
     </div>
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-header"><h2>📋 조별 미션지 형식</h2></div>
-        <div class="card-body">
-          <ul class="checklist" id="checklist-mission"></ul>
-          <div class="section-title">미션지 예시</div>
-          <div style="background:var(--gray-light);border-radius:8px;padding:12px;font-size:12px;line-height:1.8;">
-            <b>우리가 본 것:</b> 많은 사람이 바쁘게 살아가지만, 각자의 삶 안에 외로움과 두려움이 있어 보였다.<br>
-            <b>우리의 기도:</b> 하나님, 우리가 세상을 판단하기보다 하나님의 마음으로 바라보게 해주세요.
-          </div>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-header"><h2>🛡 안전 운영 확정 항목</h2></div>
-        <div class="card-body"><ul class="checklist" id="checklist-safety"></ul></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><h2>📝 Day1 메모</h2><button class="btn btn-ghost" onclick="saveMemo('day1-memo')">저장</button></div>
-      <div class="card-body"><textarea class="memo-area" id="day1-memo" placeholder="Day1 논의사항, 동선, 시간표 등..."></textarea></div>
-    </div>
-  </div>
 
-  <!-- DAY 2 -->
-  <div class="tab-panel" id="panel-day2">
-    <div class="highlight-box"><b>천로역정 × 여호수아 가나안 정복</b> — 도봉숲속마을 공간을 순례 경로로 활용, 7관문 통과</div>
+    <div class="section-title">안전 체크</div>
     <div class="card">
-      <div class="card-header"><h2>⏱ 운영 시간표 (90분)</h2></div>
-      <div class="card-body" style="overflow-x:auto;">
-        <table class="loc-table"><thead><tr><th>시간</th><th>내용</th></tr></thead><tbody>
-          <tr><td>0–10분</td><td>오프닝 / 세계관 설명</td></tr>
-          <tr><td>10–70분</td><td>7관문 순환 (관문당 약 8–10분)</td></tr>
-          <tr><td>70–80분</td><td>최종 여리고 성벽 미션</td></tr>
-          <tr><td>80–90분</td><td>조별 결단문 발표 / 기도</td></tr>
-        </tbody></table>
-      </div>
-    </div>
-    <div class="section-title">7관문 준비 현황</div>
-    <div class="gate-grid" id="gate-grid"></div>
-    <div class="card" style="margin-top:18px;">
-      <div class="card-header"><h2>📝 Day2 메모</h2><button class="btn btn-ghost" onclick="saveMemo('day2-memo')">저장</button></div>
-      <div class="card-body"><textarea class="memo-area" id="day2-memo" placeholder="공간 배치, 준비물 수량, 운영 동선 등..."></textarea></div>
-    </div>
-  </div>
-
-  <!-- CHECKLIST -->
-  <div class="tab-panel" id="panel-checklist">
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-header"><h2>🗺 가나안 정탐 확정 항목</h2></div>
-        <div class="card-body"><ul class="checklist" id="checklist-confirm-d1"></ul></div>
-      </div>
-      <div class="card">
-        <div class="card-header"><h2>🏰 가나안 정복 확정 항목</h2></div>
-        <div class="card-body"><ul class="checklist" id="checklist-confirm-d2"></ul></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><h2>📌 공통 확정 항목</h2></div>
-      <div class="card-body"><ul class="checklist" id="checklist-common"></ul></div>
-    </div>
-    <div class="card">
-      <div class="card-header"><h2>💬 단톡방 회의 안내문</h2><button class="btn btn-ghost" onclick="copyNotice()">복사</button></div>
       <div class="card-body">
-        <div id="notice-text" style="background:var(--gray-light);border-radius:8px;padding:14px;font-size:13px;line-height:1.9;white-space:pre-wrap;">이번 주 금요일 줌회의에서는 여름캠프 프로그램 중
-조별 이동미션 '가나안 정탐'과
-센터학습 '가나안 정복'을 중심으로 논의하려고 합니다.
-
-이번 수련회 주제가 돌파인 만큼, 두 프로그램이 단순한 미션이나 게임으로 끝나지 않고 학생들이 말씀을 자기 삶으로 연결하는 시간이 되도록 방향을 잡아보면 좋겠습니다.
-
-회의 때는
-• 가나안 정탐 장소 및 운영 방식
-• 조별 이동 안전관리
-• 가나안 정복 센터 구성
-• 센터별 돌파 키워드와 미니게임
-• 준비물과 담당자
-를 정리하려고 합니다.
-
-각자 생각나는 장소나 미션 아이디어가 있으면 미리 가져와 주세요!</div>
+        <ul class="item-list">
+          <li><span class="tag tag-todo">미정</span><div class="item-label">조별 비상 연락망 구축</div></li>
+          <li><span class="tag tag-todo">미정</span><div class="item-label">길 잃거나 지연 시 대응 매뉴얼</div></li>
+          <li><span class="tag tag-todo">미정</span><div class="item-label">폭염 대비 (쿨 스카프·얼음물 등)</div></li>
+          <li><span class="tag tag-todo">미정</span><div class="item-label">비 오는 경우 Day1 대체안</div></li>
+          <li><span class="tag tag-todo">미정</span><div class="item-label">비 오는 경우 Day2 실내 관문 배치안</div></li>
+        </ul>
       </div>
     </div>
-  </div>
 
-  <!-- LOG -->
-  <div class="tab-panel" id="panel-log">
-    <div class="card">
-      <div class="card-header"><h2>📝 업데이트 로그 추가</h2></div>
-      <div class="card-body">
-        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;">
-          <div style="flex:1;min-width:200px;">
-            <div style="font-size:12px;color:var(--gray);margin-bottom:4px;">업데이트 내용</div>
-            <input type="text" id="log-input" class="memo-area" style="min-height:unset;height:38px;padding:8px 12px;" placeholder="예: 가나안 정탐 장소 6곳 확정" onkeydown="if(event.key==='Enter')addLog()">
-          </div>
-          <button class="btn btn-primary" onclick="addLog()">기록 추가</button>
-        </div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-header"><h2>📋 변경 이력</h2><button class="btn btn-ghost" onclick="clearLog()">전체 삭제</button></div>
-      <div class="card-body"><ul class="update-log" id="update-log-list"></ul></div>
-    </div>
   </div>
 
 </main>
-<div id="toast"></div>
 
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
 <script>
-// ── DATA ──────────────────────────────────────────
-const LOCATIONS = [
-  { id:'loc1', name:'전쟁기념관',               zone:'용산',   code:'평화를 산 사람들의 자리',  keywords:'희생, 평화, 감사' },
-  { id:'loc2', name:'서대문형무소 / 독립공원',   zone:'서대문', code:'갇혔지만 꺾이지 않은 곳',  keywords:'고난, 신념, 믿음' },
-  { id:'loc3', name:'양화진 / 백주년기념교회',   zone:'합정',   code:'복음이 묻힌 땅',           keywords:'선교, 헌신, 복음의 유산' },
-];
-const GATES = [
-  { num:1, name:'붉은 줄의 문',    ref:'라합의 붉은 줄 (수 2장)',   game:'빨간 실/끈 거미줄 레이저 미로 통과',                              msg:'돌파는 내가 강해서가 아니라, 하나님이 주신 약속을 붙잡는 데서 시작된다.',     supplies:'빨간 털실/끈, 방울, 스톱워치, 성공 스티커',                              theme:'약속 붙잡기' },
-  { num:2, name:'요단강',          ref:'요단강 도하 (수 3장)',       game:'제한된 발판으로 전원 건너기 — 언약궤(성경책 모형) 두 명이 들고 이동', msg:'요단강은 먼저 갈라진 것이 아니라, 믿음으로 발을 디뎠을 때 열렸다.',          supplies:'파란 천/테이프, 발판(A4·신문지·폼블럭), 성경책 모형, 기념 돌 카드 12장', theme:'믿음의 첫걸음' },
-  { num:3, name:'무거운 짐의 언덕', ref:'천로역정',                  game:'"두려움, 비교, 죄책감, 상처, 외로움, 미루기" 단어 카드 붙인 짐 들고 걷다가 십자가 앞에 내려놓기', msg:'하나님 앞에 내려놓지 않은 짐은 돌파를 막는다.', supplies:'가방, 물병·책·모래주머니, 단어 카드, 십자가 표시', theme:'죄·상처·부담 내려놓기' },
-  { num:4, name:'의심의 숲',       ref:'천로역정',                  game:'한 명 눈가림 — 나머지 조원이 말로만 안내해서 코스 통과 (넓은 마당/실내)', msg:'믿음의 길은 항상 선명하지 않지만, 하나님이 말씀하시면 걸을 수 있다.',       supplies:'눈가리개 1개, 장애물(의자·콘 등)',                                        theme:'두려움·불신 돌파' },
-  { num:5, name:'허영의 장터',     ref:'천로역정 허영시장 / 수 24:15', game:'선택 카드 미션 — 상황카드 뽑고 토론 후 선택 (인기 vs 정직 / 편함 vs 순종 등)', msg:'돌파는 한 번의 감정이 아니라, 매 순간 하나님을 선택하는 것이다.',       supplies:'선택 카드 세트 (제작 필요)',                                              theme:'유혹·가치관 분별' },
-  { num:6, name:'침묵의 성벽',     ref:'여리고성 (수 6장)',          game:'말하지 않고 정해진 코스를 돌거나 침묵으로 지시문 수행',               msg:'여리고성은 힘으로 무너진 것이 아니라, 순종으로 무너졌다.',                  supplies:'지시문 카드, 말씀 카드',                                                  theme:'순종 돌파' },
-  { num:7, name:'약속의 땅',       ref:'가나안 입성',               game:'박스 성벽(단어 부착) → 결단문 외침 → 성벽 무너뜨리기',               msg:'"우리는 ______을 돌파하고, 하나님을 따라 ______하겠습니다."',               supplies:'박스 성벽(우드락/종이박스), 단어 카드, 스티커, 결단문 종이',              theme:'결단과 파송' },
-];
-const CHECKLISTS = {
-  mission:   [ {id:'m1',text:'조별 미션지 초안 작성'}, {id:'m2',text:'미션지 인쇄 매수 결정'}, {id:'m3',text:'단톡방 인증 방식 확정'} ],
-  safety:    [ {id:'s1',text:'조별 담당 교사 배정'}, {id:'s2',text:'이동수단 결정'}, {id:'s3',text:'중간 체크인 시간 및 방식 확정'}, {id:'s4',text:'비 오는 경우 대체안 마련'}, {id:'s5',text:'점심식사 방식 확정'}, {id:'s6',text:'늦어질 경우 대응 매뉴얼'} ],
-  confirmD1: [ {id:'cd1',text:'[확정] 2차 견학 장소 3곳 — 전쟁기념관 / 서대문형무소 / 양화진'}, {id:'cd2',text:'[확정] 2조씩 3곳 배정 (설명 교사 3명)'}, {id:'cd3',text:'장소별 설명 교사 배정'}, {id:'cd4',text:'조별 이동 방식 및 교통비 처리'}, {id:'cd5x',text:'1차 경유지 6곳 확정 (미션 장소)'}, {id:'cd6x',text:'촬영 미션 방식 확정 (포즈/영상)'}, {id:'cd7x',text:'이동 중 조 친해지기 활동 확정'} ],
-  confirmD2: [ {id:'cd5',text:'7관문 최종 확정'}, {id:'cd6',text:'관문별 담당자 배정'}, {id:'cd7',text:'준비물 목록 전체 작성'}, {id:'cd8',text:'비 오는 경우 대체안 (실내 이동)'} ],
-  common:    [ {id:'cc1',text:'마감 일정 확정 (준비물 구매 D-day)'}, {id:'cc2',text:'학생들에게 설명할 멘트 준비'}, {id:'cc3',text:'단톡방 회의 안내문 발송'}, {id:'cc4',text:'전체 예산 산출'}, {id:'cc5',text:'캠프 전날 준비물 최종 점검'} ],
-};
-const AREAS = [
-  { label:'Day1 미션지',       ids:['m1','m2','m3'] },
-  { label:'Day1 안전 운영',    ids:['s1','s2','s3','s4','s5','s6'] },
-  { label:'회의 확정 (정탐)',  ids:['cd1','cd2','cd3','cd4'] },
-  { label:'회의 확정 (정복)',  ids:['cd5','cd6','cd7','cd8'] },
-  { label:'공통',              ids:['cc1','cc2','cc3','cc4','cc5'] },
-];
-const STATUS_LABELS  = { pending:'준비 전', progress:'진행 중', done:'완료', hold:'보류' };
-const STATUS_CLASSES = { pending:'badge-pending', progress:'badge-progress', done:'badge-done', hold:'badge-hold' };
-const STATUS_CYCLE   = ['pending','progress','done','hold'];
-const nextStatus = cur => STATUS_CYCLE[(STATUS_CYCLE.indexOf(cur)+1)%STATUS_CYCLE.length];
-
-// ── FIREBASE ──────────────────────────────────────
-firebase.initializeApp({
-  apiKey: "AIzaSyAZJQbC6dbLtn4D32FnXQIh5hZFs4iyWoQ",
-  authDomain: "pwcamp26.firebaseapp.com",
-  projectId: "pwcamp26",
-  storageBucket: "pwcamp26.firebasestorage.app",
-  messagingSenderId: "860034291771",
-  appId: "1:860034291771:web:8de5a9e21dcfe28aefa41e",
-  databaseURL: "https://pwcamp26-default-rtdb.asia-southeast1.firebasedatabase.app"
-});
-const db = firebase.database();
-let state = {}, initialized = false;
-
-// 연결 상태 표시
-db.ref('.info/connected').on('value', snap => {
-  const el = document.getElementById('conn-status');
-  if (!el) return;
-  el.textContent = snap.val() ? '● 실시간 연결됨' : '● 연결 끊김';
-  el.style.color  = snap.val() ? '#51cf66' : '#ff6b6b';
-});
-
-// 전체 실시간 리스너
-db.ref('/').on('value', snap => {
-  state = snap.val() || {};
-  updateLastUpdated();
-  renderAll();
-  if (!initialized) {
-    initialized = true;
-    document.getElementById('loading-overlay').style.display = 'none';
-    const el = document.getElementById('sum-dday');
-    if (el) {
-      const diff = Math.ceil((new Date('2026-07-17') - new Date()) / 86400000);
-      el.textContent = diff > 0 ? diff + '일' : 'D-Day';
-    }
-  }
-});
-
-// ── ACCESSORS ─────────────────────────────────────
-const isChecked    = id => !!(state.checks?.[id]);
-const getOwner     = id => state.owners?.[id]     || '';
-const getMemo      = id => state.memos?.[id]      || '';
-const getLocStatus = id => state.locStatus?.[id]  || 'pending';
-const getLocOwner  = id => state.locOwners?.[id]  || '';
-const getGateStatus= id => state.gateStatus?.[id] || 'pending';
-const getGateOwner  = id => state.gateOwners?.[id]   || '';
-const getLocTeacher = id => state.locTeachers?.[id]  || '';
-
-// ── MUTATORS ──────────────────────────────────────
-const setChecked    = (id,v) => db.ref('checks/'+id).set(v);
-const setLocStatus  = (id,v) => db.ref('locStatus/'+id).set(v);
-const setLocOwner   = (id,v) => db.ref('locOwners/'+id).set(v);
-const setGateStatus = (id,v) => db.ref('gateStatus/'+id).set(v);
-const setGateOwner  = (id,v) => db.ref('gateOwners/'+id).set(v);
-const setLocTeacher = (id,v) => db.ref('locTeachers/'+id).set(v);
-const setOwner      = (id,v) => v ? db.ref('owners/'+id).set(v) : db.ref('owners/'+id).remove();
-
-function saveMemo(id) {
-  const el = document.getElementById(id);
-  if (el) db.ref('memos/'+id).set(el.value).then(() => showToast('저장되었습니다.'));
-}
-function updateLastUpdated() {
-  const el = document.getElementById('lastUpdated');
-  if (!el) return;
-  const now = new Date();
-  el.textContent = `마지막 업데이트: ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
-}
-
-// ── RENDER ────────────────────────────────────────
-function renderAll() {
-  renderChecklist('checklist-mission',    CHECKLISTS.mission);
-  renderChecklist('checklist-safety',     CHECKLISTS.safety);
-  renderChecklist('checklist-confirm-d1', CHECKLISTS.confirmD1);
-  renderChecklist('checklist-confirm-d2', CHECKLISTS.confirmD2);
-  renderChecklist('checklist-common',     CHECKLISTS.common);
-  renderLocTable();
-  renderGateGrid();
-  updateProgress();
-  renderLog();
-  ['overview-memo','day1-memo','day2-memo'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el && document.activeElement !== el) el.value = getMemo(id);
-  });
-}
-
-function renderChecklist(ulId, items) {
-  const ul = document.getElementById(ulId);
-  if (!ul) return;
-  ul.innerHTML = items.map(item => {
-    const checked = isChecked(item.id);
-    return `<li>
-      <label>
-        <input type="checkbox" ${checked?'checked':''} onchange="setChecked('${item.id}',this.checked)">
-        <span class="item-text ${checked?'checked':''}">${item.text}</span>
-      </label>
-      <span class="item-owner" contenteditable="true"
-        onblur="setOwner('${item.id}',this.textContent.trim())">${getOwner(item.id)}</span>
-    </li>`;
-  }).join('');
-}
-
-function renderLocTable() {
-  const tbody = document.getElementById('loc-table-body');
-  if (!tbody) return;
-  tbody.innerHTML = LOCATIONS.map(loc => {
-    const st = getLocStatus(loc.id);
-    return `<tr>
-      <td><b>${loc.id.replace('loc','')}</b></td>
-      <td>${loc.name}</td>
-      <td><span class="zone-tag">${loc.zone}</span></td>
-      <td style="font-size:12px;">${loc.code}</td>
-      <td style="font-size:12px;color:var(--text-soft);">${loc.keywords}</td>
-      <td><input class="owner-input" type="text" value="${getLocOwner(loc.id)}" placeholder="예) 1조, 2조" onblur="setLocOwner('${loc.id}',this.value)" style="width:90px;"></td>
-      <td><input class="owner-input" type="text" value="${getLocTeacher(loc.id)}" placeholder="교사명" onblur="setLocTeacher('${loc.id}',this.value)"></td>
-      <td><span class="badge ${STATUS_CLASSES[st]}" onclick="setLocStatus('${loc.id}','${nextStatus(st)}')">${STATUS_LABELS[st]}</span></td>
-    </tr>`;
-  }).join('');
-}
-
-function renderGateGrid() {
-  const grid = document.getElementById('gate-grid');
-  if (!grid) return;
-  grid.innerHTML = GATES.map(g => {
-    const id = 'gate'+g.num;
-    const st = getGateStatus(id);
-    return `<div class="gate-card">
-      <div class="gate-card-header">
-        <div class="gate-num">${g.num}</div>
-        <div class="gate-title">${g.name}</div>
-        <span class="badge ${STATUS_CLASSES[st]}" onclick="setGateStatus('${id}','${nextStatus(st)}')">${STATUS_LABELS[st]}</span>
-      </div>
-      <div class="gate-card-body">
-        <div class="gate-meta"><b>주제:</b> ${g.theme}</div>
-        <div class="gate-meta"><b>본문:</b> ${g.ref}</div>
-        <div class="gate-meta"><b>게임:</b> ${g.game}</div>
-        <div class="gate-msg">${g.msg}</div>
-        <div class="gate-supplies"><b>준비물:</b> ${g.supplies}</div>
-      </div>
-      <div class="gate-card-footer">
-        <span style="font-size:12px;color:var(--gray);">담당:</span>
-        <input class="gate-owner-input" type="text" placeholder="담당자 입력" value="${getGateOwner(id)}" onblur="setGateOwner('${id}',this.value)">
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function updateProgress() {
-  const allItems = Object.values(CHECKLISTS).flat();
-  const total = allItems.length;
-  const done  = allItems.filter(i => isChecked(i.id)).length;
-  const pct   = total ? Math.round(done/total*100) : 0;
-  document.getElementById('globalBar').style.width = pct+'%';
-  document.getElementById('globalPct').textContent = pct+'%';
-  document.getElementById('sum-total').textContent  = total;
-  document.getElementById('sum-done').textContent   = done;
-  document.getElementById('sum-remain').textContent = total-done;
-  const el = document.getElementById('areaProgress');
-  if (!el) return;
-  el.innerHTML = AREAS.map(area => {
-    const d = area.ids.filter(id=>isChecked(id)).length;
-    const t = area.ids.length;
-    const p = t ? Math.round(d/t*100) : 0;
-    const c = p===100?'var(--green)':p>0?'var(--gold)':'var(--border)';
-    return `<div style="margin-bottom:13px;">
-      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px;">
-        <span>${area.label}</span><span style="font-weight:700;color:${c};">${d}/${t}</span>
-      </div>
-      <div style="background:var(--border);border-radius:20px;height:8px;overflow:hidden;">
-        <div style="width:${p}%;height:100%;background:${c};border-radius:20px;transition:width 0.4s;"></div>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ── LOG ───────────────────────────────────────────
-function renderLog() {
-  const ul = document.getElementById('update-log-list');
-  if (!ul) return;
-  const logs = state.logs ? Object.values(state.logs).sort((a,b)=>(a.ts||0)-(b.ts||0)) : [];
-  ul.innerHTML = logs.length
-    ? logs.slice().reverse().map(l=>`<li><span class="log-date">${l.date}</span><span>${l.text}</span></li>`).join('')
-    : '<li><span style="color:var(--gray);font-size:13px;">아직 기록이 없습니다.</span></li>';
-}
-function addLog() {
-  const input = document.getElementById('log-input');
-  const text  = input.value.trim();
-  if (!text) return;
-  const now  = new Date();
-  const date = `${now.getFullYear()}.${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')}`;
-  db.ref('logs').push({ date, text, ts: Date.now() });
-  input.value = '';
-  showToast('로그가 추가되었습니다.');
-}
-function clearLog() {
-  if (confirm('전체 로그를 삭제하시겠습니까?')) db.ref('logs').remove();
-}
-
-// ── UI ────────────────────────────────────────────
 function switchTab(name, btn) {
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('panel-'+name).classList.add('active');
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
   btn.classList.add('active');
 }
-function copyNotice() {
-  navigator.clipboard.writeText(document.getElementById('notice-text').innerText)
-    .then(()=>showToast('클립보드에 복사되었습니다!'));
-}
-let toastTimer;
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.style.opacity = '1';
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(()=>{ t.style.opacity='0'; }, 2000);
+// D-day
+const ddEl = document.getElementById('dday-num');
+if (ddEl) {
+  const diff = Math.ceil((new Date('2026-07-17') - new Date()) / 86400000);
+  ddEl.textContent = diff > 0 ? diff + '일' : 'D-Day';
 }
 </script>
 </body>
