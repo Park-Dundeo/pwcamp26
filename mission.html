@@ -195,11 +195,10 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     🔒 이 기기는 <b><span id="fixedTeamNum"></span>조</b>로 고정되었어요
   </div>
 
-  <!-- 목적지 배너 -->
+  <!-- 목적지 배너 (미션 진행에 따라 다음 장소만 표시) -->
   <div class="dest-banner" id="destBanner">
-    <div class="dest-label">오늘의 정탐지</div>
-    <div class="dest-name" id="destName">—</div>
-    <div class="dest-waypoint">1차 경유지 <b id="destWaypoint">—</b></div>
+    <div class="dest-label" id="destLabel">1차 경유지</div>
+    <div class="dest-name" id="destTarget">—</div>
   </div>
 
   <!-- 잠금 화면 -->
@@ -415,6 +414,27 @@ function resetMissionUI() {
   rb.disabled = false; rb.textContent = '📝 보고서 제출하기';
 }
 
+// ── 목적지 배너: 미션 진행 단계에 맞는 "다음 장소"만 표시 ──
+function updateDestBanner(stage) {
+  const info = TEAM_MAP[currentTeam];
+  if (!info) return;
+  const banner = document.getElementById('destBanner');
+  const label = document.getElementById('destLabel');
+  const target = document.getElementById('destTarget');
+
+  if (stage === 'waypoint') {
+    banner.style.display = 'block';
+    label.textContent = '1차 경유지 · 미션1';
+    target.textContent = info.waypoint;
+  } else if (stage === 'final') {
+    banner.style.display = 'block';
+    label.textContent = '다음 목적지 · 미션2';
+    target.textContent = info.dest;
+  } else if (stage === 'done') {
+    banner.style.display = 'none';
+  }
+}
+
 // ── 조 선택 ──
 function selectTeam(num) {
   currentTeam = num;
@@ -424,8 +444,7 @@ function selectTeam(num) {
   const banner = document.getElementById('destBanner');
   banner.style.background = info.bg;
   banner.style.display = 'block';
-  document.getElementById('destName').textContent = info.dest;
-  document.getElementById('destWaypoint').textContent = info.waypoint;
+  updateDestBanner('waypoint');  // 기본은 1차 경유지만 표시, loadStatus에서 실제 진행상황에 맞게 갱신됨
 
   localStorage.setItem('pwcamp_team', num);
   resetMissionUI();  // 팀 바뀔 때마다 미션 상태 초기화
@@ -597,6 +616,7 @@ function showM1Done(skipTransition = false) {
   document.getElementById('m1UploadArea').style.display = 'none';
   document.getElementById('m1Done').style.display = 'block';
   document.getElementById('mission2Locked').style.display = 'none';
+  updateDestBanner('final');  // 미션1 완료 → 다음 목적지(최종 정탐지) 공개
 
   if (skipTransition) {
     // 재접속 복원: 전환 화면 없이 바로 미션2 표시
@@ -621,6 +641,7 @@ function unlockMission2() {
 function showM2Done() {
   document.getElementById('m2Form').style.display = 'none';
   document.getElementById('m2Done').style.display = 'block';
+  updateDestBanner('done');  // 오늘의 정탐 완료 → 배너 숨김
 }
 
 // ── 페이지 로드 시 이전 상태 복원 ──
