@@ -74,10 +74,25 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .mission-title{font-size:15px;font-weight:700;}
 
 /* ── Locked mission placeholder ── */
-.mission-locked{background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:16px;overflow:hidden;opacity:.45;pointer-events:none;}
-.mission-locked-body{padding:20px;display:flex;align-items:center;gap:12px;color:var(--gray);}
-.mission-locked-body .lock-sm{font-size:22px;}
-.mission-locked-body span{font-size:13px;font-weight:600;}
+.mission-locked{background:#1a2744;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.15);margin-bottom:16px;overflow:hidden;opacity:.6;pointer-events:none;}
+.mission-locked-body{padding:18px 20px;display:flex;align-items:center;gap:14px;color:rgba(255,255,255,.5);}
+.mission-locked-icon{font-size:24px;flex-shrink:0;}
+.mission-locked-text .locked-label{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:3px;}
+.mission-locked-text .locked-title{font-size:14px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:3px;}
+
+/* ── Mission transition (스토리텔링) ── */
+.mission-transition{display:none;margin-bottom:16px;animation:fadeUp .5s ease;}
+.transition-card{background:linear-gradient(160deg,#0f1c3a,#1a2744);border-radius:var(--radius);padding:28px 22px 24px;color:#fff;box-shadow:0 6px 28px rgba(0,0,0,.25);position:relative;overflow:hidden;text-align:center;}
+.transition-card::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:radial-gradient(circle,rgba(245,159,0,.12),transparent 70%);border-radius:50%;}
+.transition-card::after{content:'';position:absolute;bottom:-30px;left:-30px;width:100px;height:100px;background:radial-gradient(circle,rgba(59,91,219,.15),transparent 70%);border-radius:50%;}
+.t-stamp{display:inline-block;border:1.5px solid rgba(245,159,0,.5);color:var(--gold);font-size:10px;font-weight:800;letter-spacing:2px;padding:3px 10px;border-radius:20px;margin-bottom:16px;}
+.t-icon{font-size:36px;margin-bottom:12px;display:block;}
+.t-headline{font-size:20px;font-weight:800;letter-spacing:-0.5px;margin-bottom:16px;line-height:1.3;}
+.t-body{font-size:14px;line-height:1.9;opacity:.8;margin-bottom:22px;}
+.t-body b{color:var(--gold);font-weight:700;opacity:1;}
+.t-verse{font-size:11px;opacity:.45;letter-spacing:.5px;margin-bottom:22px;}
+.t-btn{background:var(--gold);color:var(--navy);border:none;border-radius:10px;padding:14px 24px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;width:100%;transition:opacity .2s;}
+.t-btn:active{opacity:.85;}
 
 /* ── Roadview placeholder ── */
 .rv-placeholder{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#2d3a5e,#1a2744);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;margin-bottom:14px;}
@@ -218,8 +233,28 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     <!-- 미션 2 잠금 placeholder (미션1 완료 전) -->
     <div class="mission-locked" id="mission2Locked">
       <div class="mission-locked-body">
-        <span class="lock-sm">🔒</span>
-        <span>미션 1을 완료하면 다음 미션이 열립니다</span>
+        <span class="mission-locked-icon">🔒</span>
+        <div class="mission-locked-text">
+          <div class="locked-label">다음 임무</div>
+          <div class="locked-title">? ? ?</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 미션 전환 스토리텔링 (미션1 완료 직후) -->
+    <div class="mission-transition" id="missionTransition">
+      <div class="transition-card">
+        <div class="t-stamp">MISSION CLEARED</div>
+        <span class="t-icon">📜</span>
+        <div class="t-headline">첫 관문,<br>통과했다.</div>
+        <div class="t-body">
+          너희의 발이 이 땅을 밟았고<br>
+          너희의 눈이 세상을 보았다.<br><br>
+          여호수아가 기다린다.<br>
+          <b>본 것을 보고하라.</b>
+        </div>
+        <div class="t-verse">여호수아 2:23 — 정탐꾼 두 사람이 돌아와 보고하되</div>
+        <button class="t-btn" onclick="unlockMission2()">다음 임무 열기 →</button>
       </div>
     </div>
 
@@ -356,7 +391,7 @@ function loadStatus() {
   db.ref(`submissions/team${currentTeam}`).once('value', snap => {
     const d = snap.val() || {};
     if (d.mission1?.photoData) {
-      showM1Done();       // 미션1 완료 → 미션2도 자동 해금
+      showM1Done(true);   // 재접속 시 전환 화면 생략하고 바로 미션2 표시
     }
     if (d.mission2?.submittedAt) {
       showM2Done();
@@ -427,7 +462,7 @@ async function uploadMission1() {
       uploadedAt: firebase.database.ServerValue.TIMESTAMP,
     });
     pb.style.width = '100%';
-    showM1Done();
+    showM1Done(false);  // 제출 시 스토리텔링 전환 화면 표시
     showToast('✅ 인증샷 제출 완료!');
   } catch(e) {
     console.error(e);
@@ -463,12 +498,29 @@ async function submitMission2() {
 }
 
 // ── 상태 전환 ──
-function showM1Done() {
+function showM1Done(skipTransition = false) {
   document.getElementById('m1UploadArea').style.display = 'none';
   document.getElementById('m1Done').style.display = 'block';
-  // 미션2 잠금 해제
   document.getElementById('mission2Locked').style.display = 'none';
-  document.getElementById('mission2Card').style.display = 'block';
+
+  if (skipTransition) {
+    // 재접속 복원: 전환 화면 없이 바로 미션2 표시
+    document.getElementById('mission2Card').style.display = 'block';
+  } else {
+    // 첫 제출: 스토리텔링 전환 화면 먼저 표시
+    setTimeout(() => {
+      const t = document.getElementById('missionTransition');
+      t.style.display = 'block';
+      t.scrollIntoView({behavior:'smooth', block:'start'});
+    }, 600);
+  }
+}
+
+function unlockMission2() {
+  document.getElementById('missionTransition').style.display = 'none';
+  const m2 = document.getElementById('mission2Card');
+  m2.style.display = 'block';
+  m2.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 function showM2Done() {
