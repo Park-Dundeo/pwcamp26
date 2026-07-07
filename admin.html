@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>관리자 대시보드 — 파워웨이브 2026</title>
+<style>
+:root {
+  --navy:#1a2744; --navy-mid:#243460; --blue:#3b5bdb;
+  --gold:#f59f00; --green:#2f9e44; --orange:#e8590c;
+  --gray:#868e96; --border:#dee2e6; --radius:10px;
+  --shadow:0 2px 12px rgba(0,0,0,.07);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;}
+
+/* ── Password gate ── */
+.pw-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.pw-box{background:#fff;border-radius:16px;padding:36px 24px;width:100%;max-width:360px;box-shadow:0 6px 32px rgba(0,0,0,.12);text-align:center;}
+.pw-logo{font-size:40px;margin-bottom:12px;}
+.pw-title{font-size:19px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.pw-sub{font-size:13px;color:var(--gray);margin-bottom:22px;}
+.pw-input{width:100%;padding:14px;border:1.5px solid var(--border);border-radius:8px;font-size:16px;font-family:inherit;text-align:center;letter-spacing:3px;margin-bottom:10px;}
+.pw-input:focus{outline:none;border-color:var(--blue);}
+.pw-btn{width:100%;padding:14px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;}
+.pw-btn:active{opacity:.85;}
+.pw-error{color:#e03131;font-size:13px;margin-top:8px;display:none;}
+
+/* ── Dashboard ── */
+.dashboard{display:none;}
+.site-header{background:linear-gradient(135deg,var(--navy),#2d4a9e);color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.header-left .title{font-size:16px;font-weight:800;}
+.header-left .sub{font-size:11px;opacity:.7;margin-top:2px;}
+.header-right{display:flex;align-items:center;gap:10px;}
+.live-badge{display:flex;align-items:center;gap:5px;font-size:11px;opacity:.8;}
+.live-dot{width:7px;height:7px;background:#f03e3e;border-radius:50%;animation:blink 1.2s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.logout-btn{background:rgba(255,255,255,.15);border:none;color:#fff;padding:6px 13px;border-radius:20px;font-size:12px;cursor:pointer;font-family:inherit;}
+
+.main{max-width:960px;margin:0 auto;padding:20px 16px 60px;}
+
+/* Stats */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px;}
+@media(max-width:600px){.stats-row{grid-template-columns:repeat(2,1fr);}}
+.stat-box{background:#fff;border-radius:var(--radius);padding:14px;text-align:center;box-shadow:var(--shadow);border-top:3px solid var(--blue);}
+.stat-box.green{border-top-color:var(--green);}
+.stat-box.gold{border-top-color:var(--gold);}
+.stat-box.orange{border-top-color:var(--orange);}
+.stat-num{font-size:24px;font-weight:800;color:var(--navy);}
+.stat-lbl{font-size:11px;color:var(--gray);margin-top:2px;}
+
+/* Section title */
+.section-title{font-size:11px;font-weight:700;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* Team grid */
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+@media(max-width:540px){.team-grid{grid-template-columns:1fr 1fr;}}
+
+.team-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:all .2s;border:2px solid transparent;}
+.team-card:hover{border-color:var(--blue);transform:translateY(-2px);}
+.team-card.active{border-color:var(--blue);}
+.team-card-top{padding:14px 14px 10px;display:flex;align-items:center;gap:10px;}
+.team-badge{width:36px;height:36px;border-radius:50%;background:var(--navy);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.team-info .name{font-size:15px;font-weight:700;}
+.team-info .dest{font-size:11px;color:var(--gray);}
+.team-pills{padding:0 12px 12px;display:flex;gap:6px;}
+.pill{flex:1;padding:5px 4px;border-radius:6px;font-size:11px;font-weight:700;text-align:center;}
+.pill.done{background:#ebfbee;color:var(--green);}
+.pill.wait{background:#f1f3f5;color:var(--gray);}
+
+/* Detail panel */
+.detail-panel{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden;display:none;animation:fadeIn .25s ease;}
+.detail-panel.visible{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.detail-header{padding:14px 18px;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:space-between;}
+.detail-header h3{font-size:15px;font-weight:700;}
+.close-btn{background:rgba(255,255,255,.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;}
+.detail-body{padding:18px;}
+.detail-section{font-size:12px;font-weight:700;color:var(--gray);letter-spacing:.5px;margin-bottom:10px;}
+.detail-photo{width:100%;border-radius:8px;max-height:340px;object-fit:cover;margin-bottom:8px;}
+.detail-empty{background:#f8f9fa;border-radius:8px;padding:20px;text-align:center;color:var(--gray);font-size:13px;}
+.submit-time{font-size:11px;color:var(--gray);margin-bottom:14px;}
+.divider{border:none;border-top:1px solid var(--border);margin:16px 0;}
+.report-box{background:#f8f9fa;border-radius:8px;padding:14px;}
+.report-row{padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.report-row:last-child{border-bottom:none;}
+.report-row .lbl{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px;}
+.report-row .val{color:#495057;line-height:1.65;}
+
+/* Feed */
+.feed-list{display:flex;flex-direction:column;gap:12px;}
+.feed-item{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:flex;align-items:stretch;gap:0;}
+.feed-thumb{width:80px;flex-shrink:0;background:#e9ecef;}
+.feed-thumb img{width:100%;height:100%;object-fit:cover;display:block;}
+.feed-content{flex:1;padding:12px;}
+.feed-team{font-size:12px;font-weight:800;color:var(--navy);}
+.feed-dest{font-size:11px;color:var(--gray);margin-bottom:6px;}
+.feed-text{font-size:13px;color:#495057;line-height:1.55;}
+.feed-time{font-size:11px;color:var(--gray);margin-top:6px;}
+</style>
+</head>
+<body>
+
+<!-- 비밀번호 게이트 -->
+<div class="pw-gate" id="pwGate">
+  <div class="pw-box">
+    <div class="pw-logo">🔐</div>
+    <div class="pw-title">관리자 대시보드</div>
+    <div class="pw-sub">파워웨이브 2026 캠프팀 전용</div>
+    <input type="password" class="pw-input" id="pwInput" placeholder="비밀번호 입력"
+      onkeydown="if(event.key==='Enter')checkPw()">
+    <button class="pw-btn" onclick="checkPw()">입장하기</button>
+    <div class="pw-error" id="pwError">비밀번호가 틀렸습니다</div>
+  </div>
+</div>
+
+<!-- 대시보드 -->
+<div class="dashboard" id="dashboard">
+  <header class="site-header">
+    <div class="header-left">
+      <div class="title">관리자 대시보드</div>
+      <div class="sub">2026 강동 파워웨이브 여름캠프</div>
+    </div>
+    <div class="header-right">
+      <div class="live-badge"><span class="live-dot"></span>실시간</div>
+      <button class="logout-btn" onclick="logout()">로그아웃</button>
+    </div>
+  </header>
+
+  <div class="main">
+
+    <!-- 통계 -->
+    <div class="stats-row">
+      <div class="stat-box"><div class="stat-num">6</div><div class="stat-lbl">전체 조</div></div>
+      <div class="stat-box green"><div class="stat-num" id="statM1">0</div><div class="stat-lbl">미션1 완료</div></div>
+      <div class="stat-box gold"><div class="stat-num" id="statM2">0</div><div class="stat-lbl">미션2 완료</div></div>
+      <div class="stat-box orange"><div class="stat-num" id="statBoth">0</div><div class="stat-lbl">전부 완료</div></div>
+    </div>
+
+    <!-- 조별 현황 -->
+    <div class="section-title">조별 현황</div>
+    <div class="team-grid" id="teamGrid"></div>
+
+    <!-- 상세 패널 -->
+    <div class="detail-panel" id="detailPanel">
+      <div class="detail-header">
+        <h3 id="detailTitle">—</h3>
+        <button class="close-btn" onclick="closeDetail()">✕</button>
+      </div>
+      <div class="detail-body" id="detailBody"></div>
+    </div>
+
+    <!-- 전체 피드 -->
+    <div class="section-title">전체 제출 피드</div>
+    <div class="feed-list" id="feedList">
+      <div style="color:var(--gray);font-size:13px;text-align:center;padding:20px;">아직 제출된 내역이 없습니다</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
+
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyAZJQbC6dbLtn4D32FnXQIh5hZFs4iyWoQ",
+  authDomain: "pwcamp26.firebaseapp.com",
+  databaseURL: "https://pwcamp26-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "pwcamp26",
+  storageBucket: "pwcamp26.firebasestorage.app",
+  messagingSenderId: "860034291771",
+  appId: "1:860034291771:web:8de5a9e21dcfe28aefa41e"
+});
+const db = firebase.database();
+
+const TEAM_MAP = {
+  1:{dest:'전쟁기념관',waypoint:'뚝섬유원지역'},
+  2:{dest:'전쟁기념관',waypoint:'뚝섬유원지역'},
+  3:{dest:'서대문형무소',waypoint:'성수역'},
+  4:{dest:'서대문형무소',waypoint:'성수역'},
+  5:{dest:'양화진',waypoint:'홍대입구역'},
+  6:{dest:'양화진',waypoint:'홍대입구역'},
+};
+
+const ADMIN_PW = 'pwave2026';
+let allData = {};
+let activeTeam = null;
+
+// ── 비밀번호 ──
+function checkPw() {
+  if (document.getElementById('pwInput').value === ADMIN_PW) {
+    sessionStorage.setItem('admin_ok','1');
+    showDashboard();
+  } else {
+    document.getElementById('pwError').style.display = 'block';
+  }
+}
+function logout() {
+  sessionStorage.removeItem('admin_ok');
+  location.reload();
+}
+if (sessionStorage.getItem('admin_ok') === '1') showDashboard();
+
+// ── 대시보드 초기화 ──
+function showDashboard() {
+  document.getElementById('pwGate').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+  buildTeamGrid();
+  db.ref('submissions').on('value', snap => {
+    allData = snap.val() || {};
+    updateStats();
+    updateCards();
+    updateFeed();
+    if (activeTeam) renderDetail(activeTeam);
+  });
+}
+
+// ── 조별 카드 생성 ──
+function buildTeamGrid() {
+  const grid = document.getElementById('teamGrid');
+  grid.innerHTML = '';
+  for (let t = 1; t <= 6; t++) {
+    const info = TEAM_MAP[t];
+    grid.innerHTML += `
+      <div class="team-card" id="card-${t}" onclick="showDetail(${t})">
+        <div class="team-card-top">
+          <div class="team-badge">${t}조</div>
+          <div class="team-info">
+            <div class="name">${t}조</div>
+            <div class="dest">${info.dest}</div>
+          </div>
+        </div>
+        <div class="team-pills">
+          <div class="pill wait" id="pill-m1-${t}">⏳ 미션1</div>
+          <div class="pill wait" id="pill-m2-${t}">⏳ 미션2</div>
+        </div>
+      </div>`;
+  }
+}
+
+// ── 통계 업데이트 ──
+function updateStats() {
+  let m1=0,m2=0,both=0;
+  for (let t=1;t<=6;t++) {
+    const d = allData[`team${t}`]||{};
+    const h1 = !!d.mission1?.photoURL;
+    const h2 = !!d.mission2?.submittedAt;
+    if(h1)m1++; if(h2)m2++; if(h1&&h2)both++;
+  }
+  document.getElementById('statM1').textContent=m1;
+  document.getElementById('statM2').textContent=m2;
+  document.getElementById('statBoth').textContent=both;
+}
+
+// ── 카드 상태 업데이트 ──
+function updateCards() {
+  for (let t=1;t<=6;t++) {
+    const d=allData[`team${t}`]||{};
+    const h1=!!d.mission1?.photoURL, h2=!!d.mission2?.submittedAt;
+    const p1=document.getElementById(`pill-m1-${t}`);
+    const p2=document.getElementById(`pill-m2-${t}`);
+    if(p1){p1.textContent=h1?'✅ 미션1':'⏳ 미션1';p1.className=`pill ${h1?'done':'wait'}`;}
+    if(p2){p2.textContent=h2?'✅ 미션2':'⏳ 미션2';p2.className=`pill ${h2?'done':'wait'}`;}
+  }
+}
+
+// ── 상세 패널 ──
+function showDetail(t) {
+  activeTeam = t;
+  document.querySelectorAll('.team-card').forEach(c=>c.classList.remove('active'));
+  document.getElementById(`card-${t}`).classList.add('active');
+  document.getElementById('detailPanel').classList.add('visible');
+  document.getElementById('detailTitle').textContent=`${t}조 제출 내역 — ${TEAM_MAP[t].dest}`;
+  renderDetail(t);
+  document.getElementById('detailPanel').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function renderDetail(t) {
+  const d=allData[`team${t}`]||{};
+  const m1=d.mission1, m2=d.mission2;
+  let html='';
+
+  html+=`<div class="detail-section">📷 미션 1 — 경유지 인증샷</div>`;
+  if(m1?.photoURL){
+    html+=`<img class="detail-photo" src="${m1.photoURL}" loading="lazy">
+           <div class="submit-time">제출: ${fmt(m1.uploadedAt)}</div>`;
+  } else {
+    html+=`<div class="detail-empty">아직 제출하지 않았습니다</div>`;
+  }
+
+  html+=`<hr class="divider">
+         <div class="detail-section">📝 미션 2 — 정탐 보고서</div>`;
+  if(m2?.submittedAt){
+    html+=`<div class="report-box">
+      <div class="report-row"><div class="lbl">👁 우리가 본 것</div><div class="val">${esc(m2.seen)}</div></div>
+      <div class="report-row"><div class="lbl">🙏 우리의 기도</div><div class="val">${esc(m2.prayer)}</div></div>
+    </div>
+    <div class="submit-time" style="margin-top:8px;">제출: ${fmt(m2.submittedAt)}</div>`;
+  } else {
+    html+=`<div class="detail-empty">아직 제출하지 않았습니다</div>`;
+  }
+
+  document.getElementById('detailBody').innerHTML=html;
+}
+
+function closeDetail(){
+  activeTeam=null;
+  document.getElementById('detailPanel').classList.remove('visible');
+  document.querySelectorAll('.team-card').forEach(c=>c.classList.remove('active'));
+}
+
+// ── 전체 피드 ──
+function updateFeed(){
+  const items=[];
+  for(let t=1;t<=6;t++){
+    const d=allData[`team${t}`]||{};
+    if(d.mission1?.photoURL){
+      items.push({team:t,type:'photo',url:d.mission1.photoURL,time:d.mission1.uploadedAt});
+    }
+    if(d.mission2?.submittedAt){
+      items.push({team:t,type:'report',seen:d.mission2.seen,prayer:d.mission2.prayer,time:d.mission2.submittedAt});
+    }
+  }
+  items.sort((a,b)=>b.time-a.time);
+  const feed=document.getElementById('feedList');
+  if(!items.length){
+    feed.innerHTML=`<div style="color:var(--gray);font-size:13px;text-align:center;padding:20px;">아직 제출된 내역이 없습니다</div>`;
+    return;
+  }
+  feed.innerHTML=items.map(it=>{
+    const info=TEAM_MAP[it.team];
+    if(it.type==='photo'){
+      return `<div class="feed-item">
+        <div class="feed-thumb"><img src="${it.url}" loading="lazy"></div>
+        <div class="feed-content">
+          <div class="feed-team">${it.team}조 · 미션1 인증샷</div>
+          <div class="feed-dest">${info.dest} · ${info.waypoint}</div>
+          <div class="feed-time">${fmt(it.time)}</div>
+        </div>
+      </div>`;
+    } else {
+      return `<div class="feed-item">
+        <div class="feed-thumb" style="display:flex;align-items:center;justify-content:center;font-size:24px;">📝</div>
+        <div class="feed-content">
+          <div class="feed-team">${it.team}조 · 미션2 정탐보고서</div>
+          <div class="feed-dest">${info.dest}</div>
+          <div class="feed-text">"${esc(it.seen)}"</div>
+          <div class="feed-time">${fmt(it.time)}</div>
+        </div>
+      </div>`;
+    }
+  }).join('');
+}
+
+function fmt(ts){ return ts ? new Date(ts).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '—'; }
+function esc(s){ return s?(s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):''; }
+</script>
+</body>
+</html>
