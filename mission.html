@@ -329,6 +329,36 @@ const TEAM_CODES = {
 let currentTeam = null;
 let selectedFile = null;
 
+// ── 미션 UI 전체 초기화 (팀 전환 시 호출) ──
+function resetMissionUI() {
+  // 미션1 초기화
+  document.getElementById('m1UploadArea').style.display = 'block';
+  document.getElementById('m1Done').style.display = 'none';
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('uploadBtn').disabled = true;
+  const zone = document.getElementById('uploadZone');
+  zone.classList.remove('has-preview');
+  document.getElementById('uploadIcon').style.display = 'block';
+  document.getElementById('uploadText').style.display = 'block';
+  document.getElementById('uploadHint').style.display = 'block';
+  const prev = document.getElementById('previewImg');
+  prev.src = ''; prev.style.display = 'none';
+  document.getElementById('photoInput').value = '';
+  selectedFile = null;
+
+  // 미션2 초기화
+  document.getElementById('missionTransition').style.display = 'none';
+  document.getElementById('mission2Locked').style.display = 'block';
+  document.getElementById('mission2Card').style.display = 'none';
+  document.getElementById('m2Form').style.display = 'block';
+  document.getElementById('m2Done').style.display = 'none';
+  document.getElementById('seenText').value = '';
+  document.getElementById('prayText').value = '';
+  const rb = document.getElementById('reportBtn');
+  rb.disabled = false; rb.textContent = '📝 보고서 제출하기';
+}
+
 // ── 조 선택 ──
 function selectTeam(num) {
   currentTeam = num;
@@ -342,6 +372,7 @@ function selectTeam(num) {
   document.getElementById('destWaypoint').textContent = info.waypoint;
 
   localStorage.setItem('pwcamp_team', num);
+  resetMissionUI();  // 팀 바뀔 때마다 미션 상태 초기화
 
   const unlocked = localStorage.getItem(`pwcamp_unlocked_${num}`) === '1';
   if (unlocked) {
