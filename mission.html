@@ -129,6 +129,19 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 /* ── Done status ── */
 .status-done{display:flex;align-items:center;gap:10px;background:#ebfbee;border:1.5px solid #b2f2bb;border-radius:10px;padding:14px 16px;font-size:14px;font-weight:700;color:var(--green);}
 
+/* ── Pending review status ── */
+.status-pending{display:flex;align-items:center;gap:10px;background:#fff9db;border:1.5px solid #ffe066;border-radius:10px;padding:14px 16px;font-size:14px;font-weight:700;color:#997404;}
+.status-pending .p-dot{width:8px;height:8px;border-radius:50%;background:#f59f00;animation:blink 1.2s infinite;flex-shrink:0;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* ── Rejected status ── */
+.status-rejected{background:#fff5f5;border:1.5px solid #ffc9c9;border-radius:10px;padding:16px;}
+.status-rejected .rr-title{font-size:14px;font-weight:800;color:#e03131;margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.status-rejected .rr-note{font-size:13px;color:#495057;line-height:1.65;margin-bottom:14px;background:#fff;border-radius:8px;padding:10px 12px;}
+.status-rejected .rr-note:empty{display:none;}
+.status-rejected .rr-btn{width:100%;padding:13px;background:#e03131;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;}
+.status-rejected .rr-btn:active{opacity:.85;}
+
 /* ── Report inputs ── */
 .report-group{margin-bottom:14px;}
 .report-label{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:6px;display:block;}
@@ -255,6 +268,16 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
         <div id="m1Done" style="display:none">
           <div class="status-done">✅ 인증샷 제출 완료!</div>
         </div>
+        <div id="m1Pending" style="display:none">
+          <div class="status-pending"><span class="p-dot"></span>🕐 관리자 확인 중이에요. 잠시만 기다려주세요!</div>
+        </div>
+        <div id="m1Rejected" style="display:none">
+          <div class="status-rejected">
+            <div class="rr-title">❌ 다시 촬영해주세요</div>
+            <div class="rr-note" id="m1RejectNote"></div>
+            <button class="rr-btn" onclick="retryMission1()">📷 다시 촬영해서 제출하기</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -313,6 +336,16 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
         </div>
         <div id="m2Done" style="display:none">
           <div class="status-done">✅ 정탐 보고서 제출 완료!</div>
+        </div>
+        <div id="m2Pending" style="display:none">
+          <div class="status-pending"><span class="p-dot"></span>🕐 관리자 확인 중이에요. 잠시만 기다려주세요!</div>
+        </div>
+        <div id="m2Rejected" style="display:none">
+          <div class="status-rejected">
+            <div class="rr-title">❌ 다시 작성해주세요</div>
+            <div class="rr-note" id="m2RejectNote"></div>
+            <button class="rr-btn" onclick="retryMission2()">📝 다시 작성해서 제출하기</button>
+          </div>
         </div>
       </div>
     </div>
@@ -383,12 +416,18 @@ const TEAM_CODES = {
 
 let currentTeam = null;
 let selectedFile = null;
+let statusRef = null;
+let statusListener = null;
+let m1PrevStatus = null;
+let m2PrevStatus = null;
 
 // ── 미션 UI 전체 초기화 (팀 전환 시 호출) ──
 function resetMissionUI() {
   // 미션1 초기화
   document.getElementById('m1UploadArea').style.display = 'block';
   document.getElementById('m1Done').style.display = 'none';
+  document.getElementById('m1Pending').style.display = 'none';
+  document.getElementById('m1Rejected').style.display = 'none';
   document.getElementById('progressWrap').style.display = 'none';
   document.getElementById('progressBar').style.width = '0%';
   document.getElementById('uploadBtn').disabled = true;
@@ -408,10 +447,16 @@ function resetMissionUI() {
   document.getElementById('mission2Card').style.display = 'none';
   document.getElementById('m2Form').style.display = 'block';
   document.getElementById('m2Done').style.display = 'none';
+  document.getElementById('m2Pending').style.display = 'none';
+  document.getElementById('m2Rejected').style.display = 'none';
   document.getElementById('seenText').value = '';
   document.getElementById('prayText').value = '';
   const rb = document.getElementById('reportBtn');
   rb.disabled = false; rb.textContent = '📝 보고서 제출하기';
+
+  // 상태 추적 초기화 (팀 전환 시 승인 전환 애니메이션 오작동 방지)
+  m1PrevStatus = null;
+  m2PrevStatus = null;
 }
 
 // ── 목적지 배너: 미션 진행 단계에 맞는 "다음 장소"만 표시 ──
@@ -444,15 +489,16 @@ function selectTeam(num) {
   const banner = document.getElementById('destBanner');
   banner.style.background = info.bg;
   banner.style.display = 'block';
-  updateDestBanner('waypoint');  // 기본은 1차 경유지만 표시, loadStatus에서 실제 진행상황에 맞게 갱신됨
+  updateDestBanner('waypoint');  // 기본은 1차 경유지만 표시, 상태 리스너에서 실제 진행상황에 맞게 갱신됨
 
   localStorage.setItem('pwcamp_team', num);
+  detachStatusListener();  // 이전 조에 대한 실시간 구독 해제
   resetMissionUI();  // 팀 바뀔 때마다 미션 상태 초기화
 
   const unlocked = localStorage.getItem(`pwcamp_unlocked_${num}`) === '1';
   if (unlocked) {
     showMissions();
-    loadStatus();
+    attachStatusListener();
   } else {
     showLockScreen();
   }
@@ -475,7 +521,7 @@ function checkCode() {
     localStorage.setItem(`pwcamp_unlocked_${currentTeam}`, '1');
     document.getElementById('lockScreen').style.display = 'none';
     showMissions();
-    loadStatus();
+    attachStatusListener();
     lockTeamSelection();
     showToast('🔓 미션이 시작됩니다!');
   } else {
@@ -499,18 +545,88 @@ function lockTeamSelection() {
   document.getElementById('fixedTeamBadge').style.display = 'block';
 }
 
-// ── 이전 상태 복원 ──
-function loadStatus() {
+// ── 실시간 상태 구독 (관리자 승인/반려를 즉시 반영) ──
+function attachStatusListener() {
   if (!currentTeam) return;
-  db.ref(`submissions/team${currentTeam}`).once('value', snap => {
+  detachStatusListener();
+  const t = currentTeam;
+  statusRef = db.ref(`submissions/team${t}`);
+  statusListener = snap => {
+    if (currentTeam !== t) return; // 팀 전환 후 이전 리스너 잔여 호출 방지
     const d = snap.val() || {};
-    if (d.mission1?.photoData) {
-      showM1Done(true);   // 재접속 시 전환 화면 생략하고 바로 미션2 표시
+    handleMission1Status(d.mission1);
+    handleMission2Status(d.mission2);
+  };
+  statusRef.on('value', statusListener);
+}
+
+function detachStatusListener() {
+  if (statusRef && statusListener) statusRef.off('value', statusListener);
+  statusRef = null;
+  statusListener = null;
+}
+
+// ── 미션1 상태 반영 (관리자 승인 대기/승인/반려) ──
+function handleMission1Status(m1) {
+  const status = m1?.status || null;
+  document.getElementById('m1UploadArea').style.display = 'none';
+  document.getElementById('m1Done').style.display = 'none';
+  document.getElementById('m1Pending').style.display = 'none';
+  document.getElementById('m1Rejected').style.display = 'none';
+
+  if (!status) {
+    document.getElementById('m1UploadArea').style.display = 'block';
+    document.getElementById('mission2Locked').style.display = 'block';
+  } else if (status === 'pending') {
+    document.getElementById('m1Pending').style.display = 'block';
+    document.getElementById('mission2Locked').style.display = 'block';
+  } else if (status === 'rejected') {
+    document.getElementById('m1Rejected').style.display = 'block';
+    document.getElementById('m1RejectNote').textContent = m1.reviewNote || '';
+    document.getElementById('mission2Locked').style.display = 'block';
+  } else if (status === 'approved') {
+    document.getElementById('m1Done').style.display = 'block';
+    document.getElementById('mission2Locked').style.display = 'none';
+    updateDestBanner('final');  // 미션1 승인 → 다음 목적지(최종 정탐지) 공개
+    if (m1PrevStatus === null) {
+      // 재접속 시 이미 승인된 상태: 전환 화면 생략하고 바로 미션2 표시
+      document.getElementById('mission2Card').style.display = 'block';
+    } else if (m1PrevStatus !== 'approved') {
+      // 방금 관리자가 승인함: 스토리텔링 전환 화면 표시
+      setTimeout(() => {
+        const t = document.getElementById('missionTransition');
+        t.style.display = 'block';
+        t.scrollIntoView({behavior:'smooth', block:'start'});
+      }, 400);
+      showToast('✅ 관리자가 미션1을 승인했어요!');
     }
-    if (d.mission2?.submittedAt) {
-      showM2Done();
+  }
+  m1PrevStatus = status;
+}
+
+// ── 미션2 상태 반영 (관리자 승인 대기/승인/반려) ──
+function handleMission2Status(m2) {
+  const status = m2?.status || null;
+  document.getElementById('m2Form').style.display = 'none';
+  document.getElementById('m2Done').style.display = 'none';
+  document.getElementById('m2Pending').style.display = 'none';
+  document.getElementById('m2Rejected').style.display = 'none';
+
+  if (!status) {
+    document.getElementById('m2Form').style.display = 'block';
+  } else if (status === 'pending') {
+    document.getElementById('m2Pending').style.display = 'block';
+  } else if (status === 'rejected') {
+    document.getElementById('m2Rejected').style.display = 'block';
+    document.getElementById('m2RejectNote').textContent = m2.reviewNote || '';
+  } else if (status === 'approved') {
+    document.getElementById('m2Done').style.display = 'block';
+    updateDestBanner('done');  // 미션2 승인 → 오늘의 정탐 완료
+    if (m2PrevStatus !== null && m2PrevStatus !== 'approved') {
+      showToast('✅ 관리자가 미션2를 승인했어요!');
     }
-  });
+  }
+  m2PrevStatus = status;
 }
 
 // ── 파일 선택 ──
@@ -557,7 +673,7 @@ async function compressToBase64(file) {
   });
 }
 
-// ── 미션1 업로드 ──
+// ── 미션1 업로드 (제출 시 '승인 대기' 상태로, 관리자 승인 후 다음 단계) ──
 async function uploadMission1() {
   if (!currentTeam || !selectedFile) return;
   const btn = document.getElementById('uploadBtn');
@@ -574,10 +690,12 @@ async function uploadMission1() {
     await db.ref(`submissions/team${currentTeam}/mission1`).set({
       photoData: base64,
       uploadedAt: firebase.database.ServerValue.TIMESTAMP,
+      status: 'pending',
+      reviewedAt: null,
+      reviewNote: null,
     });
     pb.style.width = '100%';
-    showM1Done(false);  // 제출 시 스토리텔링 전환 화면 표시
-    showToast('✅ 인증샷 제출 완료!');
+    showToast('📤 제출 완료! 관리자 확인을 기다려주세요');
   } catch(e) {
     console.error(e);
     pw.style.display = 'none';
@@ -588,7 +706,30 @@ async function uploadMission1() {
   }
 }
 
-// ── 미션2 제출 ──
+// ── 미션1 반려 후 재도전 ──
+function retryMission1() {
+  resetUploadUI();
+  document.getElementById('m1Rejected').style.display = 'none';
+  document.getElementById('m1UploadArea').style.display = 'block';
+}
+
+function resetUploadUI() {
+  document.getElementById('progressWrap').style.display = 'none';
+  document.getElementById('progressBar').style.width = '0%';
+  document.getElementById('uploadBtn').disabled = true;
+  document.getElementById('uploadBtn').textContent = '📤 인증샷 제출하기';
+  const zone = document.getElementById('uploadZone');
+  zone.classList.remove('has-preview');
+  document.getElementById('uploadIcon').style.display = 'block';
+  document.getElementById('uploadText').style.display = 'block';
+  document.getElementById('uploadHint').style.display = 'block';
+  const prev = document.getElementById('previewImg');
+  prev.src = ''; prev.style.display = 'none';
+  document.getElementById('photoInput').value = '';
+  selectedFile = null;
+}
+
+// ── 미션2 제출 (제출 시 '승인 대기' 상태로, 관리자 승인 후 완료 처리) ──
 async function submitMission2() {
   if (!currentTeam) return;
   const seen = document.getElementById('seenText').value.trim();
@@ -601,9 +742,11 @@ async function submitMission2() {
     await db.ref(`submissions/team${currentTeam}/mission2`).set({
       seen, prayer: pray,
       submittedAt: firebase.database.ServerValue.TIMESTAMP,
+      status: 'pending',
+      reviewedAt: null,
+      reviewNote: null,
     });
-    showM2Done();
-    showToast('✅ 보고서 제출 완료!');
+    showToast('📤 제출 완료! 관리자 확인을 기다려주세요');
   } catch(e) {
     btn.disabled = false;
     btn.textContent = '📝 보고서 제출하기';
@@ -611,24 +754,12 @@ async function submitMission2() {
   }
 }
 
-// ── 상태 전환 ──
-function showM1Done(skipTransition = false) {
-  document.getElementById('m1UploadArea').style.display = 'none';
-  document.getElementById('m1Done').style.display = 'block';
-  document.getElementById('mission2Locked').style.display = 'none';
-  updateDestBanner('final');  // 미션1 완료 → 다음 목적지(최종 정탐지) 공개
-
-  if (skipTransition) {
-    // 재접속 복원: 전환 화면 없이 바로 미션2 표시
-    document.getElementById('mission2Card').style.display = 'block';
-  } else {
-    // 첫 제출: 스토리텔링 전환 화면 먼저 표시
-    setTimeout(() => {
-      const t = document.getElementById('missionTransition');
-      t.style.display = 'block';
-      t.scrollIntoView({behavior:'smooth', block:'start'});
-    }, 600);
-  }
+// ── 미션2 반려 후 재도전 ──
+function retryMission2() {
+  document.getElementById('m2Rejected').style.display = 'none';
+  document.getElementById('m2Form').style.display = 'block';
+  const rb = document.getElementById('reportBtn');
+  rb.disabled = false; rb.textContent = '📝 보고서 제출하기';
 }
 
 function unlockMission2() {
@@ -636,12 +767,6 @@ function unlockMission2() {
   const m2 = document.getElementById('mission2Card');
   m2.style.display = 'block';
   m2.scrollIntoView({behavior:'smooth', block:'start'});
-}
-
-function showM2Done() {
-  document.getElementById('m2Form').style.display = 'none';
-  document.getElementById('m2Done').style.display = 'block';
-  updateDestBanner('done');  // 오늘의 정탐 완료 → 배너 숨김
 }
 
 // ── 페이지 로드 시 이전 상태 복원 ──

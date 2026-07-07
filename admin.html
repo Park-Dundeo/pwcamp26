@@ -88,6 +88,24 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .report-row .lbl{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px;}
 .report-row .val{color:#495057;line-height:1.65;}
 
+/* ── Review status badge ── */
+.review-badge{display:inline-block;font-size:11px;font-weight:800;padding:4px 10px;border-radius:20px;margin-bottom:10px;}
+.review-badge.pending{background:#fff9db;color:#997404;}
+.review-badge.approved{background:#ebfbee;color:var(--green);}
+.review-badge.rejected{background:#fff5f5;color:#e03131;}
+
+/* ── Review action buttons ── */
+.review-actions{display:flex;gap:8px;margin:12px 0 4px;}
+.review-btn{flex:1;padding:11px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s;}
+.review-btn:active{opacity:.8;}
+.review-btn.approve{background:var(--green);color:#fff;}
+.review-btn.reject{background:#e03131;color:#fff;}
+.review-note-box{font-size:12px;color:#e03131;background:#fff5f5;border-radius:6px;padding:8px 10px;margin-top:8px;}
+
+/* Team pill: pending state */
+.pill.pending{background:#fff9db;color:#997404;}
+.pill.rejected{background:#fff5f5;color:#e03131;}
+
 /* Feed */
 .feed-list{display:flex;flex-direction:column;gap:12px;}
 .feed-item{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:flex;align-items:stretch;gap:0;}
@@ -133,9 +151,9 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     <!-- 통계 -->
     <div class="stats-row">
       <div class="stat-box"><div class="stat-num">6</div><div class="stat-lbl">전체 조</div></div>
-      <div class="stat-box green"><div class="stat-num" id="statM1">0</div><div class="stat-lbl">미션1 완료</div></div>
-      <div class="stat-box gold"><div class="stat-num" id="statM2">0</div><div class="stat-lbl">미션2 완료</div></div>
-      <div class="stat-box orange"><div class="stat-num" id="statBoth">0</div><div class="stat-lbl">전부 완료</div></div>
+      <div class="stat-box gold"><div class="stat-num" id="statPending">0</div><div class="stat-lbl">검토 대기</div></div>
+      <div class="stat-box orange"><div class="stat-num" id="statBoth">0</div><div class="stat-lbl">전부 승인완료</div></div>
+      <div class="stat-box" style="border-top-color:#e03131;"><div class="stat-num" id="statRejected">0</div><div class="stat-lbl">반려됨</div></div>
     </div>
 
     <!-- 조별 현황 -->
@@ -243,27 +261,38 @@ function buildTeamGrid() {
 
 // ── 통계 업데이트 ──
 function updateStats() {
-  let m1=0,m2=0,both=0;
+  let pending=0, rejected=0, both=0;
   for (let t=1;t<=6;t++) {
     const d = allData[`team${t}`]||{};
-    const h1 = !!d.mission1?.photoURL;
-    const h2 = !!d.mission2?.submittedAt;
-    if(h1)m1++; if(h2)m2++; if(h1&&h2)both++;
+    const s1 = d.mission1?.status, s2 = d.mission2?.status;
+    if (s1==='pending') pending++;
+    if (s2==='pending') pending++;
+    if (s1==='rejected') rejected++;
+    if (s2==='rejected') rejected++;
+    if (s1==='approved' && s2==='approved') both++;
   }
-  document.getElementById('statM1').textContent=m1;
-  document.getElementById('statM2').textContent=m2;
+  document.getElementById('statPending').textContent=pending;
+  document.getElementById('statRejected').textContent=rejected;
   document.getElementById('statBoth').textContent=both;
 }
 
 // ── 카드 상태 업데이트 ──
 function updateCards() {
+  const labelMap = {
+    null: {text:'⏳', cls:'wait'},
+    pending: {text:'🕐 검토대기', cls:'pending'},
+    approved: {text:'✅ 승인', cls:'done'},
+    rejected: {text:'❌ 반려', cls:'rejected'},
+  };
   for (let t=1;t<=6;t++) {
     const d=allData[`team${t}`]||{};
-    const h1=!!d.mission1?.photoData, h2=!!d.mission2?.submittedAt;
+    const s1 = d.mission1?.status || null;
+    const s2 = d.mission2?.status || null;
     const p1=document.getElementById(`pill-m1-${t}`);
     const p2=document.getElementById(`pill-m2-${t}`);
-    if(p1){p1.textContent=h1?'✅ 미션1':'⏳ 미션1';p1.className=`pill ${h1?'done':'wait'}`;}
-    if(p2){p2.textContent=h2?'✅ 미션2':'⏳ 미션2';p2.className=`pill ${h2?'done':'wait'}`;}
+    const l1 = labelMap[s1], l2 = labelMap[s2];
+    if(p1){p1.textContent=`${l1.text} 미션1`; p1.className=`pill ${l1.cls}`;}
+    if(p2){p2.textContent=`${l2.text} 미션2`; p2.className=`pill ${l2.cls}`;}
   }
 }
 
@@ -283,10 +312,25 @@ function renderDetail(t) {
   const m1=d.mission1, m2=d.mission2;
   let html='';
 
+  const badge = s => s==='approved' ? '<span class="review-badge approved">✅ 승인됨</span>'
+    : s==='rejected' ? '<span class="review-badge rejected">❌ 반려됨</span>'
+    : s==='pending' ? '<span class="review-badge pending">🕐 검토 대기중</span>' : '';
+
+  const actions = (t, m, s) => `
+    <div class="review-actions">
+      <button class="review-btn approve" onclick="approveMission(${t},${m})">✅ 승인</button>
+      <button class="review-btn reject" onclick="rejectMission(${t},${m})">❌ 반려</button>
+    </div>`;
+
   html+=`<div class="detail-section">📷 미션 1 — 경유지 인증샷</div>`;
   if(m1?.photoData){
-    html+=`<img class="detail-photo" src="${m1.photoData}" loading="lazy">
-           <div class="submit-time">제출: ${fmt(m1.uploadedAt)}</div>`;
+    html+=`${badge(m1.status)}
+           <img class="detail-photo" src="${m1.photoData}" loading="lazy">
+           <div class="submit-time">제출: ${fmt(m1.uploadedAt)}</div>
+           ${actions(t,1,m1.status)}`;
+    if(m1.status==='rejected' && m1.reviewNote){
+      html+=`<div class="review-note-box">반려 사유: ${esc(m1.reviewNote)}</div>`;
+    }
   } else {
     html+=`<div class="detail-empty">아직 제출하지 않았습니다</div>`;
   }
@@ -294,16 +338,39 @@ function renderDetail(t) {
   html+=`<hr class="divider">
          <div class="detail-section">📝 미션 2 — 정탐 보고서</div>`;
   if(m2?.submittedAt){
-    html+=`<div class="report-box">
+    html+=`${badge(m2.status)}
+      <div class="report-box">
       <div class="report-row"><div class="lbl">👁 우리가 본 것</div><div class="val">${esc(m2.seen)}</div></div>
       <div class="report-row"><div class="lbl">🙏 우리의 기도</div><div class="val">${esc(m2.prayer)}</div></div>
     </div>
-    <div class="submit-time" style="margin-top:8px;">제출: ${fmt(m2.submittedAt)}</div>`;
+    <div class="submit-time" style="margin-top:8px;">제출: ${fmt(m2.submittedAt)}</div>
+    ${actions(t,2,m2.status)}`;
+    if(m2.status==='rejected' && m2.reviewNote){
+      html+=`<div class="review-note-box">반려 사유: ${esc(m2.reviewNote)}</div>`;
+    }
   } else {
     html+=`<div class="detail-empty">아직 제출하지 않았습니다</div>`;
   }
 
   document.getElementById('detailBody').innerHTML=html;
+}
+
+// ── 승인/반려 처리 ──
+function approveMission(t, m) {
+  db.ref(`submissions/team${t}/mission${m}`).update({
+    status: 'approved',
+    reviewedAt: firebase.database.ServerValue.TIMESTAMP,
+    reviewNote: null,
+  });
+}
+
+function rejectMission(t, m) {
+  const note = prompt('반려 사유를 입력하세요 (선택사항, 학생 화면에 표시됩니다)') || '';
+  db.ref(`submissions/team${t}/mission${m}`).update({
+    status: 'rejected',
+    reviewedAt: firebase.database.ServerValue.TIMESTAMP,
+    reviewNote: note,
+  });
 }
 
 function closeDetail(){
@@ -318,10 +385,10 @@ function updateFeed(){
   for(let t=1;t<=6;t++){
     const d=allData[`team${t}`]||{};
     if(d.mission1?.photoData){
-      items.push({team:t,type:'photo',url:d.mission1.photoData,time:d.mission1.uploadedAt});
+      items.push({team:t,type:'photo',url:d.mission1.photoData,time:d.mission1.uploadedAt,status:d.mission1.status});
     }
     if(d.mission2?.submittedAt){
-      items.push({team:t,type:'report',seen:d.mission2.seen,prayer:d.mission2.prayer,time:d.mission2.submittedAt});
+      items.push({team:t,type:'report',seen:d.mission2.seen,prayer:d.mission2.prayer,time:d.mission2.submittedAt,status:d.mission2.status});
     }
   }
   items.sort((a,b)=>b.time-a.time);
@@ -330,22 +397,25 @@ function updateFeed(){
     feed.innerHTML=`<div style="color:var(--gray);font-size:13px;text-align:center;padding:20px;">아직 제출된 내역이 없습니다</div>`;
     return;
   }
+  const statusTag = s => s==='approved' ? '<span class="review-badge approved" style="margin:0 0 0 6px;">승인</span>'
+    : s==='rejected' ? '<span class="review-badge rejected" style="margin:0 0 0 6px;">반려</span>'
+    : '<span class="review-badge pending" style="margin:0 0 0 6px;">대기</span>';
   feed.innerHTML=items.map(it=>{
     const info=TEAM_MAP[it.team];
     if(it.type==='photo'){
-      return `<div class="feed-item">
+      return `<div class="feed-item" onclick="showDetail(${it.team})" style="cursor:pointer;">
         <div class="feed-thumb"><img src="${it.url}" loading="lazy"></div>
         <div class="feed-content">
-          <div class="feed-team">${it.team}조 · 미션1 인증샷</div>
+          <div class="feed-team">${it.team}조 · 미션1 인증샷${statusTag(it.status)}</div>
           <div class="feed-dest">${info.dest} · ${info.waypoint}</div>
           <div class="feed-time">${fmt(it.time)}</div>
         </div>
       </div>`;
     } else {
-      return `<div class="feed-item">
+      return `<div class="feed-item" onclick="showDetail(${it.team})" style="cursor:pointer;">
         <div class="feed-thumb" style="display:flex;align-items:center;justify-content:center;font-size:24px;">📝</div>
         <div class="feed-content">
-          <div class="feed-team">${it.team}조 · 미션2 정탐보고서</div>
+          <div class="feed-team">${it.team}조 · 미션2 정탐보고서${statusTag(it.status)}</div>
           <div class="feed-dest">${info.dest}</div>
           <div class="feed-text">"${esc(it.seen)}"</div>
           <div class="feed-time">${fmt(it.time)}</div>
