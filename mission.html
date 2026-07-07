@@ -577,13 +577,22 @@ function handleMission1Status(m1) {
   if (!status) {
     document.getElementById('m1UploadArea').style.display = 'block';
     document.getElementById('mission2Locked').style.display = 'block';
+    document.getElementById('mission2Card').style.display = 'none';
+    document.getElementById('missionTransition').style.display = 'none';
+    updateDestBanner('waypoint');
   } else if (status === 'pending') {
     document.getElementById('m1Pending').style.display = 'block';
     document.getElementById('mission2Locked').style.display = 'block';
+    document.getElementById('mission2Card').style.display = 'none';
+    document.getElementById('missionTransition').style.display = 'none';
+    updateDestBanner('waypoint');
   } else if (status === 'rejected') {
     document.getElementById('m1Rejected').style.display = 'block';
     document.getElementById('m1RejectNote').textContent = m1.reviewNote || '';
     document.getElementById('mission2Locked').style.display = 'block';
+    document.getElementById('mission2Card').style.display = 'none';
+    document.getElementById('missionTransition').style.display = 'none';
+    updateDestBanner('waypoint');
   } else if (status === 'approved') {
     document.getElementById('m1Done').style.display = 'block';
     document.getElementById('mission2Locked').style.display = 'none';
@@ -614,11 +623,14 @@ function handleMission2Status(m2) {
 
   if (!status) {
     document.getElementById('m2Form').style.display = 'block';
+    if (m1PrevStatus === 'approved') updateDestBanner('final');
   } else if (status === 'pending') {
     document.getElementById('m2Pending').style.display = 'block';
+    if (m1PrevStatus === 'approved') updateDestBanner('final');
   } else if (status === 'rejected') {
     document.getElementById('m2Rejected').style.display = 'block';
     document.getElementById('m2RejectNote').textContent = m2.reviewNote || '';
+    if (m1PrevStatus === 'approved') updateDestBanner('final');
   } else if (status === 'approved') {
     document.getElementById('m2Done').style.display = 'block';
     updateDestBanner('done');  // 미션2 승인 → 오늘의 정탐 완료
