@@ -138,6 +138,30 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 /* ── Toast ── */
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:#212529;color:#fff;padding:12px 22px;border-radius:24px;font-size:13px;font-weight:600;z-index:200;transition:transform .3s;white-space:nowrap;pointer-events:none;}
 .toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ── Fixed team badge ── */
+.fixed-team-badge{display:none;background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:16px;padding:14px 18px;text-align:center;font-size:13px;font-weight:700;color:var(--navy);}
+.fixed-team-badge b{color:var(--blue);font-size:15px;}
+
+/* ── Reset footer (테스트용) ── */
+.reset-footer{text-align:center;padding:26px 0 6px;}
+.reset-link{background:none;border:none;color:var(--gray);font-size:11px;opacity:.45;font-family:inherit;cursor:pointer;padding:10px;}
+.reset-link:active{opacity:.8;}
+
+/* ── Reset modal ── */
+.reset-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;align-items:center;justify-content:center;padding:20px;}
+.reset-overlay.show{display:flex;}
+.reset-modal{background:#fff;border-radius:var(--radius);padding:24px 20px;width:100%;max-width:340px;box-shadow:0 8px 32px rgba(0,0,0,.3);}
+.reset-modal h3{font-size:16px;font-weight:800;color:var(--navy);margin-bottom:4px;text-align:center;}
+.reset-sub{font-size:12px;color:var(--gray);text-align:center;margin-bottom:16px;}
+.reset-pw-input{width:100%;padding:14px;border:1.5px solid var(--border);border-radius:8px;font-size:20px;font-weight:800;text-align:center;letter-spacing:6px;font-family:inherit;margin-bottom:8px;}
+.reset-pw-input.error{border-color:#f03e3e;animation:shake .4s ease;}
+.reset-err{font-size:12px;color:#f03e3e;text-align:center;min-height:16px;margin-bottom:8px;}
+.reset-btn{width:100%;padding:14px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px;}
+.reset-btn.confirm{background:var(--navy);color:#fff;}
+.reset-btn.team-only{background:#e7f5ff;color:var(--blue);}
+.reset-btn.full{background:#fff5f5;color:#f03e3e;}
+.reset-btn.cancel{background:#f1f3f5;color:var(--gray);margin-bottom:0;}
 </style>
 </head>
 <body>
@@ -151,7 +175,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 <div class="content">
 
   <!-- 조 선택 -->
-  <div class="card">
+  <div class="card" id="teamSelectCard">
     <div class="card-body">
       <div class="section-label">우리 조 번호 선택</div>
       <div class="team-grid">
@@ -164,6 +188,11 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
       </div>
       <p class="guide-note">📱 조당 1명이 접속해서 제출해요</p>
     </div>
+  </div>
+
+  <!-- 조 고정 안내 (미션 시작 후 표시, 조 선택 카드 대체) -->
+  <div class="fixed-team-badge" id="fixedTeamBadge">
+    🔒 이 기기는 <b><span id="fixedTeamNum"></span>조</b>로 고정되었어요
   </div>
 
   <!-- 목적지 배너 -->
@@ -290,9 +319,36 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     </div>
 
   </div>
+
+  <!-- 테스트용 초기화 (교사/개발자 전용) -->
+  <div class="reset-footer">
+    <button class="reset-link" onclick="openResetModal()">⚙ 기기 초기화</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- 초기화 모달 -->
+<div class="reset-overlay" id="resetOverlay">
+  <div class="reset-modal">
+    <div id="resetStepPw">
+      <h3>🔐 초기화 비밀번호</h3>
+      <div class="reset-sub">교사/개발자 전용 기능입니다</div>
+      <input class="reset-pw-input" type="tel" id="resetPwInput" maxlength="4"
+        placeholder="••••" onkeydown="if(event.key==='Enter')checkResetPw()">
+      <div class="reset-err" id="resetPwErr"></div>
+      <button class="reset-btn confirm" onclick="checkResetPw()">확인</button>
+      <button class="reset-btn cancel" onclick="closeResetModal()">취소</button>
+    </div>
+    <div id="resetStepChoice" style="display:none">
+      <h3>초기화 범위 선택</h3>
+      <div class="reset-sub">이 기기에 저장된 데이터를 초기화해요</div>
+      <button class="reset-btn team-only" onclick="resetTeamInfoOnly()">🔄 조 정보만 초기화<br><span style="font-weight:400;font-size:11px;">(조 선택 화면으로 복귀, 제출 데이터는 유지)</span></button>
+      <button class="reset-btn full" onclick="resetFullData()">💥 전체 초기화<br><span style="font-weight:400;font-size:11px;">(진행상황 + 제출한 사진·보고서까지 삭제)</span></button>
+      <button class="reset-btn cancel" onclick="closeResetModal()">취소</button>
+    </div>
+  </div>
+</div>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
@@ -401,6 +457,7 @@ function checkCode() {
     document.getElementById('lockScreen').style.display = 'none';
     showMissions();
     loadStatus();
+    lockTeamSelection();
     showToast('🔓 미션이 시작됩니다!');
   } else {
     const el = document.getElementById('codeInput');
@@ -414,6 +471,13 @@ function checkCode() {
 function showMissions() {
   document.getElementById('lockScreen').style.display = 'none';
   document.getElementById('missionArea').classList.add('visible');
+}
+
+// ── 조 선택 고정 (한 번 해금되면 다른 조로 못 바꾸게) ──
+function lockTeamSelection() {
+  document.getElementById('teamSelectCard').style.display = 'none';
+  document.getElementById('fixedTeamNum').textContent = currentTeam;
+  document.getElementById('fixedTeamBadge').style.display = 'block';
 }
 
 // ── 이전 상태 복원 ──
@@ -561,7 +625,12 @@ function showM2Done() {
 
 // ── 페이지 로드 시 이전 상태 복원 ──
 const saved = localStorage.getItem('pwcamp_team');
-if (saved) selectTeam(Number(saved));
+if (saved) {
+  selectTeam(Number(saved));
+  if (localStorage.getItem(`pwcamp_unlocked_${saved}`) === '1') {
+    lockTeamSelection();
+  }
+}
 
 // ── Toast ──
 let toastTimer;
@@ -571,6 +640,65 @@ function showToast(msg) {
   el.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
+}
+
+// ── 초기화 모달 (테스트용, 교사/개발자 전용) ──
+const RESET_MASTER_PW = '3927';
+
+function openResetModal() {
+  document.getElementById('resetOverlay').classList.add('show');
+  document.getElementById('resetStepPw').style.display = 'block';
+  document.getElementById('resetStepChoice').style.display = 'none';
+  document.getElementById('resetPwInput').value = '';
+  document.getElementById('resetPwErr').textContent = '';
+}
+
+function closeResetModal() {
+  document.getElementById('resetOverlay').classList.remove('show');
+}
+
+function checkResetPw() {
+  const input = document.getElementById('resetPwInput').value.trim();
+  if (input === RESET_MASTER_PW) {
+    document.getElementById('resetStepPw').style.display = 'none';
+    document.getElementById('resetStepChoice').style.display = 'block';
+  } else {
+    const el = document.getElementById('resetPwInput');
+    el.classList.add('error');
+    document.getElementById('resetPwErr').textContent = '비밀번호가 틀렸어요.';
+    setTimeout(() => el.classList.remove('error'), 500);
+  }
+}
+
+// 이 기기의 조 선택/잠금 상태만 초기화 (제출된 사진·보고서는 그대로 둠)
+function resetTeamInfoOnly() {
+  if (!confirm('이 기기의 조 정보를 초기화할까요?\n(제출된 사진/보고서는 삭제되지 않아요)')) return;
+  localStorage.removeItem('pwcamp_team');
+  for (let i = 1; i <= 6; i++) localStorage.removeItem(`pwcamp_unlocked_${i}`);
+  location.reload();
+}
+
+// 이 기기의 조 정보 + 해당 조의 제출 데이터(사진/보고서)까지 전부 초기화
+function resetFullData() {
+  const team = currentTeam || Number(localStorage.getItem('pwcamp_team'));
+  const msg = team
+    ? `${team}조의 진행상황과 제출된 사진·보고서를 모두 삭제할까요?\n(되돌릴 수 없어요)`
+    : '이 기기의 조 정보를 초기화할까요?';
+  if (!confirm(msg)) return;
+
+  const finishLocalReset = () => {
+    localStorage.removeItem('pwcamp_team');
+    for (let i = 1; i <= 6; i++) localStorage.removeItem(`pwcamp_unlocked_${i}`);
+    location.reload();
+  };
+
+  if (team) {
+    db.ref(`submissions/team${team}`).remove()
+      .then(finishLocalReset)
+      .catch(finishLocalReset);
+  } else {
+    finishLocalReset();
+  }
 }
 </script>
 </body>
