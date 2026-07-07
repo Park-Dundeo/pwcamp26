@@ -13,18 +13,18 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;min-height:100vh;}
 
-/* Header */
+/* ── Header ── */
 .app-header{background:linear-gradient(135deg,var(--navy),#2d4a9e);color:#fff;padding:22px 16px 26px;text-align:center;}
 .header-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
 .header-title{font-size:21px;font-weight:800;}
 .header-sub{font-size:13px;opacity:.75;margin-top:4px;}
 
-/* Content */
+/* ── Layout ── */
 .content{max-width:480px;margin:0 auto;padding:20px 16px 80px;}
-
-/* Team selector */
 .card{background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:16px;overflow:hidden;}
 .card-body{padding:18px;}
+
+/* ── Team selector ── */
 .section-label{font-size:12px;font-weight:700;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
 .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
 .team-btn{padding:16px 8px;border:2px solid var(--border);border-radius:10px;background:#fff;font-size:16px;font-weight:800;color:var(--navy);cursor:pointer;transition:all .15s;font-family:inherit;}
@@ -32,18 +32,39 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .team-btn.selected{border-color:var(--blue);background:var(--blue);color:#fff;}
 .guide-note{font-size:12px;color:var(--gray);text-align:center;margin-top:10px;}
 
-/* Destination banner */
-.dest-banner{border-radius:var(--radius);padding:18px 16px;color:#fff;margin-bottom:16px;position:relative;overflow:hidden;}
+/* ── Destination banner ── */
+.dest-banner{border-radius:var(--radius);padding:18px 16px;color:#fff;margin-bottom:16px;position:relative;overflow:hidden;display:none;}
 .dest-banner::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,.07);border-radius:50%;}
 .dest-label{font-size:11px;opacity:.75;font-weight:700;letter-spacing:1px;}
 .dest-name{font-size:24px;font-weight:800;margin:4px 0 6px;}
 .dest-waypoint{font-size:13px;opacity:.85;}
 .dest-waypoint b{background:rgba(255,255,255,.2);padding:2px 10px;border-radius:20px;}
 
-/* Mission cards */
+/* ── Lock screen ── */
+.lock-screen{display:none;animation:fadeUp .3s ease;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.lock-card{background:var(--navy);border-radius:var(--radius);padding:28px 20px;text-align:center;color:#fff;margin-bottom:16px;box-shadow:0 4px 24px rgba(0,0,0,.2);}
+.lock-icon{font-size:44px;margin-bottom:12px;display:block;}
+.lock-title{font-size:17px;font-weight:800;margin-bottom:4px;}
+.lock-sub{font-size:13px;opacity:.65;margin-bottom:24px;line-height:1.6;}
+.code-input-wrap{position:relative;margin-bottom:12px;}
+.code-input{width:100%;padding:16px;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);border-radius:10px;font-size:22px;font-weight:800;color:#fff;text-align:center;letter-spacing:6px;font-family:inherit;}
+.code-input::placeholder{opacity:.35;letter-spacing:2px;font-size:14px;font-weight:400;}
+.code-input:focus{outline:none;border-color:var(--gold);}
+.code-input.error{border-color:#f03e3e;animation:shake .4s ease;}
+@keyframes shake{0%,100%{transform:translateX(0)}20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.code-error{font-size:13px;color:#ff8787;margin-bottom:12px;min-height:20px;}
+.unlock-btn{width:100%;padding:15px;background:var(--gold);color:var(--navy);border:none;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;transition:opacity .2s;}
+.unlock-btn:active{opacity:.85;}
+
+/* ── Mission area ── */
 .mission-area{display:none;}
 .mission-area.visible{display:block;}
 
+/* ── Mission unlock animation ── */
+.mission-unlock{animation:fadeUp .4s ease;}
+
+/* ── Mission cards ── */
 .mission-header{padding:14px 16px;display:flex;align-items:center;gap:10px;}
 .mission-header.m1{background:linear-gradient(90deg,#fff9e6,#fffdf5);}
 .mission-header.m2{background:linear-gradient(90deg,#ebfbee,#f5fff7);}
@@ -52,13 +73,19 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .mission-num.m2{background:var(--green);}
 .mission-title{font-size:15px;font-weight:700;}
 
-/* Roadview placeholder */
-.rv-placeholder{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#2d3a5e,#1a2744);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;margin-bottom:14px;}
-.rv-placeholder .rv-icon{font-size:32px;margin-bottom:8px;opacity:.8;}
-.rv-placeholder .rv-text{font-size:13px;font-weight:600;}
-.rv-placeholder .rv-sub{font-size:11px;opacity:.6;margin-top:4px;}
+/* ── Locked mission placeholder ── */
+.mission-locked{background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:16px;overflow:hidden;opacity:.45;pointer-events:none;}
+.mission-locked-body{padding:20px;display:flex;align-items:center;gap:12px;color:var(--gray);}
+.mission-locked-body .lock-sm{font-size:22px;}
+.mission-locked-body span{font-size:13px;font-weight:600;}
 
-/* Steps */
+/* ── Roadview placeholder ── */
+.rv-placeholder{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#2d3a5e,#1a2744);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;margin-bottom:14px;}
+.rv-icon{font-size:32px;margin-bottom:8px;opacity:.8;}
+.rv-text{font-size:13px;font-weight:600;}
+.rv-sub{font-size:11px;opacity:.6;margin-top:4px;}
+
+/* ── Steps ── */
 .steps{margin-bottom:14px;}
 .step-row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #f1f3f5;font-size:13px;}
 .step-row:last-child{border-bottom:none;}
@@ -66,7 +93,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .step-text b{display:block;color:#1a2744;}
 .step-text span{color:#868e96;font-size:12px;}
 
-/* Upload zone */
+/* ── Upload zone ── */
 .upload-zone{border:2px dashed var(--border);border-radius:10px;padding:28px 16px;text-align:center;cursor:pointer;background:#fafafa;margin-bottom:12px;transition:all .2s;}
 .upload-zone.has-preview{border-style:solid;border-color:var(--green);padding:8px;}
 .upload-icon{font-size:34px;margin-bottom:8px;}
@@ -74,26 +101,26 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .upload-hint{font-size:11px;color:var(--gray);margin-top:4px;}
 .preview-img{width:100%;border-radius:8px;display:none;}
 
-/* Progress */
+/* ── Progress ── */
 .progress-wrap{height:6px;background:var(--border);border-radius:3px;margin-bottom:12px;display:none;overflow:hidden;}
 .progress-bar{height:100%;background:var(--blue);border-radius:3px;transition:width .3s;width:0%;}
 
-/* Buttons */
+/* ── Buttons ── */
 .submit-btn{width:100%;padding:16px;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
 .submit-btn.primary{background:var(--blue);color:#fff;}
 .submit-btn.primary:active{opacity:.8;}
 .submit-btn:disabled{background:var(--border);color:var(--gray);cursor:not-allowed;}
 
-/* Done status */
+/* ── Done status ── */
 .status-done{display:flex;align-items:center;gap:10px;background:#ebfbee;border:1.5px solid #b2f2bb;border-radius:10px;padding:14px 16px;font-size:14px;font-weight:700;color:var(--green);}
 
-/* Report inputs */
+/* ── Report inputs ── */
 .report-group{margin-bottom:14px;}
 .report-label{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:6px;display:block;}
 .report-input{width:100%;padding:13px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;resize:vertical;min-height:76px;line-height:1.65;transition:border-color .2s;}
 .report-input:focus{outline:none;border-color:var(--blue);}
 
-/* Toast */
+/* ── Toast ── */
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(80px);background:#212529;color:#fff;padding:12px 22px;border-radius:24px;font-size:13px;font-weight:600;z-index:200;transition:transform .3s;white-space:nowrap;pointer-events:none;}
 .toast.show{transform:translateX(-50%) translateY(0);}
 </style>
@@ -125,17 +152,32 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
   </div>
 
   <!-- 목적지 배너 -->
-  <div class="dest-banner" id="destBanner" style="display:none;">
+  <div class="dest-banner" id="destBanner">
     <div class="dest-label">오늘의 정탐지</div>
     <div class="dest-name" id="destName">—</div>
     <div class="dest-waypoint">1차 경유지 <b id="destWaypoint">—</b></div>
+  </div>
+
+  <!-- 잠금 화면 -->
+  <div class="lock-screen" id="lockScreen">
+    <div class="lock-card">
+      <span class="lock-icon">🔐</span>
+      <div class="lock-title">정탐 코드를 입력하세요</div>
+      <div class="lock-sub">교사에게 받은 코드를 입력해야<br>미션이 시작됩니다</div>
+      <div class="code-input-wrap">
+        <input class="code-input" type="tel" id="codeInput" placeholder="코드 입력"
+          maxlength="6" onkeydown="if(event.key==='Enter')checkCode()">
+      </div>
+      <div class="code-error" id="codeError"></div>
+      <button class="unlock-btn" onclick="checkCode()">🗝 미션 시작하기</button>
+    </div>
   </div>
 
   <!-- 미션 영역 -->
   <div class="mission-area" id="missionArea">
 
     <!-- 미션 1 -->
-    <div class="card">
+    <div class="card mission-unlock" id="mission1Card">
       <div class="mission-header m1">
         <div class="mission-num m1">1</div>
         <div class="mission-title">경유지를 찾아라 — 인증샷</div>
@@ -151,7 +193,6 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
           <div class="step-row"><div class="step-n">2</div><div class="step-text"><b>조원 전체가 나오게 인증샷 촬영</b><span>같은 앵글·배경으로!</span></div></div>
           <div class="step-row"><div class="step-n">3</div><div class="step-text"><b>아래 버튼으로 사진 업로드</b></div></div>
         </div>
-
         <div id="m1UploadArea">
           <div class="upload-zone" id="uploadZone" onclick="triggerFileInput()">
             <div class="upload-icon" id="uploadIcon">📷</div>
@@ -159,7 +200,8 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
             <div class="upload-hint" id="uploadHint">압축 후 업로드 · 최대 10MB</div>
             <img id="previewImg" class="preview-img">
           </div>
-          <input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handleFileSelect(this)">
+          <input type="file" id="photoInput" accept="image/*" capture="environment"
+            style="display:none" onchange="handleFileSelect(this)">
           <div class="progress-wrap" id="progressWrap">
             <div class="progress-bar" id="progressBar"></div>
           </div>
@@ -173,8 +215,16 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
       </div>
     </div>
 
-    <!-- 미션 2 -->
-    <div class="card">
+    <!-- 미션 2 잠금 placeholder (미션1 완료 전) -->
+    <div class="mission-locked" id="mission2Locked">
+      <div class="mission-locked-body">
+        <span class="lock-sm">🔒</span>
+        <span>미션 1을 완료하면 다음 미션이 열립니다</span>
+      </div>
+    </div>
+
+    <!-- 미션 2 (미션1 완료 후 해금) -->
+    <div class="card mission-unlock" id="mission2Card" style="display:none;">
       <div class="mission-header m2">
         <div class="mission-num m2">2</div>
         <div class="mission-title">정탐 보고서 작성</div>
@@ -186,11 +236,13 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
         <div id="m2Form">
           <div class="report-group">
             <label class="report-label">👁 우리가 본 것 — 한 문장</label>
-            <textarea class="report-input" id="seenText" placeholder="이곳에서 본 세상의 모습을 한 문장으로..."></textarea>
+            <textarea class="report-input" id="seenText"
+              placeholder="이곳에서 본 세상의 모습을 한 문장으로..."></textarea>
           </div>
           <div class="report-group">
             <label class="report-label">🙏 우리의 기도 — 한 문장</label>
-            <textarea class="report-input" id="prayText" placeholder="이 영역을 위해 드리는 기도를 한 문장으로..."></textarea>
+            <textarea class="report-input" id="prayText"
+              placeholder="이 영역을 위해 드리는 기도를 한 문장으로..."></textarea>
           </div>
           <button class="submit-btn primary" id="reportBtn" onclick="submitMission2()">
             📝 보고서 제출하기
@@ -207,7 +259,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 
 <div class="toast" id="toast"></div>
 
-<!-- Firebase (Storage 불필요 — base64로 Realtime DB에 직접 저장) -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
 
@@ -223,6 +275,7 @@ firebase.initializeApp({
 });
 const db = firebase.database();
 
+// ── 조별 설정 ──
 const TEAM_MAP = {
   1:{dest:'전쟁기념관',waypoint:'뚝섬유원지역',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
   2:{dest:'전쟁기념관',waypoint:'뚝섬유원지역',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
@@ -232,38 +285,88 @@ const TEAM_MAP = {
   6:{dest:'양화진',waypoint:'홍대입구역',bg:'linear-gradient(135deg,#4a1a00,#e8590c)'},
 };
 
+// ── 임시 코드 (추후 실제 코드로 교체) ──
+const TEAM_CODES = {
+  1:'1147', 2:'2358', 3:'3692',
+  4:'4521', 5:'5834', 6:'6173',
+};
+
 let currentTeam = null;
 let selectedFile = null;
 
-function triggerFileInput() {
-  document.getElementById('photoInput').click();
-}
-
+// ── 조 선택 ──
 function selectTeam(num) {
   currentTeam = num;
   document.querySelectorAll('.team-btn').forEach((b,i) => b.classList.toggle('selected', i+1===num));
+
   const info = TEAM_MAP[num];
   const banner = document.getElementById('destBanner');
   banner.style.background = info.bg;
   banner.style.display = 'block';
   document.getElementById('destName').textContent = info.dest;
   document.getElementById('destWaypoint').textContent = info.waypoint;
-  document.getElementById('missionArea').classList.add('visible');
+
   localStorage.setItem('pwcamp_team', num);
-  loadStatus();
-  setTimeout(() => banner.scrollIntoView({behavior:'smooth',block:'start'}), 100);
+
+  const unlocked = localStorage.getItem(`pwcamp_unlocked_${num}`) === '1';
+  if (unlocked) {
+    showMissions();
+    loadStatus();
+  } else {
+    showLockScreen();
+  }
+
+  setTimeout(() => banner.scrollIntoView({behavior:'smooth', block:'start'}), 100);
 }
 
-const saved = localStorage.getItem('pwcamp_team');
-if (saved) selectTeam(Number(saved));
+// ── 잠금 화면 표시 ──
+function showLockScreen() {
+  document.getElementById('lockScreen').style.display = 'block';
+  document.getElementById('missionArea').classList.remove('visible');
+  document.getElementById('codeInput').value = '';
+  document.getElementById('codeError').textContent = '';
+}
 
+// ── 코드 확인 ──
+function checkCode() {
+  const input = document.getElementById('codeInput').value.trim();
+  if (input === TEAM_CODES[currentTeam]) {
+    localStorage.setItem(`pwcamp_unlocked_${currentTeam}`, '1');
+    document.getElementById('lockScreen').style.display = 'none';
+    showMissions();
+    loadStatus();
+    showToast('🔓 미션이 시작됩니다!');
+  } else {
+    const el = document.getElementById('codeInput');
+    el.classList.add('error');
+    document.getElementById('codeError').textContent = '틀린 코드예요. 다시 확인해보세요!';
+    setTimeout(() => el.classList.remove('error'), 500);
+  }
+}
+
+// ── 미션 영역 표시 ──
+function showMissions() {
+  document.getElementById('lockScreen').style.display = 'none';
+  document.getElementById('missionArea').classList.add('visible');
+}
+
+// ── 이전 상태 복원 ──
 function loadStatus() {
   if (!currentTeam) return;
   db.ref(`submissions/team${currentTeam}`).once('value', snap => {
     const d = snap.val() || {};
-    if (d.mission1?.photoData) showM1Done();
-    if (d.mission2?.submittedAt) showM2Done();
+    if (d.mission1?.photoData) {
+      showM1Done();       // 미션1 완료 → 미션2도 자동 해금
+    }
+    if (d.mission2?.submittedAt) {
+      showM2Done();
+    }
   });
+}
+
+// ── 파일 선택 ──
+function triggerFileInput() {
+  document.getElementById('photoInput').click();
 }
 
 function handleFileSelect(input) {
@@ -275,8 +378,7 @@ function handleFileSelect(input) {
     const img = document.getElementById('previewImg');
     img.src = e.target.result;
     img.style.display = 'block';
-    const zone = document.getElementById('uploadZone');
-    zone.classList.add('has-preview');
+    document.getElementById('uploadZone').classList.add('has-preview');
     document.getElementById('uploadIcon').style.display = 'none';
     document.getElementById('uploadText').style.display = 'none';
     document.getElementById('uploadHint').style.display = 'none';
@@ -285,7 +387,7 @@ function handleFileSelect(input) {
   reader.readAsDataURL(file);
 }
 
-// 이미지 압축 → base64 반환 (800px, quality 0.70 → ~150-350KB)
+// ── 이미지 압축 → base64 ──
 async function compressToBase64(file) {
   return new Promise(resolve => {
     const reader = new FileReader();
@@ -306,6 +408,7 @@ async function compressToBase64(file) {
   });
 }
 
+// ── 미션1 업로드 ──
 async function uploadMission1() {
   if (!currentTeam || !selectedFile) return;
   const btn = document.getElementById('uploadBtn');
@@ -315,7 +418,6 @@ async function uploadMission1() {
   btn.textContent = '압축 중...';
   pw.style.display = 'block';
   try {
-    // 압축 진행 표시 (애니메이션용)
     pb.style.width = '30%';
     const base64 = await compressToBase64(selectedFile);
     pb.style.width = '70%';
@@ -337,6 +439,7 @@ async function uploadMission1() {
   }
 }
 
+// ── 미션2 제출 ──
 async function submitMission2() {
   if (!currentTeam) return;
   const seen = document.getElementById('seenText').value.trim();
@@ -359,15 +462,25 @@ async function submitMission2() {
   }
 }
 
+// ── 상태 전환 ──
 function showM1Done() {
   document.getElementById('m1UploadArea').style.display = 'none';
   document.getElementById('m1Done').style.display = 'block';
+  // 미션2 잠금 해제
+  document.getElementById('mission2Locked').style.display = 'none';
+  document.getElementById('mission2Card').style.display = 'block';
 }
+
 function showM2Done() {
   document.getElementById('m2Form').style.display = 'none';
   document.getElementById('m2Done').style.display = 'block';
 }
 
+// ── 페이지 로드 시 이전 상태 복원 ──
+const saved = localStorage.getItem('pwcamp_team');
+if (saved) selectTeam(Number(saved));
+
+// ── Toast ──
 let toastTimer;
 function showToast(msg) {
   const el = document.getElementById('toast');
