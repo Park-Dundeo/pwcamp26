@@ -259,7 +259,7 @@ function updateStats() {
 function updateCards() {
   for (let t=1;t<=6;t++) {
     const d=allData[`team${t}`]||{};
-    const h1=!!d.mission1?.photoURL, h2=!!d.mission2?.submittedAt;
+    const h1=!!d.mission1?.photoData, h2=!!d.mission2?.submittedAt;
     const p1=document.getElementById(`pill-m1-${t}`);
     const p2=document.getElementById(`pill-m2-${t}`);
     if(p1){p1.textContent=h1?'✅ 미션1':'⏳ 미션1';p1.className=`pill ${h1?'done':'wait'}`;}
@@ -284,8 +284,8 @@ function renderDetail(t) {
   let html='';
 
   html+=`<div class="detail-section">📷 미션 1 — 경유지 인증샷</div>`;
-  if(m1?.photoURL){
-    html+=`<img class="detail-photo" src="${m1.photoURL}" loading="lazy">
+  if(m1?.photoData){
+    html+=`<img class="detail-photo" src="${m1.photoData}" loading="lazy">
            <div class="submit-time">제출: ${fmt(m1.uploadedAt)}</div>`;
   } else {
     html+=`<div class="detail-empty">아직 제출하지 않았습니다</div>`;
@@ -317,8 +317,8 @@ function updateFeed(){
   const items=[];
   for(let t=1;t<=6;t++){
     const d=allData[`team${t}`]||{};
-    if(d.mission1?.photoURL){
-      items.push({team:t,type:'photo',url:d.mission1.photoURL,time:d.mission1.uploadedAt});
+    if(d.mission1?.photoData){
+      items.push({team:t,type:'photo',url:d.mission1.photoData,time:d.mission1.uploadedAt});
     }
     if(d.mission2?.submittedAt){
       items.push({team:t,type:'report',seen:d.mission2.seen,prayer:d.mission2.prayer,time:d.mission2.submittedAt});

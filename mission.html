@@ -207,10 +207,9 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 
 <div class="toast" id="toast"></div>
 
-<!-- Firebase -->
+<!-- Firebase (Storage 불필요 — base64로 Realtime DB에 직접 저장) -->
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-storage-compat.js"></script>
 
 <script>
 firebase.initializeApp({
@@ -223,7 +222,6 @@ firebase.initializeApp({
   appId: "1:860034291771:web:8de5a9e21dcfe28aefa41e"
 });
 const db = firebase.database();
-const storage = firebase.storage();
 
 const TEAM_MAP = {
   1:{dest:'전쟁기념관',waypoint:'뚝섬유원지역',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
@@ -263,7 +261,7 @@ function loadStatus() {
   if (!currentTeam) return;
   db.ref(`submissions/team${currentTeam}`).once('value', snap => {
     const d = snap.val() || {};
-    if (d.mission1?.photoURL) showM1Done();
+    if (d.mission1?.photoData) showM1Done();
     if (d.mission2?.submittedAt) showM2Done();
   });
 }
@@ -287,19 +285,20 @@ function handleFileSelect(input) {
   reader.readAsDataURL(file);
 }
 
-async function compressImage(file) {
+// 이미지 압축 → base64 반환 (800px, quality 0.70 → ~150-350KB)
+async function compressToBase64(file) {
   return new Promise(resolve => {
     const reader = new FileReader();
     reader.onload = e => {
       const img = new Image();
       img.onload = () => {
-        const maxW = 1200;
+        const maxW = 800;
         const ratio = Math.min(maxW / img.width, 1);
         const canvas = document.createElement('canvas');
         canvas.width = img.width * ratio;
         canvas.height = img.height * ratio;
         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-        canvas.toBlob(blob => resolve(blob), 'image/jpeg', 0.78);
+        resolve(canvas.toDataURL('image/jpeg', 0.70));
       };
       img.src = e.target.result;
     };
@@ -310,33 +309,31 @@ async function compressImage(file) {
 async function uploadMission1() {
   if (!currentTeam || !selectedFile) return;
   const btn = document.getElementById('uploadBtn');
+  const pw = document.getElementById('progressWrap');
+  const pb = document.getElementById('progressBar');
   btn.disabled = true;
   btn.textContent = '압축 중...';
+  pw.style.display = 'block';
   try {
-    const blob = await compressImage(selectedFile);
-    const path = `missions/team${currentTeam}/m1_${Date.now()}.jpg`;
-    const ref = storage.ref(path);
-    const task = ref.put(blob, {contentType:'image/jpeg'});
-    const pw = document.getElementById('progressWrap');
-    const pb = document.getElementById('progressBar');
-    pw.style.display = 'block';
-    btn.textContent = '업로드 중...';
-    task.on('state_changed', snap => {
-      pb.style.width = (snap.bytesTransferred / snap.totalBytes * 100).toFixed(0) + '%';
-    });
-    await task;
-    const url = await ref.getDownloadURL();
+    // 압축 진행 표시 (애니메이션용)
+    pb.style.width = '30%';
+    const base64 = await compressToBase64(selectedFile);
+    pb.style.width = '70%';
+    btn.textContent = '저장 중...';
     await db.ref(`submissions/team${currentTeam}/mission1`).set({
-      photoURL: url,
+      photoData: base64,
       uploadedAt: firebase.database.ServerValue.TIMESTAMP,
     });
+    pb.style.width = '100%';
     showM1Done();
     showToast('✅ 인증샷 제출 완료!');
   } catch(e) {
     console.error(e);
+    pw.style.display = 'none';
+    pb.style.width = '0%';
     btn.disabled = false;
     btn.textContent = '📤 인증샷 제출하기';
-    showToast('❌ 업로드 실패. 다시 시도해주세요.');
+    showToast('❌ 제출 실패. 다시 시도해주세요.');
   }
 }
 
