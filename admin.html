@@ -116,6 +116,26 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .feed-dest{font-size:11px;color:var(--gray);margin-bottom:6px;}
 .feed-text{font-size:13px;color:#495057;line-height:1.55;}
 .feed-time{font-size:11px;color:var(--gray);margin-top:6px;}
+
+/* ── Footer note (개인정보 안내 + 삭제) ── */
+.footer-note{margin-top:24px;padding-top:16px;border-top:1px solid var(--border);text-align:center;}
+.footer-note p{font-size:11px;color:var(--gray);line-height:1.6;max-width:520px;margin:0 auto 12px;}
+.danger-link{background:none;border:none;color:#e03131;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;padding:8px;opacity:.75;}
+.danger-link:active{opacity:1;}
+
+/* ── Wipe modal ── */
+.wipe-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;align-items:center;justify-content:center;padding:20px;}
+.wipe-overlay.show{display:flex;}
+.wipe-modal{background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:340px;box-shadow:0 8px 32px rgba(0,0,0,.3);}
+.wipe-modal h3{font-size:16px;font-weight:800;color:var(--navy);margin-bottom:6px;text-align:center;}
+.wipe-sub{font-size:12px;color:var(--gray);text-align:center;margin-bottom:16px;line-height:1.6;}
+.wipe-pw-input{width:100%;padding:14px;border:1.5px solid var(--border);border-radius:8px;font-size:15px;text-align:center;font-family:inherit;margin-bottom:8px;}
+.wipe-pw-input.error{border-color:#f03e3e;}
+.wipe-err{font-size:12px;color:#f03e3e;text-align:center;min-height:16px;margin-bottom:8px;}
+.wipe-btn{width:100%;padding:14px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px;}
+.wipe-btn.confirm{background:var(--navy);color:#fff;}
+.wipe-btn.danger{background:#e03131;color:#fff;}
+.wipe-btn.cancel{background:#f1f3f5;color:var(--gray);margin-bottom:0;}
 </style>
 </head>
 <body>
@@ -175,6 +195,34 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
       <div style="color:var(--gray);font-size:13px;text-align:center;padding:20px;">아직 제출된 내역이 없습니다</div>
     </div>
 
+    <!-- 개인정보 안내 + 데이터 삭제 -->
+    <div class="footer-note">
+      <p>🔒 제출된 사진은 수련회 미션 진행 확인 및 내부 운영 목적으로만 사용됩니다. 외부 공개 또는 SNS 게시 시에는 별도 동의 및 선별 과정을 거칩니다. 수련회 종료 후 정리 기간을 거쳐 삭제됩니다.</p>
+      <button class="danger-link" onclick="openWipeModal()">🗑 행사 종료 후 — 전체 제출 데이터 삭제</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- 전체 데이터 삭제 모달 -->
+<div class="wipe-overlay" id="wipeOverlay">
+  <div class="wipe-modal">
+    <div id="wipeStepPw">
+      <h3>🔐 삭제 비밀번호</h3>
+      <div class="wipe-sub">되돌릴 수 없는 작업입니다. 행사 종료 후에만 사용하세요.</div>
+      <input class="wipe-pw-input" type="password" id="wipePwInput" placeholder="비밀번호 입력"
+        onkeydown="if(event.key==='Enter')checkWipePw()">
+      <div class="wipe-err" id="wipePwErr"></div>
+      <button class="wipe-btn confirm" onclick="checkWipePw()">확인</button>
+      <button class="wipe-btn cancel" onclick="closeWipeModal()">취소</button>
+    </div>
+    <div id="wipeStepConfirm" style="display:none">
+      <h3>⚠️ 전체 삭제 확인</h3>
+      <div class="wipe-sub">1~6조의 모든 제출 사진·보고서가 영구 삭제됩니다.<br>계속하려면 아래에 <b>삭제</b>를 입력하세요.</div>
+      <input class="wipe-pw-input" type="text" id="wipeConfirmInput" placeholder="삭제">
+      <button class="wipe-btn danger" onclick="wipeAllData()">💥 전체 삭제 실행</button>
+      <button class="wipe-btn cancel" onclick="closeWipeModal()">취소</button>
+    </div>
   </div>
 </div>
 
@@ -340,8 +388,9 @@ function renderDetail(t) {
   if(m2?.submittedAt){
     html+=`${badge(m2.status)}
       <div class="report-box">
-      <div class="report-row"><div class="lbl">👁 우리가 본 것</div><div class="val">${esc(m2.seen)}</div></div>
-      <div class="report-row"><div class="lbl">🙏 우리의 기도</div><div class="val">${esc(m2.prayer)}</div></div>
+      <div class="report-row"><div class="lbl">🧱 우리가 본 장벽</div><div class="val">${esc(m2.barrier)}</div></div>
+      <div class="report-row"><div class="lbl">✨ 우리가 발견한 믿음</div><div class="val">${esc(m2.faith)}</div></div>
+      <div class="report-row"><div class="lbl">🙏 우리의 돌파기도</div><div class="val">${esc(m2.prayer)}</div></div>
     </div>
     <div class="submit-time" style="margin-top:8px;">제출: ${fmt(m2.submittedAt)}</div>
     ${actions(t,2,m2.status)}`;
@@ -388,7 +437,7 @@ function updateFeed(){
       items.push({team:t,type:'photo',url:d.mission1.photoData,time:d.mission1.uploadedAt,status:d.mission1.status});
     }
     if(d.mission2?.submittedAt){
-      items.push({team:t,type:'report',seen:d.mission2.seen,prayer:d.mission2.prayer,time:d.mission2.submittedAt,status:d.mission2.status});
+      items.push({team:t,type:'report',barrier:d.mission2.barrier,time:d.mission2.submittedAt,status:d.mission2.status});
     }
   }
   items.sort((a,b)=>b.time-a.time);
@@ -417,7 +466,7 @@ function updateFeed(){
         <div class="feed-content">
           <div class="feed-team">${it.team}조 · 미션2 정탐보고서${statusTag(it.status)}</div>
           <div class="feed-dest">${info.dest}</div>
-          <div class="feed-text">"${esc(it.seen)}"</div>
+          <div class="feed-text">"${esc(it.barrier)}"</div>
           <div class="feed-time">${fmt(it.time)}</div>
         </div>
       </div>`;
@@ -427,6 +476,45 @@ function updateFeed(){
 
 function fmt(ts){ return ts ? new Date(ts).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}) : '—'; }
 function esc(s){ return s?(s+'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):''; }
+
+// ── 전체 데이터 삭제 (행사 종료 후 정리용) ──
+function openWipeModal() {
+  document.getElementById('wipeOverlay').classList.add('show');
+  document.getElementById('wipeStepPw').style.display = 'block';
+  document.getElementById('wipeStepConfirm').style.display = 'none';
+  document.getElementById('wipePwInput').value = '';
+  document.getElementById('wipePwErr').textContent = '';
+}
+function closeWipeModal() {
+  document.getElementById('wipeOverlay').classList.remove('show');
+}
+function checkWipePw() {
+  const input = document.getElementById('wipePwInput').value.trim();
+  if (input === ADMIN_PW) {
+    document.getElementById('wipeStepPw').style.display = 'none';
+    document.getElementById('wipeStepConfirm').style.display = 'block';
+    document.getElementById('wipeConfirmInput').value = '';
+  } else {
+    const el = document.getElementById('wipePwInput');
+    el.classList.add('error');
+    document.getElementById('wipePwErr').textContent = '비밀번호가 틀렸어요.';
+    setTimeout(() => el.classList.remove('error'), 500);
+  }
+}
+async function wipeAllData() {
+  if (document.getElementById('wipeConfirmInput').value.trim() !== '삭제') {
+    alert('"삭제"라고 정확히 입력해야 실행됩니다.');
+    return;
+  }
+  try {
+    await db.ref('submissions').remove();
+    closeWipeModal();
+    closeDetail();
+    alert('전체 제출 데이터가 삭제되었습니다.');
+  } catch (e) {
+    alert('삭제 중 오류가 발생했습니다: ' + e.message);
+  }
+}
 </script>
 </body>
 </html>

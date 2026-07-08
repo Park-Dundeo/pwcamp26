@@ -203,7 +203,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .gate-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
 .gate-card{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
 .gate-card-top{padding:11px 13px;display:flex;align-items:center;gap:8px;background:#fff;}
-.gate-num-badge{width:26px;height:26px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.gate-num-badge{min-width:26px;height:26px;padding:0 6px;border-radius:13px;background:var(--navy);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .gate-name{font-size:13px;font-weight:700;flex:1;}
 .gate-body{padding:11px 13px;background:var(--gray-light);font-size:12px;}
 .gate-row{margin-bottom:5px;color:var(--text-soft);}
@@ -265,7 +265,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     <div class="card-body">
       <ul class="item-list">
         <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day 1 오전·오후 — 가나안 정탐</b><div class="sub">3페이즈 이동 미션 · 키워드: 두려움 돌파</div></div></li>
-        <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day 2 오전 — 가나안 정복: 돌파의 순례길</b><div class="sub">7관문 센터학습 90분 · 키워드: 불가능 돌파</div></div></li>
+        <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day 2 오전 — 가나안 정복: 돌파의 순례길</b><div class="sub">6관문 + Final 여리고 성벽 90분 · 키워드: 불가능 돌파</div></div></li>
         <li><span class="tag tag-done">확정</span><div class="item-label"><b>폐회예배</b><div class="sub">여호수아 24:15 · 망설임 → 결단</div></div></li>
       </ul>
     </div>
@@ -285,6 +285,13 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 
 <!-- ═══ Day 1 ═══ -->
 <div class="tab-panel" id="panel-day1">
+
+  <div class="card">
+    <div class="card-body">
+      <div class="section-title" style="margin-bottom:8px;">🗺 가나안 정탐이란?</div>
+      <p style="font-size:13px;color:var(--text-soft);line-height:1.75;">가나안 정탐은 단순히 장소를 방문하고 사진을 남기는 시간이 아닙니다. 우리가 살아가는 세상 속에서 장벽과 두려움, 믿음의 흔적을 발견하고, 하나님이 우리에게 주시는 돌파의 마음을 정리하는 시간입니다.</p>
+    </div>
+  </div>
 
   <div class="highlight">목적지를 선택하면 <b>전체 동선과 미션</b>이 표시됩니다.</div>
 
@@ -535,27 +542,31 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 
 <!-- ═══ Day 2 ═══ -->
 <div class="tab-panel" id="panel-day2">
-  <div class="highlight"><b>천로역정 × 여호수아 가나안 정복</b> — 도봉숲속마을 공간을 순례 경로로 활용, 7관문 통과</div>
+  <div class="highlight"><b>천로역정 × 여호수아 가나안 정복</b> — 도봉숲속마을 공간을 순례 경로로 활용, 6관문 순례 + 최종 여리고 성벽 통과</div>
   <div class="card">
     <div class="card-header"><h2>⏱ 운영 시간표 (90분)</h2></div>
     <div class="card-body">
       <ul class="item-list">
-        <li><span class="tag tag-key">0–10분</span><div class="item-label">오프닝 / 세계관 설명</div></li>
-        <li><span class="tag tag-key">10–70분</span><div class="item-label">7관문 순환 <span style="color:var(--gray);font-size:12px;">(관문당 약 8–10분)</span></div></li>
-        <li><span class="tag tag-key">70–80분</span><div class="item-label">최종 여리고 성벽 미션</div></li>
-        <li><span class="tag tag-key">80–90분</span><div class="item-label">조별 결단문 발표 / 기도</div></li>
+        <li><span class="tag tag-key">0–10분</span><div class="item-label">① 오프닝<span style="color:var(--gray);font-size:12px;"> — 전체 집합 · 프로그램 설명 · 조별 출발 안내</span></div></li>
+        <li><span class="tag tag-key">10–70분</span><div class="item-label">② 6관문 순환 <span style="color:var(--gray);font-size:12px;">(관문당 약 8–10분)</span></div></li>
+        <li><span class="tag tag-key">70–80분</span><div class="item-label">③ Final — 전체 여리고 성벽 미션<span style="color:var(--gray);font-size:12px;"> — 전 조 재집합, 결단문 완성 → 외침 → 성벽 무너뜨리기</span></div></li>
+        <li><span class="tag tag-key">80–90분</span><div class="item-label">④ 결단 나눔 및 마무리<span style="color:var(--gray);font-size:12px;"> — 조별 결단문 한 문장 공유 · 짧은 기도 · 폐회예배 연결</span></div></li>
       </ul>
     </div>
   </div>
-  <div class="section-title">7관문 — 돌파의 순례길</div>
+  <div class="section-title">6관문 — 돌파의 순례길</div>
   <div class="gate-grid">
-    <div class="gate-card"><div class="gate-card-top"><div class="gate-num-badge">1</div><div class="gate-name">붉은 줄의 문</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 라합의 붉은 줄 (수 2장)</div><div class="gate-row"><b>게임:</b> 빨간 실 거미줄 레이저 미로 통과</div><div class="gate-msg">돌파는 내가 강해서가 아니라, 하나님이 주신 약속을 붙잡는 데서 시작된다.</div><div class="gate-supplies">준비물: 빨간 털실/끈, 방울, 스톱워치, 성공 스티커</div></div></div>
-    <div class="gate-card"><div class="gate-card-top"><div class="gate-num-badge">2</div><div class="gate-name">요단강</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 요단강 도하 (수 3장)</div><div class="gate-row"><b>게임:</b> 제한된 발판으로 전원 건너기 — 언약궤 두 명이 들고 이동</div><div class="gate-msg">요단강은 먼저 갈라진 것이 아니라, 믿음으로 발을 디뎠을 때 열렸다.</div><div class="gate-supplies">준비물: 파란 천/테이프, 발판, 성경책 모형, 기념 돌 카드</div></div></div>
-    <div class="gate-card"><div class="gate-card-top"><div class="gate-num-badge">3</div><div class="gate-name">무거운 짐의 언덕</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 천로역정</div><div class="gate-row"><b>게임:</b> 단어 카드 붙인 짐 들고 걷다가 십자가 앞에 내려놓기</div><div class="gate-msg">하나님 앞에 내려놓지 않은 짐은 돌파를 막는다.</div><div class="gate-supplies">준비물: 가방, 물병·모래주머니, 단어 카드, 십자가 표시</div></div></div>
-    <div class="gate-card"><div class="gate-card-top"><div class="gate-num-badge">4</div><div class="gate-name">의심의 숲</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 천로역정</div><div class="gate-row"><b>게임:</b> 한 명 눈가림 — 조원 말로만 안내해서 코스 통과</div><div class="gate-msg">믿음의 길은 항상 선명하지 않지만, 하나님이 말씀하시면 걸을 수 있다.</div><div class="gate-supplies">준비물: 눈가리개, 장애물(의자·콘)</div></div></div>
-    <div class="gate-card"><div class="gate-card-top"><div class="gate-num-badge">5</div><div class="gate-name">허영의 장터</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 천로역정 허영시장 / 수 24:15</div><div class="gate-row"><b>게임:</b> 선택 카드 — 인기 vs 정직 / 편함 vs 순종 / 비교 vs 감사 등</div><div class="gate-msg">돌파는 한 번의 감정이 아니라, 매 순간 하나님을 선택하는 것이다.</div><div class="gate-supplies">준비물: 선택 카드 세트 (제작 필요)</div></div></div>
-    <div class="gate-card"><div class="gate-card-top"><div class="gate-num-badge">6</div><div class="gate-name">침묵의 성벽</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 여리고성 (수 6장)</div><div class="gate-row"><b>게임:</b> 말하지 않고 침묵으로 지시문 수행</div><div class="gate-msg">여리고성은 힘으로 무너진 것이 아니라, 순종으로 무너졌다.</div><div class="gate-supplies">준비물: 지시문 카드, 말씀 카드</div></div></div>
-    <div class="gate-card"><div class="gate-card-top"><div class="gate-num-badge">7</div><div class="gate-name">약속의 땅</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 가나안 입성</div><div class="gate-row"><b>게임:</b> 박스 성벽 → 결단문 외침 → 성벽 무너뜨리기</div><div class="gate-msg">"우리는 ______을 돌파하고, 하나님을 따라 ______하겠습니다."</div><div class="gate-supplies">준비물: 박스 성벽, 단어 카드, 스티커, 결단문 종이</div></div></div>
+    <div class="gate-card"><div class="gate-card-top"><div class="gate-num-badge">1/6</div><div class="gate-name">붉은 줄의 문</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 라합의 붉은 줄 (수 2장)</div><div class="gate-row"><b>게임:</b> 빨간 실 거미줄 레이저 미로 통과</div><div class="gate-msg">돌파는 내가 강해서가 아니라, 하나님이 주신 약속을 붙잡는 데서 시작된다.</div><div class="gate-supplies">준비물: 빨간 털실/끈, 방울, 스톱워치, 성공 스티커</div></div></div>
+    <div class="gate-card"><div class="gate-card-top"><div class="gate-num-badge">2/6</div><div class="gate-name">요단강</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 요단강 도하 (수 3장)</div><div class="gate-row"><b>게임:</b> 제한된 발판으로 전원 건너기 — 언약궤 두 명이 들고 이동</div><div class="gate-msg">요단강은 먼저 갈라진 것이 아니라, 믿음으로 발을 디뎠을 때 열렸다.</div><div class="gate-supplies">준비물: 파란 천/테이프, 발판, 성경책 모형, 기념 돌 카드</div></div></div>
+    <div class="gate-card"><div class="gate-card-top"><div class="gate-num-badge">3/6</div><div class="gate-name">무거운 짐의 언덕</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 천로역정</div><div class="gate-row"><b>게임:</b> 단어 카드 붙인 짐 들고 걷다가 십자가 앞에 내려놓기</div><div class="gate-msg">하나님 앞에 내려놓지 않은 짐은 돌파를 막는다.</div><div class="gate-supplies">준비물: 가방, 물병·모래주머니, 단어 카드, 십자가 표시</div></div></div>
+    <div class="gate-card"><div class="gate-card-top"><div class="gate-num-badge">4/6</div><div class="gate-name">의심의 숲</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 천로역정</div><div class="gate-row"><b>게임:</b> 한 명 눈가림 — 조원 말로만 안내해서 코스 통과</div><div class="gate-msg">믿음의 길은 항상 선명하지 않지만, 하나님이 말씀하시면 걸을 수 있다.</div><div class="gate-supplies">준비물: 눈가리개, 장애물(의자·콘)</div></div></div>
+    <div class="gate-card"><div class="gate-card-top"><div class="gate-num-badge">5/6</div><div class="gate-name">허영의 장터</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 천로역정 허영시장 / 수 24:15</div><div class="gate-row"><b>게임:</b> 선택 카드 — 인기 vs 정직 / 편함 vs 순종 / 비교 vs 감사 등</div><div class="gate-msg">돌파는 한 번의 감정이 아니라, 매 순간 하나님을 선택하는 것이다.</div><div class="gate-supplies">준비물: 선택 카드 세트 (제작 필요)</div></div></div>
+    <div class="gate-card"><div class="gate-card-top"><div class="gate-num-badge">6/6</div><div class="gate-name">침묵의 성벽</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 여리고성 (수 6장)</div><div class="gate-row"><b>게임:</b> 말하지 않고 침묵으로 지시문 수행</div><div class="gate-msg">여리고성은 힘으로 무너진 것이 아니라, 순종으로 무너졌다.</div><div class="gate-supplies">준비물: 지시문 카드, 말씀 카드</div></div></div>
+  </div>
+
+  <div class="section-title">🏆 Final — 전체 여리고 성벽 미션</div>
+  <div class="gate-grid">
+    <div class="gate-card" style="grid-column:1/-1;"><div class="gate-card-top"><div class="gate-num-badge" style="background:var(--gold, #f59f00);">Final</div><div class="gate-name">약속의 땅 — 전체 집합 미션</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 가나안 입성</div><div class="gate-row"><b>게임:</b> 6관문을 통과한 전 조가 한 장소에 재집합 → 조별 결단문 완성 → 다 함께 외침 → 상징적인 여리고 성벽(박스 성벽) 무너뜨리기</div><div class="gate-row"><b>결단문 형식:</b> "우리는 ______을 돌파하고, 하나님을 따라 ______하겠습니다."</div><div class="gate-msg">여리고성은 힘으로 무너진 것이 아니라, 순종과 함성으로 무너졌다 — 우리의 돌파도 그렇게 시작된다.</div><div class="gate-supplies">준비물: 박스 성벽, 단어 카드, 스티커, 결단문 종이</div></div></div>
   </div>
 </div>
 
@@ -569,10 +580,18 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
         <li><span class="tag tag-done">확정</span><div class="item-label"><b>학생 규모:</b> 50명 내외 · 6조 (조당 약 8~9명)</div></li>
         <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day1 2차 견학 장소:</b> 전쟁기념관 / 서대문형무소 / 양화진 (2조씩)</div></li>
         <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day1 구조:</b> 3페이즈 (이동 미션 → 견학 → 식사·이동)</div></li>
-        <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day2 구조:</b> 돌파의 순례길 — 7관문 90분</div></li>
+        <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day2 구조:</b> 돌파의 순례길 — 6관문 + Final 여리고 성벽 90분</div></li>
       </ul>
     </div>
   </div>
+  <div class="section-title">🔒 개인정보·사진 이용 안내 (가정통신문/신청 안내용)</div>
+  <div class="card">
+    <div class="card-body">
+      <p style="font-size:13px;color:var(--text-soft);line-height:1.8;">"제출된 사진은 수련회 미션 진행 확인 및 내부 운영 목적으로만 사용됩니다. 외부 공개 또는 SNS 게시 시에는 별도 동의 및 선별 과정을 거칩니다. 수련회 종료 후 정리 기간을 거쳐 삭제됩니다."</p>
+      <p style="font-size:11px;color:var(--gray);margin-top:8px;">※ 동일 문구가 학생용 미션 페이지(사진 업로드 영역)와 관리자 페이지 하단에도 반영되어 있습니다. 별도의 신청서/가정통신문에도 이 문구를 그대로 포함해주세요.</p>
+    </div>
+  </div>
+
   <div class="section-title">논의 필요</div>
   <div class="card">
     <div class="card-body">
@@ -587,7 +606,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
           <tr><td>얼음물·간식</td><td>현장 교사 사전 구입 / 수량 결정</td></tr>
           <tr><td>식사 방식·비용</td><td>조별 자유 식사 / 지원 금액 결정</td></tr>
           <tr><td>도봉숲속마을 집결</td><td>집결 시간·장소·이동 수단</td></tr>
-          <tr><td>Day2 관문별 담당자</td><td>7관문 각 1명 배정</td></tr>
+          <tr><td>Day2 관문별 담당자</td><td>6관문 각 1명 + Final(여리고 성벽) 담당 1명 배정</td></tr>
           <tr><td>비 오는 경우 대체안</td><td>Day1 실내 이동 / Day2 관문 실내 배치</td></tr>
         </tbody>
       </table>
@@ -660,12 +679,16 @@ function missionHTML(destName, spotName, spot예시) {
             <div class="report-text"><b>인증샷 1장</b><span>장소가 잘 보이는 조 사진</span></div>
           </div>
           <div class="report-line">
-            <div class="report-icon">👁</div>
-            <div class="report-text"><b>우리가 본 것 — 한 문장</b><span>이곳에서 본 세상의 모습을 한 문장으로</span></div>
+            <div class="report-icon">🧱</div>
+            <div class="report-text"><b>우리가 본 장벽</b><span>이 장소에서 사람들이 마주했던 두려움·고난·불가능은?</span></div>
+          </div>
+          <div class="report-line">
+            <div class="report-icon">✨</div>
+            <div class="report-text"><b>우리가 발견한 믿음</b><span>그 장벽 앞에서 누군가 붙들고 나아간 믿음·용기의 흔적</span></div>
           </div>
           <div class="report-line">
             <div class="report-icon">🙏</div>
-            <div class="report-text"><b>우리의 기도 — 한 문장</b><span>이 영역을 위해 드리는 기도를 한 문장으로</span></div>
+            <div class="report-text"><b>우리의 돌파기도</b><span>우리 조가 이번 수련회에서 돌파하고 싶은 것 — 한 문장 기도</span></div>
           </div>
         </div>
       </div>

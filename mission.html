@@ -24,6 +24,14 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .card{background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:16px;overflow:hidden;}
 .card-body{padding:18px;}
 
+/* ── Purpose card ── */
+.purpose-card{background:linear-gradient(160deg,#fffdf5,#fff);border:1.5px solid #ffe8a3;}
+.purpose-label{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:8px;}
+.purpose-text{font-size:12.5px;color:#495057;line-height:1.75;}
+
+/* ── Privacy notice ── */
+.privacy-note{font-size:11px;color:var(--gray);line-height:1.6;background:#f8f9fa;border-radius:8px;padding:10px 12px;margin-top:10px;}
+
 /* ── Team selector ── */
 .section-label{font-size:12px;font-weight:700;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
 .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
@@ -200,6 +208,14 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 
 <div class="content">
 
+  <!-- Day1 목적 안내 -->
+  <div class="card purpose-card">
+    <div class="card-body">
+      <div class="purpose-label">🗺 가나안 정탐이란?</div>
+      <p class="purpose-text">가나안 정탐은 단순히 장소를 방문하고 사진을 남기는 시간이 아닙니다. 우리가 살아가는 세상 속에서 장벽과 두려움, 믿음의 흔적을 발견하고, 하나님이 우리에게 주시는 돌파의 마음을 정리하는 시간입니다.</p>
+    </div>
+  </div>
+
   <!-- 조 선택 -->
   <div class="card" id="teamSelectCard">
     <div class="card-body">
@@ -279,6 +295,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
           <button class="submit-btn primary" id="uploadBtn" onclick="uploadMission1()" disabled>
             📤 인증샷 제출하기
           </button>
+          <div class="privacy-note">🔒 제출된 사진은 수련회 미션 진행 확인 및 내부 운영 목적으로만 사용됩니다. 외부 공개 또는 SNS 게시 시에는 별도 동의 및 선별 과정을 거칩니다. 수련회 종료 후 정리 기간을 거쳐 삭제됩니다.</div>
         </div>
         <div id="m1Done" style="display:none">
           <div class="status-done">✅ 인증샷 제출 완료!</div>
@@ -337,17 +354,22 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
         </p>
         <div id="m2Form">
           <div class="report-group">
-            <label class="report-label">👁 우리가 본 것 — 한 문장</label>
-            <textarea class="report-input" id="seenText"
-              placeholder="이곳에서 본 세상의 모습을 한 문장으로..."></textarea>
+            <label class="report-label">🧱 우리가 본 장벽</label>
+            <textarea class="report-input" id="barrierText"
+              placeholder="이 장소에서 사람들이 마주했던 두려움, 고난, 아픔, 불가능은 무엇이었나요?"></textarea>
           </div>
           <div class="report-group">
-            <label class="report-label">🙏 우리의 기도 — 한 문장</label>
-            <textarea class="report-input" id="prayText"
-              placeholder="이 영역을 위해 드리는 기도를 한 문장으로..."></textarea>
+            <label class="report-label">✨ 우리가 발견한 믿음</label>
+            <textarea class="report-input" id="faithText"
+              placeholder="그 장벽 앞에서 누군가는 무엇을 붙들고 견디고 나아갔나요? 믿음, 용기, 헌신의 흔적을 적어주세요."></textarea>
+          </div>
+          <div class="report-group">
+            <label class="report-label">🙏 우리의 돌파기도</label>
+            <textarea class="report-input" id="prayerText"
+              placeholder="우리 조가 이번 수련회에서 하나님 앞에 돌파하고 싶은 것은 무엇인가요? 한 문장 기도로 작성해주세요."></textarea>
           </div>
           <button class="submit-btn primary" id="reportBtn" onclick="submitMission2()">
-            📝 보고서 제출하기
+            📝 정탐 보고서 제출하기
           </button>
         </div>
         <div id="m2Done" style="display:none">
@@ -466,10 +488,11 @@ function resetMissionUI() {
   document.getElementById('m2Done').style.display = 'none';
   document.getElementById('m2Pending').style.display = 'none';
   document.getElementById('m2Rejected').style.display = 'none';
-  document.getElementById('seenText').value = '';
-  document.getElementById('prayText').value = '';
+  document.getElementById('barrierText').value = '';
+  document.getElementById('faithText').value = '';
+  document.getElementById('prayerText').value = '';
   const rb = document.getElementById('reportBtn');
-  rb.disabled = false; rb.textContent = '📝 보고서 제출하기';
+  rb.disabled = false; rb.textContent = '📝 정탐 보고서 제출하기';
 
   // 상태 추적 초기화 (팀 전환 시 승인 전환 애니메이션 오작동 방지)
   m1PrevStatus = null;
@@ -785,15 +808,16 @@ function resetUploadUI() {
 // ── 미션2 제출 (제출 시 '승인 대기' 상태로, 관리자 승인 후 완료 처리) ──
 async function submitMission2() {
   if (!currentTeam) return;
-  const seen = document.getElementById('seenText').value.trim();
-  const pray = document.getElementById('prayText').value.trim();
-  if (!seen || !pray) { showToast('두 항목 모두 입력해주세요!'); return; }
+  const barrier = document.getElementById('barrierText').value.trim();
+  const faith = document.getElementById('faithText').value.trim();
+  const prayer = document.getElementById('prayerText').value.trim();
+  if (!barrier || !faith || !prayer) { showToast('세 항목 모두 입력해주세요!'); return; }
   const btn = document.getElementById('reportBtn');
   btn.disabled = true;
   btn.textContent = '제출 중...';
   try {
     await db.ref(`submissions/team${currentTeam}/mission2`).set({
-      seen, prayer: pray,
+      barrier, faith, prayer,
       submittedAt: firebase.database.ServerValue.TIMESTAMP,
       status: 'pending',
       reviewedAt: null,
@@ -802,7 +826,7 @@ async function submitMission2() {
     showToast('📤 제출 완료! 관리자 확인을 기다려주세요');
   } catch(e) {
     btn.disabled = false;
-    btn.textContent = '📝 보고서 제출하기';
+    btn.textContent = '📝 정탐 보고서 제출하기';
     showToast('❌ 제출 실패. 다시 시도해주세요.');
   }
 }
@@ -812,7 +836,7 @@ function retryMission2() {
   document.getElementById('m2Rejected').style.display = 'none';
   document.getElementById('m2Form').style.display = 'block';
   const rb = document.getElementById('reportBtn');
-  rb.disabled = false; rb.textContent = '📝 보고서 제출하기';
+  rb.disabled = false; rb.textContent = '📝 정탐 보고서 제출하기';
 }
 
 function unlockMission2() {
