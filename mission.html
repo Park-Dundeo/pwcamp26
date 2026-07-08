@@ -266,6 +266,23 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     </div>
   </div>
 
+  <!-- 코드 해제 직후 인트로 스토리텔링 (미션1 등장 전) -->
+  <div class="mission-transition" id="introTransition">
+    <div class="transition-card">
+      <div class="t-stamp">CODE ACCEPTED</div>
+      <span class="t-icon">📯</span>
+      <div class="t-headline">가나안 정탐을<br>허가한다.</div>
+      <div class="t-body">
+        여호수아가 너희를 보낸다.<br>
+        이제 그 땅으로 들어가<br>
+        장벽과 두려움, 그리고<br>
+        <b>믿음의 흔적</b>을 찾아오라.
+      </div>
+      <div class="t-verse">여호수아 1:2 — 일어나 이 요단을 건너 내가 그들에게 주는 땅으로 가라</div>
+      <button class="t-btn" onclick="enterMissions()">🚶 정탐을 시작한다 →</button>
+    </div>
+  </div>
+
   <!-- 미션 영역 -->
   <div class="mission-area" id="missionArea">
 
@@ -478,6 +495,9 @@ let curDestStage = null;
 
 // ── 미션 UI 전체 초기화 (팀 전환 시 호출) ──
 function resetMissionUI() {
+  // 인트로 스토리텔링 초기화 (다른 조로 전환 시 이전 조 인트로가 남아있지 않도록)
+  document.getElementById('introTransition').style.display = 'none';
+
   // 미션1 초기화
   document.getElementById('m1UploadArea').style.display = 'block';
   document.getElementById('m1Done').style.display = 'none';
@@ -604,10 +624,9 @@ function checkCode() {
   if (correct) {
     localStorage.setItem(`pwcamp_unlocked_${currentTeam}`, '1');
     document.getElementById('lockScreen').style.display = 'none';
-    showMissions();
-    attachStatusListener();
-    lockTeamSelection();
-    showToast('🔓 미션이 시작됩니다!');
+    const intro = document.getElementById('introTransition');
+    intro.style.display = 'block';
+    intro.scrollIntoView({behavior:'smooth', block:'start'});
   } else {
     const el = document.getElementById('codeInput');
     el.classList.add('error');
@@ -620,6 +639,16 @@ function checkCode() {
 function showMissions() {
   document.getElementById('lockScreen').style.display = 'none';
   document.getElementById('missionArea').classList.add('visible');
+}
+
+// ── 인트로 스토리텔링 종료 → 실제 미션 화면 진입 (코드 해제 직후 1회만) ──
+function enterMissions() {
+  document.getElementById('introTransition').style.display = 'none';
+  showMissions();
+  attachStatusListener();
+  lockTeamSelection();
+  showToast('🔓 미션이 시작됩니다!');
+  document.getElementById('missionArea').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
 // ── 조 선택 고정 (한 번 해금되면 다른 조로 못 바꾸게) ──
