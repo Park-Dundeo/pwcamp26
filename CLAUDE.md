@@ -20,6 +20,7 @@
 - `mission.html`의 `QUIZ`에 조별 퀴즈 문제·정답(유사정답 포함)이 하드코딩되어 있고, 잠금화면에 문제가 표시됨. 힌트는 페이지에 노출하지 않고 교사가 별도 전달.
 - `localStorage` 키 `pwcamp_unlocked_{team}`으로 조별 잠금해제 상태 유지.
 - Firebase 규칙: `submissions`/`checklist`/`teacherDoc`/`news_comments` 네 경로 모두 read/write 허용 (2026-07-08 콘솔에 반영 완료, `firebase.rules.now.json` 참고). 새 최상위 경로를 추가로 쓰려면 이 규칙에 없는 경로는 기본 거부이므로 콘솔에서 함께 열어줘야 함.
+- `index.html`에 Kakao Maps JS SDK 연동(REQ-29) — Day1 조별 동선 카드에 지도 표시. API 키는 `park-dundeo.github.io` 도메인 제한 걸려있어 로컬 `file://`이나 다른 도메인에서는 안 뜸(의도된 동작). `ROUTE_DATA`의 좌표 중 `verified:false`인 지점은 지하철역 등 공공정보 기준 추정치라 실제 운영 전 재확인 필요.
 
 ## 요구사항/백로그
 
