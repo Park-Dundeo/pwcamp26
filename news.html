@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>프로그램 준비 소식 — 파워웨이브 2026</title>
+<style>
+:root {
+  --navy:#1a2744; --blue:#3b5bdb; --gold:#f59f00;
+  --green:#2f9e44; --gray:#868e96; --border:#dee2e6; --radius:12px; --sky:#e8eeff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;min-height:100vh;}
+
+.app-header{background:linear-gradient(135deg,var(--navy),#2d4a9e);color:#fff;padding:20px 16px 22px;text-align:center;}
+.header-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
+.header-title{font-size:19px;font-weight:800;}
+.header-sub{font-size:12px;opacity:.75;margin-top:4px;}
+
+.content{max-width:640px;margin:0 auto;padding:16px 16px 60px;}
+
+.filter-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;}
+.filter-chip{font-size:11.5px;font-weight:700;color:var(--navy);background:#fff;border:1px solid var(--border);padding:6px 11px;border-radius:20px;cursor:pointer;font-family:inherit;}
+.filter-chip.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+
+.news-card{background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:14px;overflow:hidden;}
+.news-top{padding:14px 16px 10px;}
+.news-tags{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;}
+.status-badge{font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:20px;}
+.status-badge.doing{background:#fff9db;color:#997404;}
+.status-badge.ask{background:#e7f5ff;color:var(--blue);}
+.status-badge.done{background:#ebfbee;color:var(--green);}
+.status-badge.hold{background:#f1f3f5;color:var(--gray);}
+.cat-tag{font-size:10.5px;font-weight:700;background:var(--sky);color:var(--blue);padding:3px 9px;border-radius:20px;}
+.news-title{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:6px;}
+.news-body{font-size:13px;color:#495057;line-height:1.7;}
+.news-meta{font-size:11px;color:var(--gray);margin-top:10px;}
+
+.comments-wrap{border-top:1px solid var(--border);background:#fafbfc;}
+.comments-toggle{width:100%;padding:11px 16px;background:none;border:none;font-size:12.5px;font-weight:700;color:var(--blue);cursor:pointer;font-family:inherit;text-align:left;}
+.comments-body{display:none;padding:0 16px 14px;}
+.comments-body.open{display:block;}
+.comment-item{background:#fff;border:1px solid var(--border);border-radius:8px;padding:9px 11px;margin-bottom:8px;font-size:12.5px;}
+.comment-item .c-name{font-weight:700;color:var(--navy);}
+.comment-item .c-time{font-size:10.5px;color:var(--gray);margin-left:6px;}
+.comment-item .c-text{margin-top:4px;color:#343a40;line-height:1.6;}
+.comment-empty{font-size:12px;color:var(--gray);text-align:center;padding:10px 0;}
+
+.comment-form{margin-top:8px;}
+.comment-form input, .comment-form textarea{width:100%;padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:12.5px;font-family:inherit;margin-bottom:6px;}
+.comment-form textarea{min-height:56px;resize:vertical;}
+.comment-form input:focus, .comment-form textarea:focus{outline:none;border-color:var(--blue);}
+.comment-form button{width:100%;padding:10px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;}
+.comment-form button:active{opacity:.85;}
+
+.gate-note{font-size:11px;color:var(--gray);margin-top:6px;text-align:center;}
+
+.back-link{display:block;text-align:center;margin-top:22px;font-size:12px;color:var(--gray);text-decoration:none;}
+
+/* ── 선생님 코드 게이트 ── */
+.code-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;align-items:center;justify-content:center;padding:20px;}
+.code-overlay.show{display:flex;}
+.code-modal{background:#fff;border-radius:16px;padding:24px 20px;width:100%;max-width:320px;text-align:center;}
+.code-modal h3{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.code-modal p{font-size:12px;color:var(--gray);margin-bottom:14px;}
+.code-modal input{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:8px;font-size:16px;text-align:center;margin-bottom:8px;font-family:inherit;}
+.code-modal .err{font-size:11.5px;color:#e03131;min-height:16px;margin-bottom:6px;}
+.code-modal button{width:100%;padding:12px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:6px;}
+.code-modal .go{background:var(--navy);color:#fff;}
+.code-modal .cancel{background:#f1f3f5;color:var(--gray);}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-tag">준비 현황</div>
+  <div class="header-title">프로그램 준비 소식</div>
+  <div class="header-sub">지금 무엇을 준비 중인지 공유하고, 의견을 남겨주세요</div>
+</header>
+
+<div class="content">
+
+  <div class="filter-row" id="filterRow"></div>
+  <div id="newsList"></div>
+
+  <a class="back-link" href="index.html">← 기획 대시보드로 돌아가기</a>
+</div>
+
+<!-- 선생님 코드 게이트 (댓글 작성 시) -->
+<div class="code-overlay" id="codeOverlay">
+  <div class="code-modal">
+    <h3>🔐 선생님 코드 확인</h3>
+    <p>의견 작성은 프로그램팀/교사만 가능해요</p>
+    <input type="password" id="codeInput" placeholder="코드 입력" onkeydown="if(event.key==='Enter')checkCode()">
+    <div class="err" id="codeErr"></div>
+    <button class="go" onclick="checkCode()">확인</button>
+    <button class="cancel" onclick="closeCodeGate()">취소</button>
+  </div>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
+
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyAZJQbC6dbLtn4D32FnXQIh5hZFs4iyWoQ",
+  authDomain: "pwcamp26.firebaseapp.com",
+  databaseURL: "https://pwcamp26-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "pwcamp26",
+  storageBucket: "pwcamp26.firebasestorage.app",
+  messagingSenderId: "860034291771",
+  appId: "1:860034291771:web:8de5a9e21dcfe28aefa41e"
+});
+const db = firebase.database();
+
+// 선생님 코드 — 1차 구현은 admin.html의 관리자 비밀번호와 동일 값 사용
+const TEACHER_CODE = 'pwave2026';
+const CODE_OK_KEY = 'pwcamp_news_code_ok';
+
+const CATS = ['전체', 'Day1', 'Day2', '웹', '장소', '식사', '우천 대체', '기타'];
+const STATUS_MAP = {
+  doing: { label: '준비 중', cls: 'doing' },
+  ask: { label: '의견 필요', cls: 'ask' },
+  done: { label: '완료', cls: 'done' },
+  confirmed: { label: '확정', cls: 'done' },
+  hold: { label: '보류', cls: 'hold' },
+};
+
+const NEWS = [
+  { id: 'n1', title: 'Day1 가나안 정탐 장소 확인 중', cat: '장소', status: 'doing',
+    body: '전쟁기념관 / 서대문형무소 / 양화진 관람 가능 여부·예약·비용·관람 시간을 확인하고 있어요.', updated: '2026-07-08' },
+  { id: 'n2', title: 'Day1 중간 경유지 및 인증 포인트 준비 중', cat: 'Day1', status: 'doing',
+    body: '장소별 경유지 2개, 인증 포인트를 준비 중입니다.', updated: '2026-07-08' },
+  { id: 'n3', title: 'Day1 조별 식사 운영 방식 검토 중', cat: '식사', status: 'ask',
+    body: '자유식사를 기본으로 하고, 추천 식당 후보를 준비할 예정이에요. 좋은 식당 아시면 의견 남겨주세요!', updated: '2026-07-08' },
+  { id: 'n4', title: 'Day2 돌파의 순례길 구조 정리 중', cat: 'Day2', status: 'confirmed',
+    body: '6관문 순환 + 전체 여리고 성벽 미션(Final) 구조로 확정되었습니다. (REQ-18 반영 완료)', updated: '2026-07-08' },
+  { id: 'n5', title: 'Day2 부스 게임 아이디어 수집 중', cat: 'Day2', status: 'ask',
+    body: '부스 게임, 우천 대체 게임 아이디어를 모으고 있어요. 물놀이 업그레이드 초안도 검토 중입니다 (REQ-15).', updated: '2026-07-08' },
+  { id: 'n6', title: '웹 미션 제출 방식 준비 완료', cat: '웹', status: 'done',
+    body: '조별 인증사진·정탐 보고서 제출 시스템, 관리자 승인/반려 제도, 개인정보 안내 문구까지 모두 반영되었습니다. (REQ-13/17/19)', updated: '2026-07-08' },
+];
+
+let activeFilter = '전체';
+let comments = {};
+let pendingNewsId = null;
+
+function renderFilters() {
+  document.getElementById('filterRow').innerHTML = CATS.map(c =>
+    `<button class="filter-chip ${c === activeFilter ? 'active' : ''}" onclick="setFilter('${c}')">${c}</button>`
+  ).join('');
+}
+function setFilter(c) { activeFilter = c; renderFilters(); renderNews(); }
+
+function renderNews() {
+  const list = document.getElementById('newsList');
+  const items = NEWS.filter(n => activeFilter === '전체' || n.cat === activeFilter);
+  list.innerHTML = items.map(n => {
+    const st = STATUS_MAP[n.status] || STATUS_MAP.doing;
+    const cs = comments[n.id] ? Object.entries(comments[n.id]) : [];
+    return `
+    <div class="news-card">
+      <div class="news-top">
+        <div class="news-tags"><span class="status-badge ${st.cls}">${st.label}</span><span class="cat-tag">${n.cat}</span></div>
+        <div class="news-title">${n.title}</div>
+        <div class="news-body">${n.body}</div>
+        <div class="news-meta">최근 업데이트: ${n.updated}</div>
+      </div>
+      <div class="comments-wrap">
+        <button class="comments-toggle" onclick="toggleComments('${n.id}')">💬 의견 남기기 (${cs.length})</button>
+        <div class="comments-body" id="cbody-${n.id}">
+          ${cs.length ? cs.map(([k, c]) => `<div class="comment-item"><span class="c-name">${esc(c.name)}</span><span class="c-time">${fmt(c.at)}</span><div class="c-text">${esc(c.text)}</div></div>`).join('') : '<div class="comment-empty">아직 의견이 없어요</div>'}
+          <div class="comment-form">
+            <input type="text" id="cname-${n.id}" placeholder="이름">
+            <textarea id="ctext-${n.id}" placeholder="의견을 남겨주세요"></textarea>
+            <button onclick="submitComment('${n.id}')">의견 등록</button>
+            <div class="gate-note">등록 시 선생님 코드 확인이 필요해요</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleComments(id) {
+  document.getElementById(`cbody-${id}`).classList.toggle('open');
+}
+
+function esc(v){ return v ? (v+'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) : ''; }
+function fmt(ts){ return ts ? new Date(ts).toLocaleString('ko-KR',{month:'numeric',day:'numeric',hour:'2-digit',minute:'2-digit'}) : ''; }
+
+function submitComment(newsId) {
+  const name = document.getElementById(`cname-${newsId}`).value.trim();
+  const text = document.getElementById(`ctext-${newsId}`).value.trim();
+  if (!name || !text) { alert('이름과 의견을 모두 입력해주세요.'); return; }
+  pendingNewsId = newsId;
+  if (sessionStorage.getItem(CODE_OK_KEY) === '1') {
+    doSubmitComment();
+  } else {
+    openCodeGate();
+  }
+}
+
+function doSubmitComment() {
+  const newsId = pendingNewsId;
+  const name = document.getElementById(`cname-${newsId}`).value.trim();
+  const text = document.getElementById(`ctext-${newsId}`).value.trim();
+  db.ref(`news_comments/${newsId}`).push({
+    name, text, at: firebase.database.ServerValue.TIMESTAMP,
+  });
+  document.getElementById(`cname-${newsId}`).value = '';
+  document.getElementById(`ctext-${newsId}`).value = '';
+}
+
+function openCodeGate() {
+  document.getElementById('codeOverlay').classList.add('show');
+  document.getElementById('codeInput').value = '';
+  document.getElementById('codeErr').textContent = '';
+}
+function closeCodeGate() {
+  document.getElementById('codeOverlay').classList.remove('show');
+  pendingNewsId = null;
+}
+function checkCode() {
+  const input = document.getElementById('codeInput').value.trim();
+  if (input === TEACHER_CODE) {
+    sessionStorage.setItem(CODE_OK_KEY, '1');
+    document.getElementById('codeOverlay').classList.remove('show');
+    if (pendingNewsId) doSubmitComment();
+  } else {
+    document.getElementById('codeErr').textContent = '코드가 틀렸어요.';
+  }
+}
+
+db.ref('news_comments').on('value', snap => {
+  comments = snap.val() || {};
+  renderNews();
+});
+
+renderFilters();
+renderNews();
+</script>
+</body>
+</html>

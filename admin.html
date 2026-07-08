@@ -136,6 +136,20 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .wipe-btn.confirm{background:var(--navy);color:#fff;}
 .wipe-btn.danger{background:#e03131;color:#fff;}
 .wipe-btn.cancel{background:#f1f3f5;color:var(--gray);margin-bottom:0;}
+
+/* ── 준비 소식 의견함 ── */
+.news-comment-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.nc-item{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 14px;font-size:13px;}
+.nc-item.resolved{opacity:.55;}
+.nc-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.nc-news{font-size:11px;font-weight:800;color:var(--blue);background:var(--sky, #e7f5ff);padding:2px 8px;border-radius:20px;}
+.nc-name{font-weight:700;color:var(--navy);}
+.nc-time{font-size:11px;color:var(--gray);margin-left:auto;}
+.nc-text{color:#495057;line-height:1.6;margin-bottom:8px;}
+.nc-actions{display:flex;gap:6px;}
+.nc-btn{font-size:11px;font-weight:700;padding:5px 10px;border:none;border-radius:6px;cursor:pointer;font-family:inherit;}
+.nc-btn.resolve{background:#ebfbee;color:var(--green);}
+.nc-btn.delete{background:#fff5f5;color:#e03131;}
 </style>
 </head>
 <body>
@@ -187,6 +201,12 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
         <button class="close-btn" onclick="closeDetail()">✕</button>
       </div>
       <div class="detail-body" id="detailBody"></div>
+    </div>
+
+    <!-- 준비 소식 의견함 -->
+    <div class="section-title">💬 준비 소식 의견함 · <a href="news.html" target="_blank" style="font-weight:700;color:var(--blue);text-decoration:none;">news.html 열기 ↗</a></div>
+    <div class="news-comment-list" id="newsCommentList">
+      <div style="color:var(--gray);font-size:13px;text-align:center;padding:20px;">아직 등록된 의견이 없습니다</div>
     </div>
 
     <!-- 전체 피드 -->
@@ -282,6 +302,52 @@ function showDashboard() {
     updateFeed();
     if (activeTeam) renderDetail(activeTeam);
   });
+  db.ref('news_comments').on('value', snap => {
+    newsComments = snap.val() || {};
+    renderNewsComments();
+  });
+}
+
+// ── 준비 소식 의견함 (news.html REQ-24 연동) ──
+const NEWS_TITLES = {
+  n1: 'Day1 가나안 정탐 장소 확인 중', n2: 'Day1 중간 경유지 및 인증 포인트 준비 중',
+  n3: 'Day1 조별 식사 운영 방식 검토 중', n4: 'Day2 돌파의 순례길 구조 정리 중',
+  n5: 'Day2 부스 게임 아이디어 수집 중', n6: '웹 미션 제출 방식 준비 중',
+};
+let newsComments = {};
+
+function renderNewsComments() {
+  const list = document.getElementById('newsCommentList');
+  const flat = [];
+  Object.entries(newsComments).forEach(([newsId, items]) => {
+    Object.entries(items || {}).forEach(([cid, c]) => flat.push({ newsId, cid, ...c }));
+  });
+  flat.sort((a, b) => (b.at || 0) - (a.at || 0));
+  if (!flat.length) {
+    list.innerHTML = `<div style="color:var(--gray);font-size:13px;text-align:center;padding:20px;">아직 등록된 의견이 없습니다</div>`;
+    return;
+  }
+  list.innerHTML = flat.map(c => `
+    <div class="nc-item ${c.resolved ? 'resolved' : ''}">
+      <div class="nc-top">
+        <span class="nc-news">${esc(NEWS_TITLES[c.newsId] || c.newsId)}</span>
+        <span class="nc-name">${esc(c.name)}</span>
+        <span class="nc-time">${fmt(c.at)}</span>
+      </div>
+      <div class="nc-text">${esc(c.text)}</div>
+      <div class="nc-actions">
+        <button class="nc-btn resolve" onclick="toggleResolveComment('${c.newsId}','${c.cid}',${!c.resolved})">${c.resolved ? '↺ 반영 취소' : '✅ 반영함'}</button>
+        <button class="nc-btn delete" onclick="deleteComment('${c.newsId}','${c.cid}')">🗑 삭제</button>
+      </div>
+    </div>`).join('');
+}
+
+function toggleResolveComment(newsId, cid, value) {
+  db.ref(`news_comments/${newsId}/${cid}`).update({ resolved: value });
+}
+function deleteComment(newsId, cid) {
+  if (!confirm('이 의견을 삭제할까요?')) return;
+  db.ref(`news_comments/${newsId}/${cid}`).remove();
 }
 
 // ── 조별 카드 생성 ──

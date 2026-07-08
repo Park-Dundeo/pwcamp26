@@ -6,22 +6,29 @@
 
 | 파일 | 용도 | 접근 대상 |
 |---|---|---|
-| `index.html` | 교사용 기획 대시보드 (읽기 전용) | 프로그램팀 교사 |
+| `index.html` | 교사용 기획 대시보드 (읽기 전용) + 전체 페이지 링크 허브 | 프로그램팀 교사 |
 | `mission.html` | 학생용 미션 페이지 (조 선택 → 코드 잠금해제 → 미션1 사진 → 미션2 보고서) | 학생 (조당 1명) |
-| `admin.html` | 실시간 제출 현황 모니터링 (비밀번호: `pwave2026`) | 관리자 |
+| `admin.html` | 실시간 제출 현황 모니터링 + 준비 소식 의견함 모더레이션 (비밀번호: `pwave2026`) | 관리자 |
+| `teacher.html` | 교사용 실행 매뉴얼 (타임테이블·역할표·비상연락망·조별명단·정책) | 전체 교사 |
+| `station.html` | Day2 6관문+Final 담당자 카드 (게임/30초 멘트/통과기준/안전/준비물) | 관문 담당 교사 |
+| `emergency.html` | 비상 대응표 8종 (초안, 프로그램팀 검토 필요) | 전체 교사 |
+| `checklist.html` | 관문별 준비물·담당자·세팅/회수 체크리스트 | 프로그램팀 교사 |
+| `news.html` | 준비 소식 + 의견함(댓글). 댓글 작성엔 선생님 코드(`pwave2026`, admin.html과 동일값) 필요 | 전체 교사 |
 
 - 배포: `main` push 시 `.github/workflows/deploy.yml` → GitHub Pages 자동 배포. 빌드 스텝 없음, 저장소 루트를 그대로 올림.
-- 데이터: Firebase Realtime DB (`pwcamp26-default-rtdb`), 경로 `submissions/team{N}/mission{1,2}`. 사진은 Storage가 아니라 압축 후 base64로 DB에 직접 저장 (무료 플랜 대응).
+- 데이터: Firebase Realtime DB (`pwcamp26-default-rtdb`). 경로: `submissions/team{N}/mission{1,2}`(학생 제출, 사진은 Storage 대신 압축 후 base64로 DB 직접 저장), `checklist/{itemId}`(준비물 체크), `teacherDoc/{roles|roster|policy}`(교사 매뉴얼 공동편집), `news_comments/{newsId}`(의견함 댓글).
 - `mission.html`의 `TEAM_CODES`에 조별 비밀번호 하드코딩. 힌트는 페이지에 노출하지 않고 교사가 별도 전달.
 - `localStorage` 키 `pwcamp_unlocked_{team}`으로 조별 잠금해제 상태 유지.
+- ⚠️ **Firebase Realtime Database 규칙이 `submissions` 경로만 열려 있고 나머지는 기본 거부 상태 (2026-07-08 직접 테스트로 확인).** `checklist`/`teacherDoc`/`news_comments` 세 경로가 막혀 있어 teacher.html/checklist.html/news.html은 화면은 뜨지만 저장이 전혀 안 됨. 저장소의 `firebase.rules.now.json` 내용을 Firebase 콘솔 > Realtime Database > 규칙에 반영해야 정상 동작 — **코드로 해결 불가, 사람이 콘솔에서 처리해야 함**.
 
 ## 요구사항/백로그
 
 **`REQUIREMENTS.md`가 단일 소스**. 새 요구사항, 미결 사항, 우선순위는 항상 이 파일에서 확인·갱신할 것. 코드를 보고 요구사항을 추측하지 말고 REQUIREMENTS.md를 먼저 읽는다.
 
-## 현재 구현 상태 (origin/main `e390da9` 기준, 2026-07-08)
+## 현재 구현 상태 (2026-07-08 기준, 로컬 작업분 포함 — 아직 push 전)
 
-- 완료(REQ-01~14, REQUIREMENTS.md "완료된 기능" 참고): 조별 코드 잠금해제·고정, 미션1→미션2 순차 해금, **관리자 승인/반려 기반 진행**(제출 → pending → admin.html에서 승인/반려 → 승인 시에만 다음 단계, 반려 시 재제출), 목적지 배너 단계적 공개 + 갱신 강조 애니메이션, 미션 전환 스토리텔링, 기기 초기화 기능, 사진 입력 카메라/갤러리 둘 다 허용
-- 미구현으로 남아있는 것: 비밀번호 해금 직후 → 미션1 등장 전 인트로 내레이션 없음 (`checkCode()` 성공 시 바로 `showMissions()` 호출). REQ-09에는 미션1→미션2 전환 연출만 반영됨
+- 완료(REQ-01~24, REQUIREMENTS.md "완료된 기능" 참고): 조별 코드 잠금해제·고정, 미션1→미션2 순차 해금, 관리자 승인/반려 기반 진행, 목적지 배너 단계적 공개, 미션 전환 스토리텔링, Day1 목적문구·보고서 3항목(장벽/믿음/돌파기도), Day2 6관문+Final 구조, 개인정보 안내, 운영 페이지 5종(teacher/station/emergency/checklist/news) 신규
+- 미구현: 비밀번호 해금 직후 → 미션1 등장 전 인트로 내레이션 없음 (REQ-09에는 미션1→미션2 전환 연출만 반영됨)
+- **막힘(사람 조치 필요):** 위 Firebase 규칙 반영 전까지 teacher.html/checklist.html/news.html 저장 기능 사용 불가
 
 ⚠️ **작업 시작 전 항상 `git fetch && git status`로 origin 대비 뒤처지지 않았는지 먼저 확인할 것.** 이 프로젝트는 다른 세션/사람이 병행으로 직접 push하는 경우가 있어, 로컬이 stale한 상태로 요구사항을 재작성하면 이미 구현된 것을 다시 요청하거나 REQ 번호가 충돌한다.

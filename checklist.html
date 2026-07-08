@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>준비물 체크리스트 — 파워웨이브 2026</title>
+<style>
+:root {
+  --navy:#1a2744; --blue:#3b5bdb; --gold:#f59f00;
+  --green:#2f9e44; --gray:#868e96; --border:#dee2e6; --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;min-height:100vh;}
+
+.app-header{background:linear-gradient(135deg,var(--navy),#2d4a9e);color:#fff;padding:20px 16px 22px;text-align:center;}
+.header-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
+.header-title{font-size:19px;font-weight:800;}
+.header-sub{font-size:12px;opacity:.75;margin-top:4px;}
+
+.content{max-width:640px;margin:0 auto;padding:16px 16px 60px;}
+
+.progress-summary{background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
+.progress-summary .txt{font-size:13px;font-weight:700;color:var(--navy);}
+.progress-summary .num{font-size:20px;font-weight:800;color:var(--green);}
+
+.item-card{background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:14px;overflow:hidden;}
+.item-card.done{opacity:.6;}
+.item-top{padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;}
+.item-check{width:24px;height:24px;border-radius:7px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;transition:all .15s;}
+.item-check.on{background:var(--green);border-color:var(--green);}
+.item-name{font-size:14.5px;font-weight:700;color:var(--navy);flex:1;}
+.item-tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;background:#eef2ff;color:var(--blue);}
+.item-body{padding:0 16px 16px;}
+.supply-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
+.supply-tag{background:#f1f3f5;color:#495057;font-size:12px;font-weight:600;padding:5px 10px;border-radius:20px;}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:480px){.field-grid{grid-template-columns:1fr;}}
+.field{display:flex;flex-direction:column;gap:4px;}
+.field label{font-size:11px;font-weight:700;color:var(--gray);}
+.field input{padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;}
+.field input:focus{outline:none;border-color:var(--blue);}
+
+.back-link{display:block;text-align:center;margin-top:22px;font-size:12px;color:var(--gray);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-tag">준비물 체크리스트</div>
+  <div class="header-title">누가 · 언제 · 무엇을</div>
+  <div class="header-sub">관문별 준비물 · 담당자 · 세팅/회수</div>
+</header>
+
+<div class="content">
+  <div class="progress-summary">
+    <div class="txt">전체 준비 완료</div>
+    <div class="num" id="progressNum">0 / 0</div>
+  </div>
+
+  <div id="itemList"></div>
+
+  <a class="back-link" href="index.html">← 기획 대시보드로 돌아가기</a>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
+
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyAZJQbC6dbLtn4D32FnXQIh5hZFs4iyWoQ",
+  authDomain: "pwcamp26.firebaseapp.com",
+  databaseURL: "https://pwcamp26-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "pwcamp26",
+  storageBucket: "pwcamp26.firebasestorage.app",
+  messagingSenderId: "860034291771",
+  appId: "1:860034291771:web:8de5a9e21dcfe28aefa41e"
+});
+const db = firebase.database();
+
+const ITEMS = [
+  { id: 'm1', tag: 'Day1', name: '미션1 — 경유지 인증샷', supplies: ['촬영용 스마트폰(조당 1대)', '(확정 시) 로드뷰 스크린샷 인쇄물'] },
+  { id: 'g1', tag: '1/6', name: '붉은 줄의 문', supplies: ['빨간 털실/끈', '방울', '스톱워치', '성공 스티커'] },
+  { id: 'g2', tag: '2/6', name: '요단강', supplies: ['파란 천/테이프', '발판', '성경책 모형', '기념 돌 카드'] },
+  { id: 'g3', tag: '3/6', name: '무거운 짐의 언덕', supplies: ['가방', '물병·모래주머니', '단어 카드', '십자가 표시'] },
+  { id: 'g4', tag: '4/6', name: '의심의 숲', supplies: ['눈가리개', '장애물(의자·콘)'] },
+  { id: 'g5', tag: '5/6', name: '허영의 장터', supplies: ['선택 카드 세트 (제작 필요)'] },
+  { id: 'g6', tag: '6/6', name: '침묵의 성벽', supplies: ['지시문 카드', '말씀 카드'] },
+  { id: 'gf', tag: 'Final', name: '약속의 땅 — 전체 여리고 성벽', supplies: ['박스 성벽', '단어 카드', '스티커', '결단문 종이'] },
+];
+
+let state = {};
+
+function render() {
+  const list = document.getElementById('itemList');
+  list.innerHTML = ITEMS.map(it => {
+    const s = state[it.id] || {};
+    return `
+    <div class="item-card ${s.done ? 'done' : ''}" id="card-${it.id}">
+      <div class="item-top" onclick="toggleDone('${it.id}')">
+        <div class="item-check ${s.done ? 'on' : ''}">${s.done ? '✓' : ''}</div>
+        <div class="item-name">${it.name}</div>
+        <span class="item-tag">${it.tag}</span>
+      </div>
+      <div class="item-body">
+        <div class="supply-tags">${it.supplies.map(x => `<span class="supply-tag">${x}</span>`).join('')}</div>
+        <div class="field-grid">
+          <div class="field">
+            <label>담당자</label>
+            <input type="text" placeholder="이름 입력" value="${esc(s.owner)}" onchange="updateField('${it.id}','owner',this.value)">
+          </div>
+          <div class="field">
+            <label>세팅 시점</label>
+            <input type="text" placeholder="예: Day2 시작 30분 전" value="${esc(s.setupTime)}" onchange="updateField('${it.id}','setupTime',this.value)">
+          </div>
+          <div class="field">
+            <label>회수 담당</label>
+            <input type="text" placeholder="이름 입력" value="${esc(s.returnOwner)}" onchange="updateField('${it.id}','returnOwner',this.value)">
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+  updateProgress();
+}
+
+function esc(v){ return v ? (v+'').replace(/"/g,'&quot;') : ''; }
+
+function updateProgress() {
+  const done = ITEMS.filter(it => state[it.id]?.done).length;
+  document.getElementById('progressNum').textContent = `${done} / ${ITEMS.length}`;
+}
+
+function toggleDone(id) {
+  const cur = !!state[id]?.done;
+  db.ref(`checklist/${id}`).update({ done: !cur });
+}
+
+function updateField(id, field, value) {
+  db.ref(`checklist/${id}`).update({ [field]: value });
+}
+
+db.ref('checklist').on('value', snap => {
+  state = snap.val() || {};
+  render();
+});
+
+render();
+</script>
+</body>
+</html>

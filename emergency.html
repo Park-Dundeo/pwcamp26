@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>비상 대응표 — 파워웨이브 2026</title>
+<style>
+:root {
+  --navy:#1a2744; --blue:#3b5bdb; --gold:#f59f00;
+  --green:#2f9e44; --red:#e03131; --gray:#868e96; --border:#dee2e6; --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;min-height:100vh;}
+
+.app-header{background:linear-gradient(135deg,#7a1a1a,#c92a2a);color:#fff;padding:20px 16px 22px;text-align:center;}
+.header-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
+.header-title{font-size:19px;font-weight:800;}
+.header-sub{font-size:12px;opacity:.8;margin-top:4px;}
+
+.content{max-width:640px;margin:0 auto;padding:16px 16px 60px;}
+
+.draft-banner{background:#fff9db;border:1.5px solid #ffe066;border-radius:10px;padding:12px 14px;font-size:12px;color:#997404;line-height:1.65;margin-bottom:16px;}
+
+.quick-nav{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px;}
+.quick-nav a{font-size:11.5px;font-weight:700;color:var(--navy);background:#fff;border:1px solid var(--border);padding:6px 10px;border-radius:20px;text-decoration:none;}
+.quick-nav a:active{background:var(--sky,#e8eeff);}
+
+.sit-card{background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:14px;overflow:hidden;scroll-margin-top:16px;}
+.sit-top{padding:14px 16px;background:var(--navy);color:#fff;display:flex;align-items:center;gap:10px;}
+.sit-icon{font-size:20px;}
+.sit-name{font-size:15px;font-weight:800;flex:1;}
+.sit-body{padding:16px;}
+.sit-row{margin-bottom:12px;}
+.sit-row:last-child{margin-bottom:0;}
+.sit-lbl{font-size:11px;font-weight:800;color:var(--gray);letter-spacing:.5px;text-transform:uppercase;margin-bottom:4px;}
+.sit-val{font-size:13.5px;color:#343a40;line-height:1.7;}
+.sit-row.contact .sit-val{color:var(--blue);font-weight:700;}
+.sit-row.action .sit-val{background:#fff5f5;border-radius:8px;padding:10px 12px;color:#c92a2a;}
+
+.back-link{display:block;text-align:center;margin-top:22px;font-size:12px;color:var(--gray);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-tag">EMERGENCY</div>
+  <div class="header-title">비상 대응표</div>
+  <div class="header-sub">2026 강동 파워웨이브 여름캠프</div>
+</header>
+
+<div class="content">
+
+  <div class="draft-banner">⚠️ 이 페이지는 일반적인 청소년 캠프 안전수칙 기준 <b>초안</b>입니다. 실제 병원 위치·보험 가입 여부·보건 담당자 지정 등은 프로그램팀 확인 후 확정해주세요. (REQUIREMENTS.md REQ-22 참고)</div>
+
+  <div class="quick-nav" id="quickNav"></div>
+
+  <div id="sitList"></div>
+
+  <a class="back-link" href="index.html">← 기획 대시보드로 돌아가기</a>
+</div>
+
+<script>
+const SITUATIONS = [
+  { id: 'leave', icon: '🏃', name: '학생 이탈',
+    action: '인솔교사가 즉시 인원 재점검, 마지막 목격 장소부터 역추적 수색',
+    contact: '조 인솔교사 → 총괄 책임교사 → (10분 내 미발견 시) 보호자·경찰',
+    follow: '발견 즉시 전체 조 안전 확인 공지, 사후 경위서 작성' },
+  { id: 'late', icon: '⏰', name: '지각(집결 미도착)',
+    action: '인솔교사가 학생/보호자에게 연락해 위치 확인',
+    contact: '인솔교사 → 총괄교사',
+    follow: '합류 지점 안내, 축소된 미션으로 합류 (teacher.html "늦는 조 대응"과 동일 로직)' },
+  { id: 'battery', icon: '🔋', name: '휴대폰 방전',
+    action: '인솔교사 휴대폰으로 대체 연락, 조원과 이동 유지',
+    contact: '인솔교사',
+    follow: '보조배터리 사전 지급 검토' },
+  { id: 'rain', icon: '🌧', name: '비',
+    action: '우천 대체 동선/실내 배치로 즉시 전환',
+    contact: '총괄교사가 전체 공지',
+    follow: 'Day1 실내 이동 / Day2 관문 실내 배치' },
+  { id: 'heat', icon: '🥵', name: '더위·온열질환 의심',
+    action: '즉시 그늘/실내 이동, 수분 섭취, 활동 일시 중단',
+    contact: '보건 담당 교사',
+    follow: '증상 지속 시 보호자 연락, 필요 시 병원 이송' },
+  { id: 'injury', icon: '🩹', name: '다침(경상/중상)',
+    action: '경상은 현장 응급처치, 중상은 즉시 활동 중단 후 보건 담당 호출',
+    contact: '보건 담당 교사 → (중상 시) 119·보호자',
+    follow: '사고 경위서 작성, 보험 처리 확인' },
+  { id: 'fail', icon: '🚩', name: '미션 실패(제한시간 초과 등)',
+    action: '관문 담당자 재량으로 부분 성공 처리 또는 소정의 패널티 후 통과 처리',
+    contact: '관문 담당 교사',
+    follow: '다음 관문 진행 일정에 지장 없도록 조율' },
+  { id: 'lost-teacher', icon: '📵', name: '교사 연락 두절',
+    action: '총괄교사가 인접 조 교사에게 해당 조 임시 합류 요청',
+    contact: '총괄교사',
+    follow: '연락 재개 시 상황 공유, 필요 시 사후 미팅' },
+];
+
+document.getElementById('quickNav').innerHTML = SITUATIONS.map(s => `<a href="#${s.id}">${s.icon} ${s.name}</a>`).join('');
+
+document.getElementById('sitList').innerHTML = SITUATIONS.map(s => `
+  <div class="sit-card" id="${s.id}">
+    <div class="sit-top"><span class="sit-icon">${s.icon}</span><span class="sit-name">${s.name}</span></div>
+    <div class="sit-body">
+      <div class="sit-row action"><div class="sit-lbl">즉시 조치</div><div class="sit-val">${s.action}</div></div>
+      <div class="sit-row contact"><div class="sit-lbl">연락 대상</div><div class="sit-val">${s.contact}</div></div>
+      <div class="sit-row"><div class="sit-lbl">후속 조치</div><div class="sit-val">${s.follow}</div></div>
+    </div>
+  </div>
+`).join('');
+</script>
+</body>
+</html>
