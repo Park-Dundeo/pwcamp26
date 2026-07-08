@@ -7,7 +7,7 @@
 <style>
 :root {
   --navy:#1a2744; --blue:#3b5bdb; --gold:#f59f00;
-  --green:#2f9e44; --gray:#868e96; --border:#dee2e6; --radius:12px;
+  --green:#2f9e44; --gray:#868e96; --border:#dee2e6; --radius:12px; --sky:#e8eeff;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;min-height:100vh;}
@@ -17,28 +17,35 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .header-title{font-size:19px;font-weight:800;}
 .header-sub{font-size:12px;opacity:.75;margin-top:4px;}
 
-.content{max-width:640px;margin:0 auto;padding:16px 16px 60px;}
+.content{max-width:1080px;margin:0 auto;padding:16px 16px 60px;}
 
-.progress-summary{background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);padding:14px 18px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;}
-.progress-summary .txt{font-size:13px;font-weight:700;color:var(--navy);}
-.progress-summary .num{font-size:20px;font-weight:800;color:var(--green);}
+.stats-row{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:16px;}
+@media(max-width:700px){.stats-row{grid-template-columns:repeat(3,1fr);}}
+.stat-box{background:#fff;border-radius:10px;box-shadow:0 2px 12px rgba(0,0,0,.07);padding:10px 8px;text-align:center;}
+.stat-box .n{font-size:18px;font-weight:800;color:var(--navy);}
+.stat-box .l{font-size:10.5px;color:var(--gray);margin-top:2px;}
 
-.item-card{background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:14px;overflow:hidden;}
-.item-card.done{opacity:.6;}
-.item-top{padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;}
-.item-check{width:24px;height:24px;border-radius:7px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;transition:all .15s;}
-.item-check.on{background:var(--green);border-color:var(--green);}
-.item-name{font-size:14.5px;font-weight:700;color:var(--navy);flex:1;}
-.item-tag{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:20px;background:#eef2ff;color:var(--blue);}
-.item-body{padding:0 16px 16px;}
-.supply-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;}
-.supply-tag{background:#f1f3f5;color:#495057;font-size:12px;font-weight:600;padding:5px 10px;border-radius:20px;}
-.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-@media(max-width:480px){.field-grid{grid-template-columns:1fr;}}
-.field{display:flex;flex-direction:column;gap:4px;}
-.field label{font-size:11px;font-weight:700;color:var(--gray);}
-.field input{padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;}
-.field input:focus{outline:none;border-color:var(--blue);}
+.group-title{font-size:12px;font-weight:800;color:var(--navy);letter-spacing:.5px;margin:18px 0 8px;display:flex;align-items:center;gap:8px;}
+.group-title .tag{font-size:10.5px;font-weight:800;background:var(--sky);color:var(--blue);padding:2px 9px;border-radius:20px;}
+.group-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+.table-scroll{overflow-x:auto;background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:8px;}
+table.checklist-table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:920px;}
+table.checklist-table th{background:#f8f9fa;color:var(--gray);padding:9px 10px;text-align:left;font-size:10.5px;letter-spacing:.3px;text-transform:uppercase;border-bottom:2px solid var(--border);white-space:nowrap;}
+table.checklist-table td{padding:7px 8px;border-bottom:1px solid var(--border);vertical-align:middle;}
+table.checklist-table tr:last-child td{border-bottom:none;}
+table.checklist-table input, table.checklist-table select{width:100%;padding:7px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit;background:#fff;}
+table.checklist-table input:focus, table.checklist-table select:focus{outline:none;border-color:var(--blue);}
+.supply-name{font-weight:700;color:var(--navy);white-space:nowrap;}
+.qty-col{width:60px;}
+.status-col{min-width:120px;}
+select.status-select{font-weight:700;}
+select.status-select.필요{color:var(--gray);}
+select.status-select.준비중{color:#997404;}
+select.status-select.준비완료{color:var(--blue);}
+select.status-select.세팅완료{color:#0ca678;}
+select.status-select.회수완료{color:var(--green);}
+select.status-select.확인필요{color:#e03131;}
 
 .back-link{display:block;text-align:center;margin-top:22px;font-size:12px;color:var(--gray);text-decoration:none;}
 </style>
@@ -47,17 +54,13 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 
 <header class="app-header">
   <div class="header-tag">준비물 체크리스트</div>
-  <div class="header-title">누가 · 언제 · 무엇을</div>
-  <div class="header-sub">관문별 준비물 · 담당자 · 세팅/회수</div>
+  <div class="header-title">누가 · 언제 · 무엇을 · 어디에</div>
+  <div class="header-sub">준비물별 수량 · 담당자 · 상태 · 세팅/회수 관리</div>
 </header>
 
 <div class="content">
-  <div class="progress-summary">
-    <div class="txt">전체 준비 완료</div>
-    <div class="num" id="progressNum">0 / 0</div>
-  </div>
-
-  <div id="itemList"></div>
+  <div class="stats-row" id="statsRow"></div>
+  <div id="groupsArea"></div>
 
   <a class="back-link" href="index.html">← 기획 대시보드로 돌아가기</a>
 </div>
@@ -78,63 +81,101 @@ firebase.initializeApp({
 });
 const db = firebase.database();
 
-const ITEMS = [
-  { id: 'm1', tag: 'Day1', name: '미션1 — 경유지 인증샷', supplies: ['촬영용 스마트폰(조당 1대)', '(확정 시) 로드뷰 스크린샷 인쇄물'] },
-  { id: 'g1', tag: '1/6', name: '붉은 줄의 문', supplies: ['빨간 털실/끈', '방울', '스톱워치', '성공 스티커'] },
-  { id: 'g2', tag: '2/6', name: '요단강', supplies: ['파란 천/테이프', '발판', '성경책 모형', '기념 돌 카드'] },
-  { id: 'g3', tag: '3/6', name: '무거운 짐의 언덕', supplies: ['가방', '물병·모래주머니', '단어 카드', '십자가 표시'] },
-  { id: 'g4', tag: '4/6', name: '의심의 숲', supplies: ['눈가리개', '장애물(의자·콘)'] },
-  { id: 'g5', tag: '5/6', name: '허영의 장터', supplies: ['선택 카드 세트 (제작 필요)'] },
-  { id: 'g6', tag: '6/6', name: '침묵의 성벽', supplies: ['지시문 카드', '말씀 카드'] },
-  { id: 'gf', tag: 'Final', name: '약속의 땅 — 전체 여리고 성벽', supplies: ['박스 성벽', '단어 카드', '스티커', '결단문 종이'] },
+const STATUSES = ['필요', '준비중', '준비완료', '세팅완료', '회수완료', '확인필요'];
+
+// 그룹(관문/미션) 단위로 준비물을 개별 행으로 관리
+const GROUPS = [
+  { tag: 'Day1', name: '미션1 — 경유지 인증샷', items: [
+    { id: 'm1-phone', name: '촬영용 스마트폰', qty: '6대 (조당 1대)' },
+    { id: 'm1-print',  name: '로드뷰 스크린샷 인쇄물', qty: '6장', note: 'REQ-03 확정 후 인쇄' },
+  ]},
+  { tag: '1/6', name: '붉은 줄의 문', items: [
+    { id: 'g1-string', name: '빨간 털실/끈', qty: '1세트' },
+    { id: 'g1-bell',   name: '방울', qty: '10개 내외' },
+    { id: 'g1-watch',  name: '스톱워치', qty: '1개' },
+    { id: 'g1-sticker',name: '성공 스티커', qty: '6장 (조당 1장)' },
+  ]},
+  { tag: '2/6', name: '요단강', items: [
+    { id: 'g2-cloth',  name: '파란 천/테이프', qty: '1세트' },
+    { id: 'g2-plate',  name: '발판', qty: '6~8개' },
+    { id: 'g2-bible',  name: '성경책 모형', qty: '1개' },
+    { id: 'g2-card',   name: '기념 돌 카드', qty: '6장' },
+  ]},
+  { tag: '3/6', name: '무거운 짐의 언덕', items: [
+    { id: 'g3-bag',    name: '가방', qty: '6개 (조당 1개)' },
+    { id: 'g3-weight', name: '물병·모래주머니', qty: '6세트' },
+    { id: 'g3-word',   name: '단어 카드', qty: '1세트' },
+    { id: 'g3-cross',  name: '십자가 표시', qty: '1개' },
+  ]},
+  { tag: '4/6', name: '의심의 숲', items: [
+    { id: 'g4-blind',  name: '눈가리개', qty: '6개 이상' },
+    { id: 'g4-obst',   name: '장애물(의자·콘)', qty: '5~6개' },
+  ]},
+  { tag: '5/6', name: '허영의 장터', items: [
+    { id: 'g5-cards',  name: '선택 카드 세트', qty: '1세트', note: '제작 필요' },
+  ]},
+  { tag: '6/6', name: '침묵의 성벽', items: [
+    { id: 'g6-instr',  name: '지시문 카드', qty: '1세트' },
+    { id: 'g6-verse',  name: '말씀 카드', qty: '1세트' },
+  ]},
+  { tag: 'Final', name: '약속의 땅 — 전체 여리고 성벽', items: [
+    { id: 'gf-wall',   name: '박스 성벽', qty: '1개 (대형)' },
+    { id: 'gf-word',   name: '단어 카드', qty: '6세트 (조별)' },
+    { id: 'gf-sticker',name: '스티커', qty: '다수' },
+    { id: 'gf-paper',  name: '결단문 종이', qty: '6장 (조당 1장)' },
+  ]},
 ];
 
 let state = {};
 
 function render() {
-  const list = document.getElementById('itemList');
-  list.innerHTML = ITEMS.map(it => {
-    const s = state[it.id] || {};
-    return `
-    <div class="item-card ${s.done ? 'done' : ''}" id="card-${it.id}">
-      <div class="item-top" onclick="toggleDone('${it.id}')">
-        <div class="item-check ${s.done ? 'on' : ''}">${s.done ? '✓' : ''}</div>
-        <div class="item-name">${it.name}</div>
-        <span class="item-tag">${it.tag}</span>
-      </div>
-      <div class="item-body">
-        <div class="supply-tags">${it.supplies.map(x => `<span class="supply-tag">${x}</span>`).join('')}</div>
-        <div class="field-grid">
-          <div class="field">
-            <label>담당자</label>
-            <input type="text" placeholder="이름 입력" value="${esc(s.owner)}" onchange="updateField('${it.id}','owner',this.value)">
-          </div>
-          <div class="field">
-            <label>세팅 시점</label>
-            <input type="text" placeholder="예: Day2 시작 30분 전" value="${esc(s.setupTime)}" onchange="updateField('${it.id}','setupTime',this.value)">
-          </div>
-          <div class="field">
-            <label>회수 담당</label>
-            <input type="text" placeholder="이름 입력" value="${esc(s.returnOwner)}" onchange="updateField('${it.id}','returnOwner',this.value)">
-          </div>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
-  updateProgress();
+  const area = document.getElementById('groupsArea');
+  area.innerHTML = GROUPS.map(g => `
+    <div class="group-title"><span class="tag">${g.tag}</span>${g.name}</div>
+    <div class="table-scroll">
+      <table class="checklist-table">
+        <thead><tr>
+          <th>준비물명</th><th class="qty-col">수량</th><th>담당자</th><th class="status-col">준비 상태</th>
+          <th>세팅 위치</th><th>세팅 시간</th><th>회수 담당</th><th>비고</th>
+        </tr></thead>
+        <tbody>
+          ${g.items.map(it => {
+            const s = state[it.id] || {};
+            const status = s.status || '필요';
+            return `<tr>
+              <td class="supply-name">${it.name}</td>
+              <td>${it.qty}</td>
+              <td><input type="text" placeholder="이름" value="${esc(s.owner)}" onchange="updateField('${it.id}','owner',this.value)"></td>
+              <td><select class="status-select ${status}" onchange="updateField('${it.id}','status',this.value)">
+                ${STATUSES.map(st => `<option value="${st}" ${status===st?'selected':''}>${st}</option>`).join('')}
+              </select></td>
+              <td><input type="text" placeholder="예: 1관문 입구" value="${esc(s.setupLoc)}" onchange="updateField('${it.id}','setupLoc',this.value)"></td>
+              <td><input type="text" placeholder="예: 시작 30분 전" value="${esc(s.setupTime)}" onchange="updateField('${it.id}','setupTime',this.value)"></td>
+              <td><input type="text" placeholder="이름" value="${esc(s.returnOwner)}" onchange="updateField('${it.id}','returnOwner',this.value)"></td>
+              <td><input type="text" placeholder="${it.note || ''}" value="${esc(s.memo)}" onchange="updateField('${it.id}','memo',this.value)"></td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  `).join('');
+  renderStats();
+}
+
+function renderStats() {
+  const allItems = GROUPS.flatMap(g => g.items);
+  const counts = {};
+  STATUSES.forEach(s => counts[s] = 0);
+  allItems.forEach(it => {
+    const status = state[it.id]?.status || '필요';
+    counts[status] = (counts[status] || 0) + 1;
+  });
+  document.getElementById('statsRow').innerHTML = STATUSES.map(s =>
+    `<div class="stat-box"><div class="n">${counts[s]}</div><div class="l">${s}</div></div>`
+  ).join('');
 }
 
 function esc(v){ return v ? (v+'').replace(/"/g,'&quot;') : ''; }
-
-function updateProgress() {
-  const done = ITEMS.filter(it => state[it.id]?.done).length;
-  document.getElementById('progressNum').textContent = `${done} / ${ITEMS.length}`;
-}
-
-function toggleDone(id) {
-  const cur = !!state[id]?.done;
-  db.ref(`checklist/${id}`).update({ done: !cur });
-}
 
 function updateField(id, field, value) {
   db.ref(`checklist/${id}`).update({ [field]: value });

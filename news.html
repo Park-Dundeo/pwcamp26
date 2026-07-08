@@ -41,15 +41,24 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .comments-body{display:none;padding:0 16px 14px;}
 .comments-body.open{display:block;}
 .comment-item{background:#fff;border:1px solid var(--border);border-radius:8px;padding:9px 11px;margin-bottom:8px;font-size:12.5px;}
+.comment-item .c-top{display:flex;align-items:center;flex-wrap:wrap;gap:6px;}
 .comment-item .c-name{font-weight:700;color:var(--navy);}
-.comment-item .c-time{font-size:10.5px;color:var(--gray);margin-left:6px;}
+.comment-item .c-topic{font-size:10.5px;font-weight:700;background:var(--sky);color:var(--blue);padding:2px 8px;border-radius:20px;}
+.comment-item .c-time{font-size:10.5px;color:var(--gray);margin-left:auto;}
 .comment-item .c-text{margin-top:4px;color:#343a40;line-height:1.6;}
 .comment-empty{font-size:12px;color:var(--gray);text-align:center;padding:10px 0;}
 
+.comment-status-badge{font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:20px;}
+.comment-status-badge.new{background:#e7f5ff;color:var(--blue);}
+.comment-status-badge.checked{background:#fff9db;color:#997404;}
+.comment-status-badge.applied{background:#ebfbee;color:var(--green);}
+.comment-status-badge.hold{background:#f1f3f5;color:var(--gray);}
+
 .comment-form{margin-top:8px;}
-.comment-form input, .comment-form textarea{width:100%;padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:12.5px;font-family:inherit;margin-bottom:6px;}
+.comment-form input, .comment-form textarea, .comment-form select{width:100%;padding:9px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:12.5px;font-family:inherit;margin-bottom:6px;background:#fff;}
 .comment-form textarea{min-height:56px;resize:vertical;}
-.comment-form input:focus, .comment-form textarea:focus{outline:none;border-color:var(--blue);}
+.comment-form input:focus, .comment-form textarea:focus, .comment-form select:focus{outline:none;border-color:var(--blue);}
+.comment-form .disclaimer{font-size:10.5px;color:var(--gray);line-height:1.55;background:#f8f9fa;border-radius:6px;padding:8px 9px;margin-bottom:8px;}
 .comment-form button{width:100%;padding:10px;background:var(--navy);color:#fff;border:none;border-radius:8px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;}
 .comment-form button:active{opacity:.85;}
 
@@ -127,6 +136,17 @@ const STATUS_MAP = {
   hold: { label: '보류', cls: 'hold' },
 };
 
+// 댓글(의견) 작성 시 선택하는 "관련 항목" — 소식 카테고리(CATS)와는 별개 고정 목록
+const TOPICS = ['Day1 장소', 'Day1 식사', 'Day1 이동', 'Day2 관문', '우천 대체', '안전', '웹 시스템', '기타'];
+
+// 댓글 상태 4단계
+const COMMENT_STATUS = {
+  new:     { label: '🆕 새 의견', cls: 'new' },
+  checked: { label: '👀 확인함', cls: 'checked' },
+  applied: { label: '✅ 반영함', cls: 'applied' },
+  hold:    { label: '⏸ 보류', cls: 'hold' },
+};
+
 const NEWS = [
   { id: 'n1', title: 'Day1 가나안 정탐 장소 확인 중', cat: '장소', status: 'doing',
     body: '전쟁기념관 / 서대문형무소 / 양화진 관람 가능 여부·예약·비용·관람 시간을 확인하고 있어요.', updated: '2026-07-08' },
@@ -136,8 +156,8 @@ const NEWS = [
     body: '자유식사를 기본으로 하고, 추천 식당 후보를 준비할 예정이에요. 좋은 식당 아시면 의견 남겨주세요!', updated: '2026-07-08' },
   { id: 'n4', title: 'Day2 돌파의 순례길 구조 정리 중', cat: 'Day2', status: 'confirmed',
     body: '6관문 순환 + 전체 여리고 성벽 미션(Final) 구조로 확정되었습니다. (REQ-18 반영 완료)', updated: '2026-07-08' },
-  { id: 'n5', title: 'Day2 부스 게임 아이디어 수집 중', cat: 'Day2', status: 'ask',
-    body: '부스 게임, 우천 대체 게임 아이디어를 모으고 있어요. 물놀이 업그레이드 초안도 검토 중입니다 (REQ-15).', updated: '2026-07-08' },
+  { id: 'n5', title: '우천 시 대체안 준비 중', cat: '우천 대체', status: 'ask',
+    body: 'Day1 실내 이동 동선과 Day2 관문별 실내 대체 운영 방식을 정리하고 있어요. 좋은 아이디어 있으면 의견 남겨주세요!', updated: '2026-07-08' },
   { id: 'n6', title: '웹 미션 제출 방식 준비 완료', cat: '웹', status: 'done',
     body: '조별 인증사진·정탐 보고서 제출 시스템, 관리자 승인/반려 제도, 개인정보 안내 문구까지 모두 반영되었습니다. (REQ-13/17/19)', updated: '2026-07-08' },
 ];
@@ -170,10 +190,26 @@ function renderNews() {
       <div class="comments-wrap">
         <button class="comments-toggle" onclick="toggleComments('${n.id}')">💬 의견 남기기 (${cs.length})</button>
         <div class="comments-body" id="cbody-${n.id}">
-          ${cs.length ? cs.map(([k, c]) => `<div class="comment-item"><span class="c-name">${esc(c.name)}</span><span class="c-time">${fmt(c.at)}</span><div class="c-text">${esc(c.text)}</div></div>`).join('') : '<div class="comment-empty">아직 의견이 없어요</div>'}
+          ${cs.length ? cs.map(([k, c]) => {
+            const cst = COMMENT_STATUS[c.status] || COMMENT_STATUS.new;
+            return `<div class="comment-item">
+              <div class="c-top">
+                <span class="c-name">${esc(c.name)}</span>
+                ${c.topic ? `<span class="c-topic">${esc(c.topic)}</span>` : ''}
+                <span class="comment-status-badge ${cst.cls}">${cst.label}</span>
+                <span class="c-time">${fmt(c.at)}</span>
+              </div>
+              <div class="c-text">${esc(c.text)}</div>
+            </div>`;
+          }).join('') : '<div class="comment-empty">아직 의견이 없어요</div>'}
           <div class="comment-form">
             <input type="text" id="cname-${n.id}" placeholder="이름">
+            <select id="ctopic-${n.id}">
+              <option value="">관련 항목 선택</option>
+              ${TOPICS.map(t => `<option value="${t}">${t}</option>`).join('')}
+            </select>
             <textarea id="ctext-${n.id}" placeholder="의견을 남겨주세요"></textarea>
+            <div class="disclaimer">이 댓글은 프로그램 준비를 위한 의견함입니다. 남겨주신 의견은 프로그램팀이 확인 후 필요한 경우 준비 내용에 반영하겠습니다. 댓글 내용은 공식 결정사항이 아니며, 확정된 내용은 준비 소식 본문에 업데이트됩니다.</div>
             <button onclick="submitComment('${n.id}')">의견 등록</button>
             <div class="gate-note">등록 시 선생님 코드 확인이 필요해요</div>
           </div>
@@ -193,7 +229,8 @@ function fmt(ts){ return ts ? new Date(ts).toLocaleString('ko-KR',{month:'numeri
 function submitComment(newsId) {
   const name = document.getElementById(`cname-${newsId}`).value.trim();
   const text = document.getElementById(`ctext-${newsId}`).value.trim();
-  if (!name || !text) { alert('이름과 의견을 모두 입력해주세요.'); return; }
+  const topic = document.getElementById(`ctopic-${newsId}`).value;
+  if (!name || !text || !topic) { alert('이름·관련 항목·의견을 모두 입력해주세요.'); return; }
   pendingNewsId = newsId;
   if (sessionStorage.getItem(CODE_OK_KEY) === '1') {
     doSubmitComment();
@@ -206,10 +243,12 @@ function doSubmitComment() {
   const newsId = pendingNewsId;
   const name = document.getElementById(`cname-${newsId}`).value.trim();
   const text = document.getElementById(`ctext-${newsId}`).value.trim();
+  const topic = document.getElementById(`ctopic-${newsId}`).value;
   db.ref(`news_comments/${newsId}`).push({
-    name, text, at: firebase.database.ServerValue.TIMESTAMP,
+    name, text, topic, status: 'new', at: firebase.database.ServerValue.TIMESTAMP,
   });
   document.getElementById(`cname-${newsId}`).value = '';
+  document.getElementById(`ctopic-${newsId}`).value = '';
   document.getElementById(`ctext-${newsId}`).value = '';
 }
 

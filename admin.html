@@ -141,15 +141,20 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .news-comment-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
 .nc-item{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 14px;font-size:13px;}
 .nc-item.resolved{opacity:.55;}
-.nc-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.nc-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
 .nc-news{font-size:11px;font-weight:800;color:var(--blue);background:var(--sky, #e7f5ff);padding:2px 8px;border-radius:20px;}
+.nc-topic{font-size:11px;font-weight:700;color:#495057;background:#f1f3f5;padding:2px 8px;border-radius:20px;}
 .nc-name{font-weight:700;color:var(--navy);}
 .nc-time{font-size:11px;color:var(--gray);margin-left:auto;}
 .nc-text{color:#495057;line-height:1.6;margin-bottom:8px;}
-.nc-actions{display:flex;gap:6px;}
-.nc-btn{font-size:11px;font-weight:700;padding:5px 10px;border:none;border-radius:6px;cursor:pointer;font-family:inherit;}
-.nc-btn.resolve{background:#ebfbee;color:var(--green);}
-.nc-btn.delete{background:#fff5f5;color:#e03131;}
+.nc-actions{display:flex;gap:6px;flex-wrap:wrap;}
+.nc-btn{font-size:11px;font-weight:700;padding:5px 10px;border:none;border-radius:6px;cursor:pointer;font-family:inherit;opacity:.5;}
+.nc-btn.status.active{opacity:1;box-shadow:0 0 0 1.5px currentColor inset;}
+.nc-btn.new{background:#e7f5ff;color:var(--blue);}
+.nc-btn.checked{background:#fff9db;color:#997404;}
+.nc-btn.applied{background:#ebfbee;color:var(--green);}
+.nc-btn.hold{background:#f1f3f5;color:var(--gray);}
+.nc-btn.delete{background:#fff5f5;color:#e03131;opacity:1;}
 </style>
 </head>
 <body>
@@ -312,7 +317,13 @@ function showDashboard() {
 const NEWS_TITLES = {
   n1: 'Day1 가나안 정탐 장소 확인 중', n2: 'Day1 중간 경유지 및 인증 포인트 준비 중',
   n3: 'Day1 조별 식사 운영 방식 검토 중', n4: 'Day2 돌파의 순례길 구조 정리 중',
-  n5: 'Day2 부스 게임 아이디어 수집 중', n6: '웹 미션 제출 방식 준비 중',
+  n5: '우천 시 대체안 준비 중', n6: '웹 미션 제출 방식 준비 중',
+};
+const NC_STATUS = {
+  new:     { label: '🆕 새 의견', cls: 'new' },
+  checked: { label: '👀 확인함', cls: 'checked' },
+  applied: { label: '✅ 반영함', cls: 'applied' },
+  hold:    { label: '⏸ 보류', cls: 'hold' },
 };
 let newsComments = {};
 
@@ -320,7 +331,11 @@ function renderNewsComments() {
   const list = document.getElementById('newsCommentList');
   const flat = [];
   Object.entries(newsComments).forEach(([newsId, items]) => {
-    Object.entries(items || {}).forEach(([cid, c]) => flat.push({ newsId, cid, ...c }));
+    // 과거 resolved(boolean) 데이터 마이그레이션: true→applied, false/없음→new
+    Object.entries(items || {}).forEach(([cid, c]) => {
+      const status = c.status || (c.resolved ? 'applied' : 'new');
+      flat.push({ newsId, cid, ...c, status });
+    });
   });
   flat.sort((a, b) => (b.at || 0) - (a.at || 0));
   if (!flat.length) {
@@ -328,22 +343,23 @@ function renderNewsComments() {
     return;
   }
   list.innerHTML = flat.map(c => `
-    <div class="nc-item ${c.resolved ? 'resolved' : ''}">
+    <div class="nc-item ${c.status === 'applied' || c.status === 'hold' ? 'resolved' : ''}">
       <div class="nc-top">
         <span class="nc-news">${esc(NEWS_TITLES[c.newsId] || c.newsId)}</span>
+        ${c.topic ? `<span class="nc-topic">${esc(c.topic)}</span>` : ''}
         <span class="nc-name">${esc(c.name)}</span>
         <span class="nc-time">${fmt(c.at)}</span>
       </div>
       <div class="nc-text">${esc(c.text)}</div>
       <div class="nc-actions">
-        <button class="nc-btn resolve" onclick="toggleResolveComment('${c.newsId}','${c.cid}',${!c.resolved})">${c.resolved ? '↺ 반영 취소' : '✅ 반영함'}</button>
+        ${Object.entries(NC_STATUS).map(([key, s]) => `<button class="nc-btn status ${s.cls} ${c.status === key ? 'active' : ''}" onclick="setCommentStatus('${c.newsId}','${c.cid}','${key}')">${s.label}</button>`).join('')}
         <button class="nc-btn delete" onclick="deleteComment('${c.newsId}','${c.cid}')">🗑 삭제</button>
       </div>
     </div>`).join('');
 }
 
-function toggleResolveComment(newsId, cid, value) {
-  db.ref(`news_comments/${newsId}/${cid}`).update({ resolved: value });
+function setCommentStatus(newsId, cid, status) {
+  db.ref(`news_comments/${newsId}/${cid}`).update({ status });
 }
 function deleteComment(newsId, cid) {
   if (!confirm('이 의견을 삭제할까요?')) return;

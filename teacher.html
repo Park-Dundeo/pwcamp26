@@ -58,6 +58,13 @@ table.doc-table input:focus{outline:none;border-color:var(--blue);}
 .policy-lbl{font-size:12px;font-weight:700;color:var(--navy);margin:12px 0 6px;}
 .policy-lbl:first-child{margin-top:0;}
 
+.situation-row{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-bottom:1px solid #f1f3f5;font-size:13px;}
+.situation-row:last-child{border-bottom:none;}
+.situation-icon{font-size:16px;flex-shrink:0;width:22px;text-align:center;}
+.situation-name{font-weight:700;color:var(--navy);}
+.situation-action{color:#495057;font-size:12.5px;margin-top:2px;line-height:1.6;}
+.situation-link{font-size:11px;color:var(--blue);text-decoration:none;font-weight:700;white-space:nowrap;flex-shrink:0;}
+
 .back-link{display:block;text-align:center;margin-top:22px;font-size:12px;color:var(--gray);text-decoration:none;}
 </style>
 </head>
@@ -115,6 +122,12 @@ table.doc-table input:focus{outline:none;border-color:var(--blue);}
     </div>
   </div>
 
+  <!-- 5. 상황별 대응 기준 -->
+  <div class="section">
+    <div class="section-top"><div class="n">05</div><div class="t">🚨 상황별 대응 기준</div></div>
+    <div class="section-body" id="situationList"></div>
+  </div>
+
   <a class="back-link" href="index.html">← 기획 대시보드로 돌아가기</a>
 </div>
 
@@ -133,6 +146,31 @@ firebase.initializeApp({
   appId: "1:860034291771:web:8de5a9e21dcfe28aefa41e"
 });
 const db = firebase.database();
+
+const SITUATIONS = [
+  { icon: '🏃', name: '학생 이탈 시', action: '즉시 인원 재점검 후 마지막 목격 장소부터 역추적 수색', link: 'emergency.html#leave' },
+  { icon: '⏰', name: '조가 늦을 때', action: '연락해서 위치 확인, 축소된 미션으로 합류 안내', link: 'emergency.html#late' },
+  { icon: '📵', name: '사진 업로드가 안 될 때', action: '네트워크 재확인 후 재시도, 안 되면 인솔교사 폰으로 대신 촬영·업로드', link: 'emergency.html#upload-fail' },
+  { icon: '🔋', name: '휴대폰 배터리가 없을 때', action: '인솔교사 휴대폰으로 대체 연락, 조원과 이동 유지', link: 'emergency.html#battery' },
+  { icon: '🍽', name: '식당 입장이 어려울 때', action: '인근 대체 식당으로 즉시 이동, 총괄교사에게 보고', link: 'emergency.html#restaurant' },
+  { icon: '🩹', name: '학생이 다쳤을 때', action: '경상은 현장 응급처치, 중상은 즉시 활동 중단 후 보건 담당 호출', link: 'emergency.html#injury' },
+  { icon: '🌧', name: '비가 올 때', action: '우천 대체 동선/실내 배치로 즉시 전환', link: 'emergency.html#rain' },
+  { icon: '🙋', name: '견학 담당 선생님이 늦을 때', action: '인솔교사가 임시 대기 안내, 인접 견학지 담당교사에게 협조 요청', link: 'emergency.html#guide-late' },
+  { icon: '📝', name: '학생이 보고서를 장난스럽게 썼을 때', action: '관리자가 반려 처리 + 재작성 안내 문구, 반복 시 인솔교사 직접 지도', link: 'emergency.html#joke-report' },
+  { icon: '⏳', name: '관리자 승인이 늦을 때', action: '학생은 대기 유지, 인솔교사가 관리자에게 직접 승인 요청', link: 'emergency.html#approval-late' },
+];
+
+function renderSituations() {
+  document.getElementById('situationList').innerHTML = SITUATIONS.map(s => `
+    <div class="situation-row">
+      <div class="situation-icon">${s.icon}</div>
+      <div style="flex:1;">
+        <div class="situation-name">${s.name}</div>
+        <div class="situation-action">${s.action}</div>
+      </div>
+      <a class="situation-link" href="${s.link}" target="_blank">상세보기 →</a>
+    </div>`).join('');
+}
 
 const ROLES = [
   { group: '총괄' },
@@ -215,6 +253,7 @@ db.ref('teacherDoc/policy').on('value', snap => {
 
 renderRoles();
 renderRoster();
+renderSituations();
 </script>
 </body>
 </html>

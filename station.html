@@ -52,6 +52,12 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .supply-tags{display:flex;flex-wrap:wrap;gap:6px;}
 .supply-tag{background:#f1f3f5;color:#495057;font-size:12px;font-weight:600;padding:5px 10px;border-radius:20px;}
 
+.owner-chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:20px;background:#eef2ff;color:var(--blue);}
+.owner-chip.unset{background:#f1f3f5;color:var(--gray);}
+.setup-box{background:#f8f9fa;border-radius:10px;padding:12px 14px;font-size:13px;color:#343a40;line-height:1.7;}
+.rain-box{background:#e7f5ff;border:1.5px solid #a5d8ff;border-radius:10px;padding:12px 14px;font-size:13px;color:#1864ab;line-height:1.7;}
+.next-box{background:#fff9db;border:1.5px solid #ffe066;border-radius:10px;padding:12px 14px;font-size:13px;color:#846200;line-height:1.7;font-style:italic;}
+
 .nav-row{display:flex;gap:8px;margin-top:4px;}
 .nav-btn{flex:1;padding:13px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.06);}
 .nav-btn:active{opacity:.8;}
@@ -76,70 +82,107 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
   <a class="back-link" href="index.html">← 기획 대시보드로 돌아가기</a>
 </div>
 
+<!-- Firebase (담당자 이름을 teacher.html 역할표와 실시간 연동) -->
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
+
 <script>
+firebase.initializeApp({
+  apiKey: "AIzaSyAZJQbC6dbLtn4D32FnXQIh5hZFs4iyWoQ",
+  authDomain: "pwcamp26.firebaseapp.com",
+  databaseURL: "https://pwcamp26-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "pwcamp26",
+  storageBucket: "pwcamp26.firebasestorage.app",
+  messagingSenderId: "860034291771",
+  appId: "1:860034291771:web:8de5a9e21dcfe28aefa41e"
+});
+const db = firebase.database();
+let roles = {};
+
 const STATIONS = [
   {
-    id: 1, label: '1/6', name: '붉은 줄의 문', color: 'linear-gradient(135deg,#7d1a1a,#c92a2a)',
+    id: 1, roleId: 'gate1', label: '1/6', name: '붉은 줄의 문', color: 'linear-gradient(135deg,#7d1a1a,#c92a2a)',
     verse: '여호수아 2장 — 라합의 붉은 줄',
     game: '빨간 실 거미줄 레이저 미로 통과',
     script: '라합은 이스라엘 백성도, 정탐꾼의 가족도 아니었어요. 그런데 창문에 붉은 줄 하나를 내려서 살길을 얻었죠. 그 줄은 라합이 만든 게 아니라 정탐꾼이 준 약속이었어요. 오늘 여러분이 돌파해야 할 것도 똑같아요 — 내 실력이 아니라, 하나님이 이미 주신 약속을 붙잡을 때 열립니다.',
     pass: '제한시간 내 실 미로를 건드리지 않고 통과 (건드리면 처음부터 재시도, 총 3회까지)',
     safety: '실/미로에 걸려 넘어지지 않도록 바닥 정리, 진행 중 뒷사람과 간격 유지',
     supplies: ['빨간 털실/끈', '방울', '스톱워치', '성공 스티커'],
+    setup: '관문 입구부터 지그재그로 빨간 실을 무릎~허리 높이에 매듭 지어 설치하고, 군데군데 방울을 매달아 건드리면 소리 나게 준비',
+    rainPlan: '실내에서는 의자·책상 다리 사이를 통과하는 코스로 축소하고, 실 높이를 낮춰 설치',
+    nextMsg: '정탐꾼 여러분 수고하셨어요! 다음 조 들여보내주시고, 실이 헝클어졌으면 살짝 정리해주세요.',
   },
   {
-    id: 2, label: '2/6', name: '요단강', color: 'linear-gradient(135deg,#0b3d91,#3b5bdb)',
+    id: 2, roleId: 'gate2', label: '2/6', name: '요단강', color: 'linear-gradient(135deg,#0b3d91,#3b5bdb)',
     verse: '여호수아 3장 — 요단강 도하',
     game: '제한된 발판으로 전원 건너기 — 언약궤 두 명이 들고 이동',
     script: '요단강은 이스라엘이 40년 광야 끝에 마주한 마지막 장애물이었어요. 물이 갈라진 건 제사장들이 강가에 서서 기다렸을 때가 아니라, 실제로 발을 물에 담갔을 때였죠. 방금 발판 위에서 언약궤를 들고 건넌 것처럼, 돌파는 마음으로 결심하는 게 아니라 실제로 한 걸음 내딛는 데서 시작돼요.',
     pass: '전 조원이 발판 밖으로 발을 딛지 않고 반대편 도착 + 언약궤를 떨어뜨리지 않음',
     safety: '발판 주변 바닥 미끄럼 주의 (물놀이 버전으로 진행 시 특히 주의)',
     supplies: ['파란 천/테이프', '발판', '성경책 모형', '기념 돌 카드'],
+    setup: '발판을 일정 간격으로 배치하고 출발선에 대야(물), 도착선에 목표통 준비. 언약궤 모형은 발판 옆에 비치',
+    rainPlan: '실내에서는 바닥에 테이프로 발판 위치만 표시하고 물 없이 진행 (또는 소량의 물로 축소)',
+    nextMsg: '잘 건넜어요! 다음 조 오기 전에 발판 위치만 확인해주세요, 물은 그대로 둬도 됩니다.',
   },
   {
-    id: 3, label: '3/6', name: '무거운 짐의 언덕', color: 'linear-gradient(135deg,#5c3a21,#8c5a33)',
+    id: 3, roleId: 'gate3', label: '3/6', name: '무거운 짐의 언덕', color: 'linear-gradient(135deg,#5c3a21,#8c5a33)',
     verse: '천로역정 — 크리스천의 짐',
     game: '단어 카드 붙인 짐 들고 걷다가 십자가 앞에 내려놓기',
     script: '크리스천은 등에 진 무거운 죄의 짐을 지고 걷다가, 십자가 앞에서야 그 짐을 내려놓을 수 있었어요. 여러분도 방금 짐을 메고 걷다가 내려놓았죠. 그 짐에 적힌 단어들은 사실 우리가 평소에 꽁꽁 붙들고 사는 걱정이나 죄책감일 수 있어요. 내려놓지 않으면 계속 우리 발걸음을 느리게 만듭니다.',
     pass: '짐을 메고 출발해 십자가 표시 앞에 실제로 내려놓는 동작까지 완료',
     safety: '짐 무게(물병·모래주머니) 너무 무겁지 않게 조정, 이동 중 주변 확인',
     supplies: ['가방', '물병·모래주머니', '단어 카드', '십자가 표시'],
+    setup: '가방에 물병·모래주머니를 미리 채워 준비하고, 단어 카드를 가방에 부착. 십자가 표시는 도착 지점에 크게 표시',
+    rainPlan: '실내에서는 짧은 복도 구간으로 코스를 축소, 짐 무게는 동일하게 유지',
+    nextMsg: '잘 내려놨어요! 짐은 그대로 두시고 다음 조 불러주세요, 가방만 다시 매어주시면 됩니다.',
   },
   {
-    id: 4, label: '4/6', name: '의심의 숲', color: 'linear-gradient(135deg,#1a4429,#2f9e44)',
+    id: 4, roleId: 'gate4', label: '4/6', name: '의심의 숲', color: 'linear-gradient(135deg,#1a4429,#2f9e44)',
     verse: '천로역정 — 의심의 성',
     game: '한 명 눈가림 — 조원 말로만 안내해서 코스 통과',
     script: '눈을 가린 친구는 아무것도 안 보이는 상태에서 오직 조원의 목소리만 믿고 걸었어요. 우리 믿음의 길도 똑같습니다 — 앞이 항상 선명하게 보이지 않아요. 그 순간에도 하나님은 말씀으로 우리를 인도하고 계세요. 방금 들었던 그 목소리처럼요.',
     pass: '눈가린 학생이 장애물과 충돌 없이 코스 끝까지 도달 (조원 음성 안내만 허용)',
     safety: '눈가리개 착용 학생 주변 장애물 재확인, 안내자 밀착 동행 필수',
     supplies: ['눈가리개', '장애물(의자·콘)'],
+    setup: '장애물(의자·콘)을 코스에 배치하고, 눈가리개는 위생을 위해 조별로 새 것 또는 소독 후 사용',
+    rainPlan: '실내에서는 장애물 수를 줄이고 통로를 넓게 확보, 안내자가 더 밀착해서 동행',
+    nextMsg: '수고했어요! 장애물 위치 그대로 두시고 다음 조 불러주세요.',
   },
   {
-    id: 5, label: '5/6', name: '허영의 장터', color: 'linear-gradient(135deg,#8a5a00,#f59f00)',
+    id: 5, roleId: 'gate5', label: '5/6', name: '허영의 장터', color: 'linear-gradient(135deg,#8a5a00,#f59f00)',
     verse: '천로역정 허영시장 / 여호수아 24:15',
     game: '선택 카드 — 인기 vs 정직 / 편함 vs 순종 / 비교 vs 감사 등',
     script: '허영시장에서는 늘 인기냐 정직이냐, 편함이냐 순종이냐를 선택해야 했어요. 돌파는 캠프에서 한 번 크게 결심한다고 끝나는 게 아니에요. 학교에서, 집에서, 매일 매 순간 "오늘 나는 하나님을 선택한다"고 다시 결정하는 것 — 그게 진짜 돌파입니다.',
     pass: '카드 선택 자체가 통과 조건 (정답은 없음 — 선택 후 왜 그렇게 골랐는지 한 마디 나누면 통과)',
     safety: '특이 안전 요소 낮음',
     supplies: ['선택 카드 세트 (제작 필요)'],
+    setup: '선택 카드 세트를 관문 테이블에 펼쳐두고, 조별로 순서대로 뽑을 수 있게 준비',
+    rainPlan: '실내에서도 동일하게 진행 가능 (장소 제약이 적은 관문)',
+    nextMsg: '좋은 나눔이었어요! 카드는 다시 섞어서 다음 조를 위해 정리해주세요.',
   },
   {
-    id: 6, label: '6/6', name: '침묵의 성벽', color: 'linear-gradient(135deg,#2b2d42,#495057)',
+    id: 6, roleId: 'gate6', label: '6/6', name: '침묵의 성벽', color: 'linear-gradient(135deg,#2b2d42,#495057)',
     verse: '여호수아 6장 — 여리고성',
     game: '말하지 않고 침묵으로 지시문 수행',
     script: '여리고성이 무너진 건 이스라엘 백성이 힘으로 밀어붙여서가 아니라, 하나님이 시키신 대로 순종했기 때문이에요. 오늘 여러분도 말 한마디 못하고 침묵 속에서 지시문만 따랐죠. 답답했나요? 순종은 원래 이해가 다 안 되는 상태에서 시작됩니다.',
     pass: '제한시간 내 침묵을 깨지 않고 지시문 과제를 완수 (말하면 처음부터 재시도)',
     safety: '특이 안전 요소 낮음',
     supplies: ['지시문 카드', '말씀 카드'],
+    setup: '지시문 카드와 말씀 카드를 순서대로 준비하고, 진행자는 미리 지시 순서를 숙지',
+    rainPlan: '실내에서도 동일하게 진행 가능, 소음이 적은 조용한 공간 확보',
+    nextMsg: '침묵 잘 지켰어요! 카드 순서 다시 정리하고 다음 조 불러주세요.',
   },
   {
-    id: 'final', label: 'Final', name: '약속의 땅 — 전체 집합 미션', color: 'linear-gradient(135deg,#7a4a00,#f59f00)',
+    id: 'final', roleId: 'gateFinal', label: 'Final', name: '약속의 땅 — 전체 집합 미션', color: 'linear-gradient(135deg,#7a4a00,#f59f00)',
     verse: '가나안 입성',
     game: '6관문을 통과한 전 조가 한 장소에 재집합 → 조별 결단문 완성 → 다 함께 외침 → 상징적인 여리고 성벽(박스 성벽) 무너뜨리기',
     script: '6개 관문을 다 통과했어요. 라합의 약속, 요단강 도하, 짐을 내려놓음, 믿음의 순종, 매일의 선택, 침묵의 순종 — 이 모든 게 오늘 여러분이 지나온 길입니다. 이제 진짜 여리고성이 남았어요. 이건 게임이 아니라 선포입니다. 오늘 외치는 그 한 문장이 이번 여름 하나님 앞에서 실제로 돌파할 것을 정하는 순간이 될 거예요.',
     pass: '조별 결단문("우리는 ______을 돌파하고, 하나님을 따라 ______하겠습니다.")을 완성해 다 함께 외친 후 성벽을 무너뜨리는 것 자체가 통과 (탈락 없음)',
     safety: '박스 성벽 무너뜨릴 때 주변 학생과의 거리 확보, 파편(테이프·박스 조각) 정리',
     supplies: ['박스 성벽', '단어 카드', '스티커', '결단문 종이'],
+    setup: '박스 성벽을 미리 쌓아두고, 결단문 종이와 필기구를 조별로 배치',
+    rainPlan: '실내 강당 등 넓은 공간으로 이동, 성벽 무너뜨리는 동작은 동일하게 진행',
+    nextMsg: '모든 조가 함께 완주했습니다! (Final은 전체 집합 마지막 순서라 다음 조 안내 대신) 이제 결단 나눔으로 이어가겠습니다.',
   },
 ];
 
@@ -162,6 +205,7 @@ function selectStation(i) {
 
 function renderCard(s) {
   const area = document.getElementById('cardArea');
+  const ownerName = roles[s.roleId]?.name;
   area.innerHTML = `
     <div class="card visible">
       <div class="card-top" style="background:${s.color};">
@@ -171,8 +215,16 @@ function renderCard(s) {
       </div>
       <div class="card-body">
         <div class="block">
+          <div class="section-lbl">🙋 담당자</div>
+          <span class="owner-chip ${ownerName ? '' : 'unset'}">${ownerName ? '👤 ' + esc(ownerName) : '담당자 미정 (teacher.html 역할표에서 입력)'}</span>
+        </div>
+        <div class="block">
           <div class="section-lbl">🎮 게임</div>
           <p>${s.game}</p>
+        </div>
+        <div class="block">
+          <div class="section-lbl">🧩 세팅 방법</div>
+          <div class="setup-box">${s.setup}</div>
         </div>
         <div class="block">
           <div class="section-lbl">🎙 30초 영적 해석 멘트 (게임 종료 직후 읽어주세요)</div>
@@ -190,8 +242,16 @@ function renderCard(s) {
           <div class="safety-box">${s.safety}</div>
         </div>
         <div class="block">
+          <div class="section-lbl">🌧 우천 시 대체 운영</div>
+          <div class="rain-box">${s.rainPlan}</div>
+        </div>
+        <div class="block">
           <div class="section-lbl">🧰 준비물</div>
           <div class="supply-tags">${s.supplies.map(x => `<span class="supply-tag">${x}</span>`).join('')}</div>
+        </div>
+        <div class="block">
+          <div class="section-lbl">📢 종료 후 다음 조 안내 멘트</div>
+          <div class="next-box">"${s.nextMsg}"</div>
         </div>
         <div class="nav-row">
           <button class="nav-btn" onclick="stepStation(-1)">← 이전 관문</button>
@@ -201,6 +261,8 @@ function renderCard(s) {
     </div>`;
 }
 
+function esc(v){ return v ? (v+'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) : ''; }
+
 function stepStation(delta) {
   const next = (current + delta + STATIONS.length) % STATIONS.length;
   selectStation(next);
@@ -208,6 +270,11 @@ function stepStation(delta) {
 
 buildGrid();
 selectStation(0);
+
+db.ref('teacherDoc/roles').on('value', snap => {
+  roles = snap.val() || {};
+  renderCard(STATIONS[current]);
+});
 </script>
 </body>
 </html>
