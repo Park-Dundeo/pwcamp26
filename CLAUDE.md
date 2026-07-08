@@ -17,7 +17,7 @@
 
 - 배포: `main` push 시 `.github/workflows/deploy.yml` → GitHub Pages 자동 배포. 빌드 스텝 없음, 저장소 루트를 그대로 올림.
 - 데이터: Firebase Realtime DB (`pwcamp26-default-rtdb`). 경로: `submissions/team{N}/mission{1,2}`(학생 제출, 사진은 Storage 대신 압축 후 base64로 DB 직접 저장), `checklist/{itemId}`(준비물 체크), `teacherDoc/{roles|roster|policy}`(교사 매뉴얼 공동편집), `news_comments/{newsId}`(의견함 댓글).
-- `mission.html`의 `TEAM_CODES`에 조별 비밀번호 하드코딩. 힌트는 페이지에 노출하지 않고 교사가 별도 전달.
+- `mission.html`의 `QUIZ`에 조별 퀴즈 문제·정답(유사정답 포함)이 하드코딩되어 있고, 잠금화면에 문제가 표시됨. 힌트는 페이지에 노출하지 않고 교사가 별도 전달.
 - `localStorage` 키 `pwcamp_unlocked_{team}`으로 조별 잠금해제 상태 유지.
 - Firebase 규칙: `submissions`/`checklist`/`teacherDoc`/`news_comments` 네 경로 모두 read/write 허용 (2026-07-08 콘솔에 반영 완료, `firebase.rules.now.json` 참고). 새 최상위 경로를 추가로 쓰려면 이 규칙에 없는 경로는 기본 거부이므로 콘솔에서 함께 열어줘야 함.
 

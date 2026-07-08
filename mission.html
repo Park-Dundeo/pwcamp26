@@ -67,7 +67,10 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .lock-card{background:var(--navy);border-radius:var(--radius);padding:28px 20px;text-align:center;color:#fff;margin-bottom:16px;box-shadow:0 4px 24px rgba(0,0,0,.2);}
 .lock-icon{font-size:44px;margin-bottom:12px;display:block;}
 .lock-title{font-size:17px;font-weight:800;margin-bottom:4px;}
-.lock-sub{font-size:13px;opacity:.65;margin-bottom:24px;line-height:1.6;}
+.lock-sub{font-size:13px;opacity:.65;margin-bottom:20px;line-height:1.6;}
+.quiz-box{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:10px;padding:14px 16px;margin-bottom:20px;text-align:left;}
+.quiz-label{font-size:10px;font-weight:800;letter-spacing:1.5px;color:var(--gold);text-transform:uppercase;margin-bottom:6px;}
+.quiz-question{font-size:14px;line-height:1.6;font-weight:600;}
 .code-input-wrap{position:relative;margin-bottom:12px;}
 .code-input{width:100%;padding:16px;background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.2);border-radius:10px;font-size:22px;font-weight:800;color:#fff;text-align:center;letter-spacing:6px;font-family:inherit;}
 .code-input::placeholder{opacity:.35;letter-spacing:2px;font-size:14px;font-weight:400;}
@@ -249,10 +252,14 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     <div class="lock-card">
       <span class="lock-icon">🔐</span>
       <div class="lock-title">정탐 코드를 입력하세요</div>
-      <div class="lock-sub">교사에게 받은 코드를 입력해야<br>미션이 시작됩니다</div>
+      <div class="lock-sub">아래 퀴즈의 정답이 곧 코드예요<br>(힌트는 선생님이 알려주세요)</div>
+      <div class="quiz-box">
+        <div class="quiz-label">🧩 정탐 퀴즈</div>
+        <div class="quiz-question" id="quizQuestion">—</div>
+      </div>
       <div class="code-input-wrap">
-        <input class="code-input" type="tel" id="codeInput" placeholder="코드 입력"
-          maxlength="6" onkeydown="if(event.key==='Enter')checkCode()">
+        <input class="code-input" type="text" id="codeInput" placeholder="정답 입력"
+          maxlength="10" onkeydown="if(event.key==='Enter')checkCode()">
       </div>
       <div class="code-error" id="codeError"></div>
       <button class="unlock-btn" onclick="checkCode()">🗝 미션 시작하기</button>
@@ -446,11 +453,20 @@ const TEAM_MAP = {
   6:{dest:'양화진',waypoint:'홍대입구역',bg:'linear-gradient(135deg,#4a1a00,#e8590c)'},
 };
 
-// ── 임시 코드 (추후 실제 코드로 교체) ──
-const TEAM_CODES = {
-  1:'1147', 2:'2358', 3:'3692',
-  4:'4521', 5:'5834', 6:'6173',
+// ── 조별 비밀번호 퀴즈 (REQ-07 확정) ──
+const QUIZ = {
+  1:{ question:'라합이 정탐꾼을 숨기고 창문에 내린 것의 색은?', answers:['붉은','빨간','붉은줄','빨간줄','홍색'] },
+  2:{ question:'이스라엘이 가나안을 정탐한 날수는? (숫자)', answers:['사십','40','40일'] },
+  3:{ question:'여리고성이 무너진 날은 며칠째? (숫자)', answers:['칠','7','7일'] },
+  4:{ question:'이번 캠프의 주제 한 단어는?', answers:['돌파'] },
+  5:{ question:'요단강을 건넌 후 기념으로 세운 것은?', answers:['돌','12돌','기념돌'] },
+  6:{ question:'여호수아가 "나와 내 집은 여호와를 ___하겠노라" 에서 빈칸은?', answers:['섬기','섬김','섬기겠노라'] },
 };
+
+// 입력값 정규화: 앞뒤 공백/느낌표·물음표·공백 제거 후 비교
+function normalizeAnswer(s) {
+  return (s || '').trim().replace(/[\s!?.]/g, '');
+}
 
 let currentTeam = null;
 let selectedFile = null;
@@ -576,12 +592,16 @@ function showLockScreen() {
   document.getElementById('missionArea').classList.remove('visible');
   document.getElementById('codeInput').value = '';
   document.getElementById('codeError').textContent = '';
+  const quiz = QUIZ[currentTeam];
+  document.getElementById('quizQuestion').textContent = quiz ? quiz.question : '—';
 }
 
 // ── 코드 확인 ──
 function checkCode() {
-  const input = document.getElementById('codeInput').value.trim();
-  if (input === TEAM_CODES[currentTeam]) {
+  const input = normalizeAnswer(document.getElementById('codeInput').value);
+  const quiz = QUIZ[currentTeam];
+  const correct = quiz && quiz.answers.some(a => normalizeAnswer(a) === input);
+  if (correct) {
     localStorage.setItem(`pwcamp_unlocked_${currentTeam}`, '1');
     document.getElementById('lockScreen').style.display = 'none';
     showMissions();
@@ -591,7 +611,7 @@ function checkCode() {
   } else {
     const el = document.getElementById('codeInput');
     el.classList.add('error');
-    document.getElementById('codeError').textContent = '틀린 코드예요. 다시 확인해보세요!';
+    document.getElementById('codeError').textContent = '정답이 아니에요. 다시 확인해보세요!';
     setTimeout(() => el.classList.remove('error'), 500);
   }
 }
