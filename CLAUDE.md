@@ -19,16 +19,15 @@
 - 데이터: Firebase Realtime DB (`pwcamp26-default-rtdb`). 경로: `submissions/team{N}/mission{1,2}`(학생 제출, 사진은 Storage 대신 압축 후 base64로 DB 직접 저장), `checklist/{itemId}`(준비물 체크), `teacherDoc/{roles|roster|policy}`(교사 매뉴얼 공동편집), `news_comments/{newsId}`(의견함 댓글).
 - `mission.html`의 `TEAM_CODES`에 조별 비밀번호 하드코딩. 힌트는 페이지에 노출하지 않고 교사가 별도 전달.
 - `localStorage` 키 `pwcamp_unlocked_{team}`으로 조별 잠금해제 상태 유지.
-- ⚠️ **Firebase Realtime Database 규칙이 `submissions` 경로만 열려 있고 나머지는 기본 거부 상태 (2026-07-08 직접 테스트로 확인).** `checklist`/`teacherDoc`/`news_comments` 세 경로가 막혀 있어 teacher.html/checklist.html/news.html은 화면은 뜨지만 저장이 전혀 안 됨. 저장소의 `firebase.rules.now.json` 내용을 Firebase 콘솔 > Realtime Database > 규칙에 반영해야 정상 동작 — **코드로 해결 불가, 사람이 콘솔에서 처리해야 함**.
+- Firebase 규칙: `submissions`/`checklist`/`teacherDoc`/`news_comments` 네 경로 모두 read/write 허용 (2026-07-08 콘솔에 반영 완료, `firebase.rules.now.json` 참고). 새 최상위 경로를 추가로 쓰려면 이 규칙에 없는 경로는 기본 거부이므로 콘솔에서 함께 열어줘야 함.
 
 ## 요구사항/백로그
 
 **`REQUIREMENTS.md`가 단일 소스**. 새 요구사항, 미결 사항, 우선순위는 항상 이 파일에서 확인·갱신할 것. 코드를 보고 요구사항을 추측하지 말고 REQUIREMENTS.md를 먼저 읽는다.
 
-## 현재 구현 상태 (2026-07-08 기준, 로컬 작업분 포함 — 아직 push 전)
+## 현재 구현 상태 (2026-07-08 기준, origin/main에 push 완료)
 
-- 완료(REQ-01~24, REQUIREMENTS.md "완료된 기능" 참고): 조별 코드 잠금해제·고정, 미션1→미션2 순차 해금, 관리자 승인/반려 기반 진행, 목적지 배너 단계적 공개, 미션 전환 스토리텔링, Day1 목적문구·보고서 3항목(장벽/믿음/돌파기도), Day2 6관문+Final 구조, 개인정보 안내, 운영 페이지 5종(teacher/station/emergency/checklist/news) 신규
+- 완료(REQ-01~24, REQUIREMENTS.md "완료된 기능" 참고): 조별 코드 잠금해제·고정, 미션1→미션2 순차 해금, 관리자 승인/반려 기반 진행, 목적지 배너 단계적 공개, 미션 전환 스토리텔링, Day1 목적문구·보고서 3항목(장벽/믿음/돌파기도), Day2 6관문+Final 구조, 개인정보 안내, 운영 페이지 5종(teacher/station/emergency/checklist/news) 신규 — Firebase 저장까지 실제 브라우저로 재검증 완료
 - 미구현: 비밀번호 해금 직후 → 미션1 등장 전 인트로 내레이션 없음 (REQ-09에는 미션1→미션2 전환 연출만 반영됨)
-- **막힘(사람 조치 필요):** 위 Firebase 규칙 반영 전까지 teacher.html/checklist.html/news.html 저장 기능 사용 불가
 
 ⚠️ **작업 시작 전 항상 `git fetch && git status`로 origin 대비 뒤처지지 않았는지 먼저 확인할 것.** 이 프로젝트는 다른 세션/사람이 병행으로 직접 push하는 경우가 있어, 로컬이 stale한 상태로 요구사항을 재작성하면 이미 구현된 것을 다시 요청하거나 REQ 번호가 충돌한다.
