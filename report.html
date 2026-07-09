@@ -22,7 +22,21 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .tool-btn{flex:1;padding:13px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;}
 .tool-btn.pdf{background:var(--navy);color:#fff;}
 .tool-btn.print{background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.08);}
+.tool-btn.data{background:#e7f5ff;color:var(--blue);}
 .tool-btn:disabled{opacity:.6;}
+
+/* ── LLM용 데이터 모달 ── */
+.data-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center;padding:16px;}
+.data-modal-overlay.show{display:flex;}
+.data-modal{background:#fff;border-radius:var(--radius);width:100%;max-width:600px;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;}
+.data-modal-head{padding:16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.data-modal-head h3{font-size:14px;font-weight:800;color:var(--navy);}
+.data-modal-close{background:none;border:none;font-size:20px;color:var(--gray);cursor:pointer;}
+.data-modal-textarea{flex:1;width:100%;padding:14px;border:none;font-family:ui-monospace,'SF Mono',Menlo,monospace;font-size:11.5px;line-height:1.6;resize:none;background:#f8f9fa;color:#212529;}
+.data-modal-foot{padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0;}
+.data-modal-foot button{flex:1;padding:12px;border:none;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.data-modal-foot .copy-btn{background:var(--navy);color:#fff;}
+.data-modal-foot .dl-btn{background:#f1f3f5;color:var(--navy);}
 .tool-status{max-width:640px;margin:8px auto 0;padding:0 16px;font-size:11.5px;color:var(--gray);text-align:center;}
 
 /* ── 조별 필터 ── */
@@ -71,8 +85,23 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 <div class="toolbar">
   <button class="tool-btn pdf" id="pdfBtn" onclick="downloadPDF()">📄 PDF로 저장</button>
   <button class="tool-btn print" onclick="window.print()">🖨 인쇄하기</button>
+  <button class="tool-btn data" onclick="openDataModal()">📋 데이터 내보내기</button>
 </div>
 <div class="tool-status" id="toolStatus"></div>
+
+<div class="data-modal-overlay" id="dataModal">
+  <div class="data-modal">
+    <div class="data-modal-head">
+      <h3>📋 LLM용 원본 데이터 (감성 보고서는 로컬에서 직접 작성)</h3>
+      <button class="data-modal-close" onclick="closeDataModal()">✕</button>
+    </div>
+    <textarea class="data-modal-textarea" id="dataText" readonly></textarea>
+    <div class="data-modal-foot">
+      <button class="copy-btn" onclick="copyDataText()">📋 복사하기</button>
+      <button class="dl-btn" onclick="downloadDataText()">💾 텍스트 파일로 저장</button>
+    </div>
+  </div>
+</div>
 
 <div class="team-filter" id="teamFilter"></div>
 
@@ -183,9 +212,74 @@ function applyFilter(){
 
 renderFilterChips();
 
+let latestData = {};
 db.ref('submissions').on('value', snap => {
-  renderAll(snap.val() || {});
+  latestData = snap.val() || {};
+  renderAll(latestData);
 });
+
+// ── LLM용 원본 데이터 내보내기 (감성 있는 서술형 보고서는 이 데이터를 로컬 LLM에 붙여넣어 별도로 작성) ──
+function fmtDate(ts){
+  if (!ts) return '(시각 미기록)';
+  const d = new Date(ts);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+function statusLabel(s){
+  return s === 'approved' ? '승인 완료' : s === 'rejected' ? '반려됨' : s === 'pending' ? '승인 대기 중' : '미제출';
+}
+
+function buildLLMText(){
+  const lines = [];
+  lines.push('# 2026 강동 온누리 여름캠프 — Day1 가나안 정탐 미션 원본 데이터');
+  lines.push('# (이 데이터를 바탕으로 감성 있는 정탐 보고서를 별도로 작성해 주세요. 사진 파일은 이 텍스트에 포함되어 있지 않습니다.)');
+  lines.push('');
+  [1,2,3,4,5,6].forEach(t => {
+    const info = TEAM_MAP[t];
+    const d = latestData[`team${t}`] || {};
+    const m1 = d.mission1, m2 = d.mission2;
+    lines.push(`## ${t}조 — 목적지: ${info.dest}`);
+    lines.push(`- 미션1(경유지 인증샷): ${statusLabel(m1?.status)}${m1?.uploadedAt ? ` / 제출 시각 ${fmtDate(m1.uploadedAt)}` : ''}${m1?.photoData ? ' / 사진 있음(이 텍스트에는 미포함, report.html에서 직접 확인)' : ''}`);
+    if (m2) {
+      lines.push(`- 미션2(정탐 보고서): ${statusLabel(m2.status)} / 제출 시각 ${fmtDate(m2.submittedAt)}`);
+      lines.push(`  - 우리가 본 장벽: ${m2.barrier || '(내용 없음)'}`);
+      lines.push(`  - 우리가 발견한 믿음: ${m2.faith || '(내용 없음)'}`);
+      lines.push(`  - 우리의 돌파기도: ${m2.prayer || '(내용 없음)'}`);
+      if (m2.status === 'rejected' && m2.reviewNote) lines.push(`  - 반려 사유: ${m2.reviewNote}`);
+    } else {
+      lines.push('- 미션2(정탐 보고서): 미제출');
+    }
+    lines.push('');
+  });
+  return lines.join('\n');
+}
+
+function openDataModal(){
+  document.getElementById('dataText').value = buildLLMText();
+  document.getElementById('dataModal').classList.add('show');
+}
+function closeDataModal(){
+  document.getElementById('dataModal').classList.remove('show');
+}
+async function copyDataText(){
+  const ta = document.getElementById('dataText');
+  try {
+    await navigator.clipboard.writeText(ta.value);
+  } catch(e) {
+    ta.select();
+    document.execCommand('copy');
+  }
+  const status = document.getElementById('toolStatus');
+  status.textContent = '✅ 클립보드에 복사했어요. LLM에 붙여넣어 보고서를 작성해보세요.';
+}
+function downloadDataText(){
+  const blob = new Blob([document.getElementById('dataText').value], {type:'text/plain;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '정탐미션_원본데이터.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+}
 
 // ── PDF 저장 (html2canvas로 각 팀 카드를 이미지로 캡처 → jsPDF로 A4 페이지에 삽입) ──
 async function renderPagesToPdf(pages, filename, statusEl, onProgress){
@@ -264,7 +358,7 @@ async function downloadSingle(t){
 const printStyle = document.createElement('style');
 printStyle.media = 'print';
 printStyle.textContent = `
-  .app-header, .toolbar, .tool-status, .back-link, .team-filter, .no-capture { display:none !important; }
+  .app-header, .toolbar, .tool-status, .back-link, .team-filter, .no-capture, .data-modal-overlay { display:none !important; }
   body { background:#fff; }
   .report-page { break-inside: avoid; page-break-after: always; box-shadow:none; border:1px solid #ddd; }
 `;
