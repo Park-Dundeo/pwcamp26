@@ -25,6 +25,16 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .tool-btn:disabled{opacity:.6;}
 .tool-status{max-width:640px;margin:8px auto 0;padding:0 16px;font-size:11.5px;color:var(--gray);text-align:center;}
 
+/* ── 조별 필터 ── */
+.team-filter{max-width:640px;margin:14px auto 0;padding:0 16px;display:flex;gap:6px;overflow-x:auto;}
+.tf-chip{flex-shrink:0;padding:8px 16px;border-radius:20px;border:1.5px solid var(--border);background:#fff;font-size:12.5px;font-weight:700;color:var(--navy);cursor:pointer;font-family:inherit;white-space:nowrap;}
+.tf-chip.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+.rp-dl-btn{margin-top:14px;width:100%;padding:11px;border:none;border-radius:8px;background:rgba(255,255,255,.9);color:var(--navy);font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;}
+.rp-dl-btn:disabled{opacity:.6;}
+
+.report-page.filtered-out{display:none;}
+
 .content{max-width:640px;margin:0 auto;padding:16px 16px 60px;}
 .back-link{display:block;text-align:center;margin-top:14px;font-size:12px;color:var(--gray);text-decoration:none;}
 
@@ -63,6 +73,8 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
   <button class="tool-btn print" onclick="window.print()">🖨 인쇄하기</button>
 </div>
 <div class="tool-status" id="toolStatus"></div>
+
+<div class="team-filter" id="teamFilter"></div>
 
 <div class="content" id="reportContent">
   <div style="text-align:center;color:var(--gray);font-size:13px;padding:40px 0;">불러오는 중...</div>
@@ -130,12 +142,13 @@ function renderTeamPage(t, d){
       </div>`;
   }
 
-  return `<div class="report-page" id="page-${t}">
+  return `<div class="report-page" id="page-${t}" data-team="${t}">
     <div class="rp-top" style="background:${info.bg}">
       <div class="rp-badge">SPY REPORT · ${t}조</div>
       <div class="rp-team">${t}조 정탐 보고</div>
       <div class="rp-dest">📍 ${info.dest}</div>
       ${m2ok ? '<div class="rp-seal">✅ 정탐 완료</div>' : ''}
+      <button class="rp-dl-btn no-capture" id="dlBtn-${t}" onclick="downloadSingle(${t})">📄 ${t}조만 PDF로 저장</button>
     </div>
     <div class="rp-body">${inner}</div>
   </div>`;
@@ -144,40 +157,100 @@ function renderTeamPage(t, d){
 function renderAll(allData){
   const el = document.getElementById('reportContent');
   el.innerHTML = [1,2,3,4,5,6].map(t => renderTeamPage(t, allData[`team${t}`] || {})).join('');
+  applyFilter();
 }
+
+let currentFilter = 'all';
+
+function renderFilterChips(){
+  const el = document.getElementById('teamFilter');
+  const opts = [{v:'all', label:'전체'}, ...[1,2,3,4,5,6].map(n => ({v:String(n), label:`${n}조`}))];
+  el.innerHTML = opts.map(o => `<button class="tf-chip ${currentFilter===o.v?'active':''}" onclick="setFilter('${o.v}')">${o.label}</button>`).join('');
+}
+
+function setFilter(v){
+  currentFilter = v;
+  renderFilterChips();
+  applyFilter();
+}
+
+function applyFilter(){
+  document.querySelectorAll('.report-page').forEach(page => {
+    const t = page.dataset.team;
+    page.classList.toggle('filtered-out', currentFilter !== 'all' && currentFilter !== t);
+  });
+}
+
+renderFilterChips();
 
 db.ref('submissions').on('value', snap => {
   renderAll(snap.val() || {});
 });
 
 // ── PDF 저장 (html2canvas로 각 팀 카드를 이미지로 캡처 → jsPDF로 A4 페이지에 삽입) ──
-async function downloadPDF(){
-  const btn = document.getElementById('pdfBtn');
-  const status = document.getElementById('toolStatus');
-  if (typeof html2canvas === 'undefined' || !window.jspdf) {
-    status.textContent = '⚠️ PDF 라이브러리를 불러오지 못했어요. 인터넷 연결을 확인하거나 "인쇄하기"를 이용해주세요.';
-    return;
-  }
-  btn.disabled = true;
-  const origText = btn.textContent;
-  const pages = document.querySelectorAll('.report-page');
+async function renderPagesToPdf(pages, filename, statusEl, onProgress){
   const { jsPDF } = window.jspdf;
   const pdf = new jsPDF('p', 'mm', 'a4');
   const pageW = 210, pageH = 297, margin = 8;
+  for (let i = 0; i < pages.length; i++) {
+    onProgress(i+1, pages.length);
+    const canvas = await html2canvas(pages[i], {
+      scale: 2, useCORS: true, backgroundColor: '#ffffff',
+      ignoreElements: (el) => el.classList && el.classList.contains('no-capture'),
+    });
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
+    const usableW = pageW - margin * 2;
+    const imgH = Math.min(canvas.height * usableW / canvas.width, pageH - margin * 2);
+    if (i > 0) pdf.addPage();
+    pdf.addImage(imgData, 'JPEG', margin, margin, usableW, imgH);
+  }
+  pdf.save(filename);
+}
 
+function checkLibs(status){
+  if (typeof html2canvas === 'undefined' || !window.jspdf) {
+    status.textContent = '⚠️ PDF 라이브러리를 불러오지 못했어요. 인터넷 연결을 확인하거나 "인쇄하기"를 이용해주세요.';
+    return false;
+  }
+  return true;
+}
+
+// 전체(또는 현재 필터로 보이는 조들) PDF 저장
+async function downloadPDF(){
+  const btn = document.getElementById('pdfBtn');
+  const status = document.getElementById('toolStatus');
+  if (!checkLibs(status)) return;
+  const pages = Array.from(document.querySelectorAll('.report-page:not(.filtered-out)'));
+  if (!pages.length) { status.textContent = '표시된 조가 없어요. 필터를 확인해주세요.'; return; }
+  btn.disabled = true;
+  const origText = btn.textContent;
+  status.textContent = '';
   try {
-    for (let i = 0; i < pages.length; i++) {
-      btn.textContent = `📄 생성 중... (${i+1}/${pages.length})`;
-      status.textContent = '';
-      const canvas = await html2canvas(pages[i], { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-      const imgData = canvas.toDataURL('image/jpeg', 0.92);
-      const usableW = pageW - margin * 2;
-      const imgH = Math.min(canvas.height * usableW / canvas.width, pageH - margin * 2);
-      if (i > 0) pdf.addPage();
-      pdf.addImage(imgData, 'JPEG', margin, margin, usableW, imgH);
-    }
-    pdf.save('가나안_정탐보고서.pdf');
+    await renderPagesToPdf(pages, currentFilter === 'all' ? '가나안_정탐보고서.pdf' : `${currentFilter}조_정탐보고서.pdf`, status,
+      (i, total) => { btn.textContent = `📄 생성 중... (${i}/${total})`; });
     status.textContent = '✅ PDF 저장 완료!';
+  } catch (e) {
+    console.error(e);
+    status.textContent = '❌ PDF 생성에 실패했어요. "인쇄하기"로 시도해보세요.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = origText;
+  }
+}
+
+// 특정 한 조만 PDF 저장 (카드 안 버튼)
+async function downloadSingle(t){
+  const btn = document.getElementById(`dlBtn-${t}`);
+  const status = document.getElementById('toolStatus');
+  if (!checkLibs(status)) return;
+  const page = document.getElementById(`page-${t}`);
+  btn.disabled = true;
+  const origText = btn.textContent;
+  status.textContent = '';
+  try {
+    await renderPagesToPdf([page], `${t}조_정탐보고서.pdf`, status,
+      () => { btn.textContent = '📄 생성 중...'; });
+    status.textContent = `✅ ${t}조 PDF 저장 완료!`;
   } catch (e) {
     console.error(e);
     status.textContent = '❌ PDF 생성에 실패했어요. "인쇄하기"로 시도해보세요.';
@@ -191,7 +264,7 @@ async function downloadPDF(){
 const printStyle = document.createElement('style');
 printStyle.media = 'print';
 printStyle.textContent = `
-  .app-header, .toolbar, .tool-status, .back-link { display:none !important; }
+  .app-header, .toolbar, .tool-status, .back-link, .team-filter, .no-capture { display:none !important; }
   body { background:#fff; }
   .report-page { break-inside: avoid; page-break-after: always; box-shadow:none; border:1px solid #ddd; }
 `;
