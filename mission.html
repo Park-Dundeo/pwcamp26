@@ -475,15 +475,16 @@ firebase.initializeApp({
 const db = firebase.database();
 
 // ── 조별 설정 ──
-// ⚠️ 이 TEAM_MAP은 admin.html에도 복사본이 있음 — 목적지/경유지 변경 시 반드시 두 파일 모두 수정할 것
-// (index.html의 ROUTE_DATA 좌표·타임라인도 함께 확인)
+// ⚠️ 이 TEAM_MAP은 admin.html·index.html(ROUTE_DATA)에도 복사본이 있음 — 목적지/경유지 변경 시 반드시 모두 함께 수정할 것
+// 2026-07-09 결정: 견학지 3곳→2곳으로 축소 (연세대 언더우드가 기념관 코스 보류), 6개 조를 3명씩 배정
+// 전쟁기념관행 3개 조는 서로 다른 경유지(노들섬/이촌한강공원/서울로7017)에서 출발해 삼각지역에서 만남
 const TEAM_MAP = {
-  1:{dest:'전쟁기념관',waypoint:'뚝섬유원지역',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
-  2:{dest:'전쟁기념관',waypoint:'뚝섬유원지역',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
-  3:{dest:'서대문형무소',waypoint:'성수역',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
+  1:{dest:'전쟁기념관',waypoint:'노들섬',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
+  2:{dest:'전쟁기념관',waypoint:'이촌한강공원',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
+  3:{dest:'전쟁기념관',waypoint:'서울로7017',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
   4:{dest:'서대문형무소',waypoint:'성수역',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
-  5:{dest:'연세대 언더우드가 기념관',waypoint:'신촌역',bg:'linear-gradient(135deg,#4a1a00,#e8590c)'},
-  6:{dest:'연세대 언더우드가 기념관',waypoint:'신촌역',bg:'linear-gradient(135deg,#4a1a00,#e8590c)'},
+  5:{dest:'서대문형무소',waypoint:'성수역',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
+  6:{dest:'서대문형무소',waypoint:'성수역',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
 };
 
 // ── 조별 비밀번호 퀴즈 (REQ-07 확정) ──
@@ -601,8 +602,8 @@ function fillMissionDestChips(num) {
   document.getElementById('m1DestName').textContent = info.waypoint;
   document.getElementById('m2DestName').textContent = info.dest;
   document.getElementById('m2DestNameInline').textContent = info.dest;
-  // 조별 견학 코스 안내 링크 (1·2조=전쟁기념관 c / 3·4조=서대문형무소 b / 5·6조=언더우드가 a)
-  const course = num <= 2 ? 'c' : num <= 4 ? 'b' : 'a';
+  // 조별 견학 코스 안내 링크 (1·2·3조=전쟁기념관 c / 4·5·6조=서대문형무소 b)
+  const course = num <= 3 ? 'c' : 'b';
   document.getElementById('m2GuideLink').href = `guide.html?course=${course}`;
 }
 

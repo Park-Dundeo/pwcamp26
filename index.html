@@ -351,11 +351,11 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 
   <div class="highlight">목적지를 선택하면 <b>전체 동선과 미션</b>이 표시됩니다.</div>
 
-  <!-- 목적지 선택 -->
-  <div class="dest-grid">
-    <div class="dest-card" id="dest-a" onclick="selectDest('a')">
+  <!-- 목적지 선택 (2026-07-09 결정: 3곳 → 2곳으로 축소, 조별 인원 재편) -->
+  <div class="dest-grid" style="grid-template-columns:repeat(2,1fr);">
+    <div class="dest-card" id="dest-war" onclick="selectDest('war')">
       <div class="dest-card-top">
-        <div class="dest-teams">SITE A · 1조 · 2조</div>
+        <div class="dest-teams">SITE A · 1조 · 2조 · 3조</div>
         <div class="dest-name">전쟁기념관</div>
         <div class="dest-zone">용산구 · 삼각지역</div>
       </div>
@@ -366,7 +366,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     </div>
     <div class="dest-card" id="dest-b" onclick="selectDest('b')">
       <div class="dest-card-top">
-        <div class="dest-teams">SITE B · 3조 · 4조</div>
+        <div class="dest-teams">SITE B · 4조 · 5조 · 6조</div>
         <div class="dest-name">서대문형무소</div>
         <div class="dest-zone">서대문구 · 독립문역</div>
       </div>
@@ -375,100 +375,154 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
         <div class="dest-code">"갇혔지만 꺾이지 않은 곳"</div>
       </div>
     </div>
-    <div class="dest-card" id="dest-c" onclick="selectDest('c')">
-      <div class="dest-card-top">
-        <div class="dest-teams">SITE C · 5조 · 6조</div>
-        <div class="dest-name">연세대 언더우드가 기념관</div>
-        <div class="dest-zone">신촌 · 연세대학교</div>
-      </div>
-      <div class="dest-card-body">
-        <div class="dest-keyword">선교 · 헌신 · 복음의 유산</div>
-        <div class="dest-code">"복음이 뿌리내린 땅"</div>
-      </div>
-    </div>
   </div>
+  <div class="tool-status" style="font-size:11.5px;color:var(--gray);text-align:center;margin:-8px 0 14px;">📌 2026-07-09 교사 논의로 견학지 3곳 → 2곳으로 축소, 6개 조를 3명씩 배정 (연세대 언더우드가 기념관 코스는 보류)</div>
 
-  <!-- ── ROUTE A: 전쟁기념관 ── -->
-  <div class="route-panel" id="route-a">
+  <!-- ── ROUTE WAR: 전쟁기념관 (2026-07-09부터 3개 조 · 3개 경유지 루트로 재편) ── -->
+  <div class="route-panel" id="route-war">
     <div class="route-card">
       <div class="route-card-header">
-        <h3>🗺 1조 · 2조 동선</h3>
-        <span class="route-teams-badge">전쟁기념관</span>
+        <h3>🗺 1조 · 2조 · 3조 동선</h3>
+        <span class="route-teams-badge">전쟁기념관 (3개 경유지 루트)</span>
       </div>
-      <div class="route-timeline">
-        <div class="rt-step">
-          <div class="rt-icon start">🏫</div>
-          <div class="rt-content">
-            <div class="rt-title">출발 — 나비쇼핑몰 (강동구)</div>
-            <div class="rt-sub">조별 출발 · 인솔 교사 동행</div>
-            <div class="rt-transit">
-              <span class="line-badge line-5">5호선</span>
-              <span class="transfer-arrow">강동역 승차 →</span>
-              <span class="line-badge line-7">7호선</span>
-              <span class="transfer-arrow">군자역 환승</span>
+      <div style="font-size:12px;color:var(--gray);line-height:1.7;margin-bottom:16px;">조별로 서로 다른 한강·도심 경유지에서 출발해, 모두 <b>삼각지역 → 전쟁기념관</b>으로 모입니다. 최종 집결지는 3개 조 동일 — <b>전쟁기념관 정문</b> (삼각지역 11·12번 출구 도보 3분 / 4호선 삼각지역 1번 출구 도보 5분).</div>
+
+      <!-- 1조: 노들섬 -->
+      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">🚩 1조 — 노들섬 경유</div>
+        <div class="route-timeline">
+          <div class="rt-step">
+            <div class="rt-icon start">🏫</div>
+            <div class="rt-content">
+              <div class="rt-title">출발 — 나비쇼핑몰 (강동구)</div>
+              <div class="rt-sub">조별 출발 · 인솔 교사 동행</div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon mission">📍</div>
+            <div class="rt-content">
+              <div class="rt-title">1차 미션 — 노들섬</div>
+              <div class="rt-sub">노들섬 정류장 하차 (신용산역 방면 버스 이용)</div>
+              <div class="rt-transit"><span class="time-chip">인증샷: 잔디마당 · 한강대교 배경 · 전망 계단</span></div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon start">🚌</div>
+            <div class="rt-content">
+              <div class="rt-title">이동 — 삼각지역 방면 버스/환승</div>
+              <div class="rt-sub">⚠️ 3개 루트 중 이동 난이도 가장 높음 — 버스 시간 관리 필요</div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon dest">🏛</div>
+            <div class="rt-content">
+              <div class="rt-title">2차 견학 — 전쟁기념관</div>
+              <div class="rt-sub">삼각지역 11·12번 출구 도보 3분</div>
             </div>
           </div>
         </div>
-        <div class="rt-step">
-          <div class="rt-icon mission">📍</div>
-          <div class="rt-content">
-            <div class="rt-title">1차 미션 — 뚝섬유원지역</div>
-            <div class="rt-sub">7호선 하차 · 한강변 포인트</div>
-            <div class="rt-transit"><span class="time-chip">⏱ 약 20분 소요</span></div>
-          </div>
+        <div class="map-wrap">
+          <div class="kmap" id="kmap-war1"></div>
+          <div class="point-list" id="points-war1"></div>
         </div>
-        <div class="rt-step">
-          <div class="rt-icon start">🚇</div>
-          <div class="rt-content">
-            <div class="rt-title">재탑승 — 7호선 이태원역 방향</div>
-            <div class="rt-transit">
-              <span class="line-badge line-7">7호선</span>
-              <span class="transfer-arrow">이태원역 하차 → 도보 10분</span>
+      </div>
+
+      <!-- 2조: 이촌한강공원 -->
+      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">🚩 2조 — 이촌한강공원 경유</div>
+        <div class="route-timeline">
+          <div class="rt-step">
+            <div class="rt-icon start">🏫</div>
+            <div class="rt-content">
+              <div class="rt-title">출발 — 나비쇼핑몰 (강동구)</div>
+              <div class="rt-sub">조별 출발 · 인솔 교사 동행</div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon mission">📍</div>
+            <div class="rt-content">
+              <div class="rt-title">1차 미션 — 이촌한강공원</div>
+              <div class="rt-sub">이촌역 4번 출구 방면, 공원까지 약 500m</div>
+              <div class="rt-transit"><span class="time-chip">인증샷: 강변 산책로 · 한강철교/한강대교 배경</span></div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon start">🚇</div>
+            <div class="rt-content">
+              <div class="rt-title">이동 — 4호선 이촌역 → 삼각지역</div>
+              <div class="rt-sub">✅ 3개 루트 중 가장 안정적</div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon dest">🏛</div>
+            <div class="rt-content">
+              <div class="rt-title">2차 견학 — 전쟁기념관</div>
+              <div class="rt-sub">삼각지역 11·12번 출구 도보 3분</div>
             </div>
           </div>
         </div>
-        <div class="rt-step">
-          <div class="rt-icon dest">🏛</div>
-          <div class="rt-content">
-            <div class="rt-title">2차 견학 — 전쟁기념관</div>
-            <div class="rt-sub">설명 교사 현장 대기 · 입장료 확인 필요</div>
-            <div class="rt-transit"><span class="time-chip">⏱ 견학 약 60분</span></div>
-          </div>
-        </div>
-        <div class="rt-step">
-          <div class="rt-icon food">🍽</div>
-          <div class="rt-content">
-            <div class="rt-title">식사 — 이태원·용산 인근</div>
-            <div class="rt-sub">조별 자유 식사 (방식 미정)</div>
-          </div>
-        </div>
-        <div class="rt-step">
-          <div class="rt-icon bus">🚌</div>
-          <div class="rt-content">
-            <div class="rt-title">도봉숲속마을 이동</div>
-            <div class="rt-sub">집결 시간·장소 추후 확정</div>
-          </div>
+        <div class="map-wrap">
+          <div class="kmap" id="kmap-war2"></div>
+          <div class="point-list" id="points-war2"></div>
         </div>
       </div>
-      <div class="map-wrap">
-        <div class="kmap" id="kmap-a"></div>
-        <div class="map-caption">지도 위 선은 실제 이동 경로가 아니라, 장소 간 이동 순서를 보여주는 안내선입니다. 정확한 대중교통 경로와 소요 시간은 카카오맵 또는 네이버지도에서 확인해주세요.</div>
-        <div class="point-list" id="points-a"></div>
+
+      <!-- 3조: 서울로7017 -->
+      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;">
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">🚩 3조 — 서울로7017 경유</div>
+        <div class="route-timeline">
+          <div class="rt-step">
+            <div class="rt-icon start">🏫</div>
+            <div class="rt-content">
+              <div class="rt-title">출발 — 나비쇼핑몰 (강동구)</div>
+              <div class="rt-sub">조별 출발 · 인솔 교사 동행</div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon mission">📍</div>
+            <div class="rt-content">
+              <div class="rt-title">1차 미션 — 서울로7017</div>
+              <div class="rt-sub">서울역 고가 보행길</div>
+              <div class="rt-transit"><span class="time-chip">인증샷: 고가 보행길 · 서울역 배경 · 도심 전망</span></div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon start">🚇</div>
+            <div class="rt-content">
+              <div class="rt-title">이동 — 4호선 서울역 → 삼각지역</div>
+              <div class="rt-sub">이동은 단순하나 서울역 주변 혼잡 — 인원 체크 자주 필요</div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon dest">🏛</div>
+            <div class="rt-content">
+              <div class="rt-title">2차 견학 — 전쟁기념관</div>
+              <div class="rt-sub">삼각지역 11·12번 출구 도보 3분</div>
+            </div>
+          </div>
+        </div>
+        <div class="map-wrap">
+          <div class="kmap" id="kmap-war3"></div>
+          <div class="point-list" id="points-war3"></div>
+        </div>
       </div>
-      <a class="map-btn" href="https://map.naver.com/v5/search/전쟁기념관" target="_blank">🗺 네이버 지도로 보기 →</a>
+
+      <div class="map-caption" style="margin-bottom:12px;">지도 위 선은 실제 이동 경로가 아니라, 장소 간 이동 순서를 보여주는 안내선입니다. 정확한 대중교통 경로와 소요 시간은 카카오맵 또는 네이버지도에서 확인해주세요. 식사·도봉숲속마을 이동은 3개 조 공통(하단 참고).</div>
+      <a class="map-btn" href="https://map.naver.com/v5/search/전쟁기념관" target="_blank">🗺 전쟁기념관 네이버 지도로 보기 →</a>
       <a class="guide-btn" href="guide.html?course=c">📖 견학 코스 안내 보기 →</a>
     </div>
     <!-- 미션 -->
-    <div id="missions-a"></div>
+    <div id="missions-war"></div>
   </div>
 
   <!-- ── ROUTE B: 서대문형무소 ── -->
   <div class="route-panel" id="route-b">
     <div class="route-card">
       <div class="route-card-header">
-        <h3>🗺 3조 · 4조 동선</h3>
+        <h3>🗺 4조 · 5조 · 6조 동선</h3>
         <span class="route-teams-badge">서대문형무소</span>
       </div>
+      <div style="font-size:12px;color:var(--gray);line-height:1.7;margin-bottom:16px;">⚠️ 3개 조 공통 경유지로 임시 표시되어 있습니다. 전쟁기념관처럼 조별로 다른 경유지·인증샷 스팟이 확정되면 갱신 예정입니다.</div>
       <div class="route-timeline">
         <div class="rt-step">
           <div class="rt-icon start">🏫</div>
@@ -487,7 +541,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
           <div class="rt-icon mission">📍</div>
           <div class="rt-content">
             <div class="rt-title">1차 미션 — 성수역 (성수동)</div>
-            <div class="rt-sub">2호선 하차 · 성수동 거리</div>
+            <div class="rt-sub">2호선 하차 · 성수동 거리 (조별 경유지 확정 전 임시)</div>
             <div class="rt-transit"><span class="time-chip">⏱ 약 20분 소요</span></div>
           </div>
         </div>
@@ -539,81 +593,12 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     <div id="missions-b"></div>
   </div>
 
-  <!-- ── ROUTE C: 연세대 언더우드가 기념관 ── -->
-  <div class="route-panel" id="route-c">
-    <div class="route-card">
-      <div class="route-card-header">
-        <h3>🗺 5조 · 6조 동선</h3>
-        <span class="route-teams-badge">연세대 언더우드가 기념관</span>
-      </div>
-      <div class="route-timeline">
-        <div class="rt-step">
-          <div class="rt-icon start">🏫</div>
-          <div class="rt-content">
-            <div class="rt-title">출발 — 나비쇼핑몰 (강동구)</div>
-            <div class="rt-sub">조별 출발 · 인솔 교사 동행</div>
-            <div class="rt-transit">
-              <span class="line-badge line-5">5호선</span>
-              <span class="transfer-arrow">강동역 →</span>
-              <span class="line-badge line-2">2호선</span>
-              <span class="transfer-arrow">왕십리역 환승</span>
-            </div>
-          </div>
-        </div>
-        <div class="rt-step">
-          <div class="rt-icon mission">📍</div>
-          <div class="rt-content">
-            <div class="rt-title">1차 미션 — 신촌역</div>
-            <div class="rt-sub">2호선 하차 · 신촌 로터리 일대</div>
-            <div class="rt-transit"><span class="time-chip">⏱ 약 25분 소요</span></div>
-          </div>
-        </div>
-        <div class="rt-step">
-          <div class="rt-icon start">🚶</div>
-          <div class="rt-content">
-            <div class="rt-title">이동 — 연세대학교 정문까지 도보</div>
-            <div class="rt-sub">신촌역에서 도보 약 15분</div>
-          </div>
-        </div>
-        <div class="rt-step">
-          <div class="rt-icon dest">🏛</div>
-          <div class="rt-content">
-            <div class="rt-title">2차 견학 — 연세대 언더우드가 기념관</div>
-            <div class="rt-sub">설명 교사 현장 대기 · 입장료 확인 필요</div>
-            <div class="rt-transit"><span class="time-chip">⏱ 견학 약 60분</span></div>
-          </div>
-        </div>
-        <div class="rt-step">
-          <div class="rt-icon food">🍽</div>
-          <div class="rt-content">
-            <div class="rt-title">식사 — 신촌·이대 인근</div>
-            <div class="rt-sub">조별 자유 식사 (방식 미정)</div>
-          </div>
-        </div>
-        <div class="rt-step">
-          <div class="rt-icon bus">🚌</div>
-          <div class="rt-content">
-            <div class="rt-title">도봉숲속마을 이동</div>
-            <div class="rt-sub">집결 시간·장소 추후 확정</div>
-          </div>
-        </div>
-      </div>
-      <div class="map-wrap">
-        <div class="kmap" id="kmap-c"></div>
-        <div class="map-caption">지도 위 선은 실제 이동 경로가 아니라, 장소 간 이동 순서를 보여주는 안내선입니다. 정확한 대중교통 경로와 소요 시간은 카카오맵 또는 네이버지도에서 확인해주세요.</div>
-        <div class="point-list" id="points-c"></div>
-      </div>
-      <a class="map-btn" href="https://map.naver.com/v5/search/연세대학교 언더우드가기념관" target="_blank">🗺 네이버 지도로 보기 →</a>
-      <a class="guide-btn" href="guide.html?course=a">📖 견학 코스 안내 보기 →</a>
-    </div>
-    <div id="missions-c"></div>
-  </div>
-
 </div><!-- /panel-day1 -->
 
 <!-- ═══ Day 2 ═══ -->
 <div class="tab-panel" id="panel-day2">
   <div class="highlight"><b>천로역정 × 여호수아 가나안 정복</b> — 도봉숲속마을 공간을 순례 경로로 활용, 6관문 순례 + 최종 여리고 성벽 통과</div>
+  <a href="teacher.html" style="display:flex;align-items:center;justify-content:center;gap:8px;background:var(--sky);color:var(--blue);text-decoration:none;font-size:12.5px;font-weight:700;padding:11px;border-radius:10px;margin-bottom:16px;">🗺 도봉숲속마을 캠프 지도 보기 (교사 매뉴얼) →</a>
   <div class="card">
     <div class="card-header"><h2>⏱ 운영 시간표 (90분)</h2></div>
     <div class="card-body">
@@ -649,7 +634,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
       <ul class="item-list">
         <li><span class="tag tag-done">확정</span><div class="item-label"><b>수련회 주제:</b> 돌파 / Breakthrough — 여호수아 24:15</div></li>
         <li><span class="tag tag-done">확정</span><div class="item-label"><b>학생 규모:</b> 50명 내외 · 6조 (조당 약 8~9명)</div></li>
-        <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day1 2차 견학 장소:</b> 전쟁기념관 / 서대문형무소 / 연세대 언더우드가 기념관 (2조씩)</div></li>
+        <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day1 2차 견학 장소:</b> 전쟁기념관(1·2·3조) / 서대문형무소(4·5·6조) — 2026-07-09 논의로 3곳→2곳 축소</div></li>
         <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day1 구조:</b> 3페이즈 (이동 미션 → 견학 → 식사·이동)</div></li>
         <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day2 구조:</b> 돌파의 순례길 — 6관문 + Final 여리고 성벽 90분</div></li>
       </ul>
@@ -672,7 +657,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
           <tr><td>조별 이동 수단·교통비</td><td>지하철 기준 동선 확정 / 교통카드 지급 방식</td></tr>
           <tr><td>촬영 미션 방식</td><td>로드뷰 재현샷 / 포즈 사진 / 영상 중 선택</td></tr>
           <tr><td>이동 중 조 활동</td><td>조 이름·구호 만들기 / 릴레이 대화 미션지</td></tr>
-          <tr><td>설명 교사 3명 배정</td><td>전쟁기념관 / 서대문형무소 / 연세대 언더우드가 기념관 각 1명</td></tr>
+          <tr><td>설명 교사 배정</td><td>전쟁기념관 1명(3개 조 공통) / 서대문형무소 1명(3개 조 공통)</td></tr>
           <tr><td>입장료 확인</td><td>3곳 모두 확인 (전쟁기념관 무료 추정)</td></tr>
           <tr><td>얼음물·간식</td><td>현장 교사 사전 구입 / 수량 결정</td></tr>
           <tr><td>식사 방식·비용</td><td>조별 자유 식사 / 지원 금액 결정</td></tr>
@@ -784,15 +769,18 @@ function selectDest(key) {
   const mBox = document.getElementById('missions-' + key);
   if (!mBox.innerHTML.trim()) {
     const data = {
-      a: { dest:'전쟁기념관', spot:'뚝섬유원지역' },
+      war: { dest:'전쟁기념관', spot:'노들섬 · 이촌한강공원 · 서울로7017 (조별 상이)' },
       b: { dest:'서대문형무소', spot:'성수역' },
-      c: { dest:'연세대 언더우드가 기념관', spot:'신촌역' },
     }[key];
     mBox.innerHTML = missionHTML(data.dest, data.spot);
   }
 
   // 조별 동선 지도 (한 번만 초기화, 패널이 보이는 상태에서 생성해야 정상 렌더링됨)
-  initRouteMap(key);
+  if (key === 'war') {
+    initRouteMap('war1'); initRouteMap('war2'); initRouteMap('war3');
+  } else {
+    initRouteMap(key);
+  }
 
   // 스크롤
   panel.scrollIntoView({ behavior:'smooth', block:'start' });
@@ -807,33 +795,37 @@ function selectDest(key) {
 const TYPE_ICON = { '출발':'start', '1차 미션':'mission', '2차 견학':'dest', '식사 권역':'food', '최종 이동':'bus' };
 
 const ROUTE_DATA = {
-  a: {
-    group: '1조 · 2조', destination: '전쟁기념관', routeTitle: '전쟁기념관 정탐 루트',
+  war1: {
+    group: '1조', destination: '전쟁기념관', routeTitle: '전쟁기념관 정탐 루트 (노들섬 경유)',
     points: [
       { order:1, type:'출발', name:'나비쇼핑몰 / 강동역', lat:37.535000, lng:127.132000, description:'조별 출발 · 인솔 교사 동행', stay:null, mission:null, verified:false },
-      { order:2, type:'1차 미션', name:'뚝섬유원지역', lat:37.531540, lng:127.066704, description:'7호선 하차 · 한강변 포인트', stay:'약 20분', mission:'로드뷰 재현샷 또는 한강 배경 정탐 인증샷', verified:true },
+      { order:2, type:'1차 미션', name:'노들섬', lat:37.517700, lng:126.956300, description:'신용산역 방면 버스 · 한강대교 배경', stay:null, mission:'인증샷: 잔디마당 · 한강대교 배경 · 전망 계단', verified:false },
       { order:3, type:'2차 견학', name:'전쟁기념관', lat:37.536300, lng:126.977000, description:'희생 · 평화 · 감사', stay:'약 60분', mission:'우리가 본 장벽 / 발견한 믿음 / 돌파기도 보고서 작성', verified:true },
-      { order:4, type:'식사 권역', name:'이태원 · 용산 인근', lat:37.534400, lng:126.994600, description:'조별 자유 식사 (방식 미정)', stay:null, mission:null, verified:false },
-      { order:5, type:'최종 이동', name:'도봉숲속마을', lat:37.669700, lng:127.045900, description:'집결 시간·장소 추후 확정', stay:null, mission:null, verified:false },
+    ],
+  },
+  war2: {
+    group: '2조', destination: '전쟁기념관', routeTitle: '전쟁기념관 정탐 루트 (이촌한강공원 경유)',
+    points: [
+      { order:1, type:'출발', name:'나비쇼핑몰 / 강동역', lat:37.535000, lng:127.132000, description:'조별 출발 · 인솔 교사 동행', stay:null, mission:null, verified:false },
+      { order:2, type:'1차 미션', name:'이촌한강공원', lat:37.522200, lng:126.970100, description:'이촌역 4번 출구 방면 약 500m', stay:null, mission:'인증샷: 강변 산책로 · 한강철교/한강대교 배경', verified:false },
+      { order:3, type:'2차 견학', name:'전쟁기념관', lat:37.536300, lng:126.977000, description:'희생 · 평화 · 감사', stay:'약 60분', mission:'우리가 본 장벽 / 발견한 믿음 / 돌파기도 보고서 작성', verified:true },
+    ],
+  },
+  war3: {
+    group: '3조', destination: '전쟁기념관', routeTitle: '전쟁기념관 정탐 루트 (서울로7017 경유)',
+    points: [
+      { order:1, type:'출발', name:'나비쇼핑몰 / 강동역', lat:37.535000, lng:127.132000, description:'조별 출발 · 인솔 교사 동행', stay:null, mission:null, verified:false },
+      { order:2, type:'1차 미션', name:'서울로7017', lat:37.554700, lng:126.970800, description:'서울역 고가 보행길', stay:null, mission:'인증샷: 고가 보행길 · 서울역 배경 · 도심 전망', verified:false },
+      { order:3, type:'2차 견학', name:'전쟁기념관', lat:37.536300, lng:126.977000, description:'희생 · 평화 · 감사', stay:'약 60분', mission:'우리가 본 장벽 / 발견한 믿음 / 돌파기도 보고서 작성', verified:true },
     ],
   },
   b: {
-    group: '3조 · 4조', destination: '서대문형무소', routeTitle: '서대문형무소 정탐 루트',
+    group: '4조 · 5조 · 6조', destination: '서대문형무소', routeTitle: '서대문형무소 정탐 루트',
     points: [
       { order:1, type:'출발', name:'나비쇼핑몰 / 강동역', lat:37.535000, lng:127.132000, description:'조별 출발 · 인솔 교사 동행', stay:null, mission:null, verified:false },
-      { order:2, type:'1차 미션', name:'성수역', lat:37.544700, lng:127.055700, description:'2호선 하차 · 성수동 거리', stay:'약 20분', mission:'로드뷰 재현샷 또는 성수동 거리 정탐 인증샷', verified:false },
+      { order:2, type:'1차 미션', name:'성수역', lat:37.544700, lng:127.055700, description:'2호선 하차 · 성수동 거리 (조별 경유지 확정 전 임시)', stay:'약 20분', mission:'로드뷰 재현샷 또는 성수동 거리 정탐 인증샷', verified:false },
       { order:3, type:'2차 견학', name:'서대문형무소', lat:37.574400, lng:126.956000, description:'자유 · 독립 · 순국선열', stay:'약 60분', mission:'우리가 본 장벽 / 발견한 믿음 / 돌파기도 보고서 작성', verified:false },
       { order:4, type:'식사 권역', name:'신촌 · 연희동 인근', lat:37.559700, lng:126.942500, description:'조별 자유 식사 (방식 미정)', stay:null, mission:null, verified:false },
-      { order:5, type:'최종 이동', name:'도봉숲속마을', lat:37.669700, lng:127.045900, description:'집결 시간·장소 추후 확정', stay:null, mission:null, verified:false },
-    ],
-  },
-  c: {
-    group: '5조 · 6조', destination: '연세대 언더우드가 기념관', routeTitle: '연세대 언더우드가 기념관 정탐 루트',
-    points: [
-      { order:1, type:'출발', name:'나비쇼핑몰 / 강동역', lat:37.535000, lng:127.132000, description:'조별 출발 · 인솔 교사 동행', stay:null, mission:null, verified:false },
-      { order:2, type:'1차 미션', name:'신촌역', lat:37.559700, lng:126.942500, description:'2호선 하차 · 신촌 로터리 일대', stay:'약 25분', mission:'로드뷰 재현샷 또는 신촌 거리 정탐 인증샷', verified:false },
-      { order:3, type:'2차 견학', name:'연세대 언더우드가 기념관', lat:37.566500, lng:126.937600, description:'복음 · 헌신 · 발자취', stay:'약 60분', mission:'우리가 본 장벽 / 발견한 믿음 / 돌파기도 보고서 작성', verified:false },
-      { order:4, type:'식사 권역', name:'신촌 · 이대 인근', lat:37.556700, lng:126.946400, description:'조별 자유 식사 (방식 미정)', stay:null, mission:null, verified:false },
       { order:5, type:'최종 이동', name:'도봉숲속마을', lat:37.669700, lng:127.045900, description:'집결 시간·장소 추후 확정', stay:null, mission:null, verified:false },
     ],
   },

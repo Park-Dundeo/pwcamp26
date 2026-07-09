@@ -275,15 +275,15 @@ firebase.initializeApp({
 });
 const db = firebase.database();
 
-// ⚠️ 이 TEAM_MAP은 mission.html에도 복사본이 있음 — 목적지/경유지 변경 시 반드시 두 파일 모두 수정할 것
-// (index.html의 ROUTE_DATA 좌표·타임라인도 함께 확인)
+// ⚠️ 이 TEAM_MAP은 mission.html·index.html(ROUTE_DATA)에도 복사본이 있음 — 목적지/경유지 변경 시 반드시 모두 함께 수정할 것
+// 2026-07-09 결정: 견학지 3곳→2곳으로 축소 (연세대 언더우드가 기념관 코스 보류), 6개 조를 3명씩 배정
 const TEAM_MAP = {
-  1:{dest:'전쟁기념관',waypoint:'뚝섬유원지역'},
-  2:{dest:'전쟁기념관',waypoint:'뚝섬유원지역'},
-  3:{dest:'서대문형무소',waypoint:'성수역'},
+  1:{dest:'전쟁기념관',waypoint:'노들섬'},
+  2:{dest:'전쟁기념관',waypoint:'이촌한강공원'},
+  3:{dest:'전쟁기념관',waypoint:'서울로7017'},
   4:{dest:'서대문형무소',waypoint:'성수역'},
-  5:{dest:'연세대 언더우드가 기념관',waypoint:'신촌역'},
-  6:{dest:'연세대 언더우드가 기념관',waypoint:'신촌역'},
+  5:{dest:'서대문형무소',waypoint:'성수역'},
+  6:{dest:'서대문형무소',waypoint:'성수역'},
 };
 
 // 관리자 비밀번호 (SHA-256 해시 저장 — 학생이 소스 보기로 비번을 알아내 셀프 승인하는 것 방지. 원본은 교사 공유방 참고)

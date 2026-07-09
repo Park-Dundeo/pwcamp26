@@ -83,7 +83,7 @@ table.doc-table input:focus{outline:none;border-color:var(--blue);}
     <div class="section-top"><div class="n">01</div><div class="t">⏱ 전체 통합 타임테이블</div></div>
     <div class="section-body">
       <div class="tl-row"><div class="tl-time">Day1 오전</div><div class="tl-txt"><span class="tl-day d1">D1</span><b>페이즈 1 — 이동 미션</b><br><span>집결 → 경유지 인증샷(미션1) → 목적지 이동</span></div></div>
-      <div class="tl-row"><div class="tl-time">Day1 오전~오후</div><div class="tl-txt"><span class="tl-day d1">D1</span><b>페이즈 2 — 견학</b><br><span>전쟁기념관 / 서대문형무소 / 연세대 언더우드가 기념관 (2조씩) + 정탐 보고서(미션2)</span></div></div>
+      <div class="tl-row"><div class="tl-time">Day1 오전~오후</div><div class="tl-txt"><span class="tl-day d1">D1</span><b>페이즈 2 — 견학</b><br><span>전쟁기념관(1·2·3조, 조별 경유지 상이) / 서대문형무소(4·5·6조) + 정탐 보고서(미션2)</span></div></div>
       <div class="tl-row"><div class="tl-time">Day1 오후</div><div class="tl-txt"><span class="tl-day d1">D1</span><b>페이즈 3 — 식사·이동</b><br><span>조별 자유 식사 후 숙소/다음 일정으로 이동</span></div></div>
       <div class="tl-row"><div class="tl-time">Day2 0–10분</div><div class="tl-txt"><span class="tl-day d2">D2</span><b>① 오프닝</b><br><span>전체 집합 · 프로그램 설명 · 조별 출발 안내</span></div></div>
       <div class="tl-row"><div class="tl-time">Day2 10–70분</div><div class="tl-txt"><span class="tl-day d2">D2</span><b>② 6관문 순환</b><br><span>관문당 약 8–10분</span></div></div>
@@ -92,9 +92,18 @@ table.doc-table input:focus{outline:none;border-color:var(--blue);}
     </div>
   </div>
 
-  <!-- 2. 역할표 + 비상연락망 (통합) -->
+  <!-- 2. 캠프장 지도 -->
   <div class="section">
-    <div class="section-top"><div class="n">02</div><div class="t">👥 역할표 · 비상연락망</div></div>
+    <div class="section-top"><div class="n">02</div><div class="t">🗺 캠프장 지도 (도봉숲속마을)</div></div>
+    <div class="section-body">
+      <img src="assets/dobong-camp-map.jpg" alt="도봉숲속마을 캠프 지도 — 가나안 정복 컨셉" style="width:100%;border-radius:8px;display:block;">
+      <div style="font-size:11.5px;color:var(--gray);text-align:center;margin-top:8px;line-height:1.6;">입구/집결지 · 운동장 · 송석대강당 · 객실동 · 숲속산책로 · B1F 식당 · 사무국/양호실 · 소그룹실(계수·밤·전나무 등 8실) · 치유정원/도시텃밭 · 숲속음악당/숲속마당 · Sunken Garden — Day2 관문 배치·집결지 안내 시 참고</div>
+    </div>
+  </div>
+
+  <!-- 3. 역할표 + 비상연락망 (통합) -->
+  <div class="section">
+    <div class="section-top"><div class="n">03</div><div class="t">👥 역할표 · 비상연락망</div></div>
     <div class="section-body">
       <table class="doc-table">
         <thead><tr><th>역할</th><th>이름</th><th>전화번호</th></tr></thead>
@@ -103,9 +112,9 @@ table.doc-table input:focus{outline:none;border-color:var(--blue);}
     </div>
   </div>
 
-  <!-- 3. 조별 명단 -->
+  <!-- 4. 조별 명단 -->
   <div class="section">
-    <div class="section-top"><div class="n">03</div><div class="t">📋 조별 명단</div></div>
+    <div class="section-top"><div class="n">04</div><div class="t">📋 조별 명단</div></div>
     <div class="section-body">
       <div class="roster-grid" id="rosterGrid"></div>
     </div>
@@ -113,7 +122,7 @@ table.doc-table input:focus{outline:none;border-color:var(--blue);}
 
   <!-- 4. 교통비/식비 기준 + 늦는 조 대응 -->
   <div class="section">
-    <div class="section-top"><div class="n">04</div><div class="t">💳 교통비·식비 기준 / 늦는 조 대응</div></div>
+    <div class="section-top"><div class="n">05</div><div class="t">💳 교통비·식비 기준 / 늦는 조 대응</div></div>
     <div class="section-body policy-box">
       <div class="policy-lbl">교통비·식비 기준 (지급 금액 · 방식 · 정산 방법)</div>
       <textarea id="policyTransport" placeholder="예: 조별 교통카드 2만원 충전, 식비는 1인 8천원 현금 지급, 영수증 제출 불필요" onchange="savePolicy('transport', this.value)"></textarea>
@@ -124,7 +133,7 @@ table.doc-table input:focus{outline:none;border-color:var(--blue);}
 
   <!-- 5. 상황별 대응 기준 -->
   <div class="section">
-    <div class="section-top"><div class="n">05</div><div class="t">🚨 상황별 대응 기준</div></div>
+    <div class="section-top"><div class="n">06</div><div class="t">🚨 상황별 대응 기준</div></div>
     <div class="section-body" id="situationList"></div>
   </div>
 
@@ -183,7 +192,7 @@ const ROLES = [
   { group: 'Day1 · 견학 설명교사' },
   { id: 'guide-war', role: '전쟁기념관 설명' },
   { id: 'guide-prison', role: '서대문형무소 설명' },
-  { id: 'guide-underwood', role: '언더우드가 기념관 설명' },
+  { id: 'guide-underwood', role: '언더우드가 기념관 설명 (2026-07-09 보류)' },
   { group: 'Day2 · 관문 담당' },
   { id: 'gate1', role: '1/6 붉은 줄의 문' }, { id: 'gate2', role: '2/6 요단강' },
   { id: 'gate3', role: '3/6 무거운 짐의 언덕' }, { id: 'gate4', role: '4/6 의심의 숲' },

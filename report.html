@@ -132,13 +132,14 @@ firebase.initializeApp({
 const db = firebase.database();
 
 // ⚠️ mission.html/admin.html과 동일한 TEAM_MAP — 목적지 변경 시 이 파일도 함께 수정할 것
+// ⚠️ mission.html/admin.html/index.html(ROUTE_DATA)과 동일한 TEAM_MAP — 목적지 변경 시 이 파일도 함께 수정할 것
 const TEAM_MAP = {
   1:{dest:'전쟁기념관',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
   2:{dest:'전쟁기념관',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
-  3:{dest:'서대문형무소',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
+  3:{dest:'전쟁기념관',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
   4:{dest:'서대문형무소',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
-  5:{dest:'연세대 언더우드가 기념관',bg:'linear-gradient(135deg,#4a1a00,#e8590c)'},
-  6:{dest:'연세대 언더우드가 기념관',bg:'linear-gradient(135deg,#4a1a00,#e8590c)'},
+  5:{dest:'서대문형무소',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
+  6:{dest:'서대문형무소',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
 };
 
 function esc(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
