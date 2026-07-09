@@ -100,6 +100,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
       <textarea class="compose-input" id="composeInput" rows="1" maxlength="500" placeholder="메시지를 입력하세요..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
       <button class="compose-send" id="sendBtn" onclick="sendMessage()">➤</button>
     </div>
+    <div id="sendError" style="display:none;font-size:11.5px;color:var(--red);text-align:center;padding-top:6px;"></div>
   </div>
 </div>
 
@@ -253,6 +254,8 @@ async function sendMessage(){
   const text = input.value.trim();
   if (!text || !myRole) return;
   const btn = document.getElementById('sendBtn');
+  const errEl = document.getElementById('sendError');
+  errEl.style.display = 'none';
   btn.disabled = true;
   try {
     await db.ref('board_messages').push({
@@ -264,6 +267,10 @@ async function sendMessage(){
     input.value = '';
   } catch(e) {
     console.error(e);
+    errEl.style.display = 'block';
+    errEl.textContent = (e.code === 'PERMISSION_DENIED' || /permission/i.test(e.message))
+      ? '⚠️ 전송 실패: 서버 접근 권한 문제예요. 관리자에게 Firebase 규칙 확인을 요청해주세요.'
+      : '⚠️ 전송에 실패했어요. 인터넷 연결을 확인하고 다시 시도해주세요.';
   } finally {
     btn.disabled = false;
   }
@@ -312,6 +319,9 @@ function renderFeed(){
 db.ref('board_messages').on('value', snap => {
   allMessages = snap.val() || {};
   renderFeed();
+}, err => {
+  console.error(err);
+  document.getElementById('feed').innerHTML = `<div class="feed-empty">⚠️ 메시지를 불러오지 못했어요.<br>서버 접근 권한 문제일 수 있어요 — 관리자에게 문의해주세요.</div>`;
 });
 
 updateComposeUI();

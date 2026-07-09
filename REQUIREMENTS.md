@@ -1,7 +1,7 @@
 # 2026 파워웨이브 캠프 — 개발 요구사항
 
 > 마지막 업데이트: 2026-07-09  
-> 변경: REQ-36 보완 완료 — "중간 사진+AI 감성 보고서 자동생성"은 검토 후 보류, 대신 report.html에 "LLM용 데이터 내보내기"(복사/텍스트 다운로드) 추가. 감성 있는 서술형 보고서는 이 데이터를 로컬 LLM에 붙여넣어 직접 작성하는 방식으로 확정
+> 변경: 버그 수정 — board.html 채팅이 안 올라가던 문제, 원인은 코드가 아니라 Firebase 규칙에 `board_messages` 경로 누락(REQ-19/REQ-35 반영 시점 차이). `firebase.rules.now.json` 갱신 + board.html에 실패 시 에러 메시지 표시 추가. **⚠️ Firebase 콘솔에 수동 반영 필요**
 
 > ✅ **REQ-29 실사용 확인 완료 (2026-07-09):** "지도를 불러올 수 없습니다" 오류를 3단계에 걸쳐 해결함 — ① Kakao 앱에서 "카카오맵(OPEN_MAP_AND_LOCAL)" 제품이 비활성화 상태였음(`NotAuthorizedError`) → 활성화. ② 그 다음엔 도메인 mismatch(`AccessDeniedError`) — [플랫폼 > Web > 사이트 도메인]에 등록했지만 이건 카카오톡 공유/로그인 등에 쓰이는 설정이라 지도 API와 무관했음. ③ 실제로는 **[플랫폼 키] > [JavaScript 키] > [JavaScript SDK 도메인]**이라는 별도 필드에 도메인을 등록해야 했음 — 여기에 등록 후 최종 해결. curl로 `Referer: https://park-dundeo.github.io`를 흉내낸 요청이 200 OK로 확인됨.
 
@@ -561,6 +561,13 @@
   - `mission.html` 하단 · `index.html` 상단 nav바에 링크 연결
 - **의도적으로 하지 않은 것:** 학생 전원에게 글쓰기 권한을 주지 않음(스팸/부적절한 글 관리 부담을 조장 6명 + 관리자로 한정해 방지). 별도 "질문 전용" 채널은 만들지 않고 공지와 질문응답을 하나의 피드에 통합(실제 단톡방처럼 자연스러운 흐름 우선)
 - **한계:** 클라이언트 사이드 인증이라 완전한 보안은 아님(REQ-33과 동일한 한계). Firebase Realtime DB 특성상 메시지 삭제는 완전 삭제이며 복구 불가 — 관리자가 신중히 사용해야 함. 조장이 기기를 바꾸면(분실·고장) 재인증 필요
+
+**🐛 버그 수정 (2026-07-09) — "채팅이 안 올라가요":**
+- **원인:** 코드 버그가 아니라 **Firebase Realtime Database 규칙 누락**. REQ-19에서 확정된 규칙(`firebase.rules.now.json`)은 `submissions`/`checklist`/`teacherDoc`/`news_comments` 네 경로만 read/write를 허용하는데, board.html은 그 이후에 추가된 페이지라 이 파일이 쓰는 `board_messages` 경로가 규칙에 없었음 → Firebase가 조용히 PERMISSION_DENIED로 막고 있었고, 기존 코드는 그 실패를 `console.error`로만 남기고 화면엔 아무 표시도 안 해서 "버튼 눌러도 반응 없음"처럼 보였음
+- **조치:**
+  1. `firebase.rules.now.json`에 `board_messages` 블록 추가 — **⚠️ Firebase 콘솔 > Realtime Database > 규칙 탭에 수동으로 반영해야 실제로 고쳐짐** (이 파일은 저장소에만 있고 자동 배포되지 않음)
+  2. `board.html`: 메시지 전송 실패 시 입력창 아래에 빨간 에러 문구 표시(권한 문제인지 네트워크 문제인지 구분), 피드 읽기 실패 시에도 "⚠️ 불러오지 못했어요" 안내로 조용한 실패 방지
+- **재발 방지 참고:** 새 Firebase 경로(`.ref('경로명')`)를 쓰는 페이지를 추가할 때마다 `firebase.rules.now.json`에도 그 경로를 추가하고 콘솔에 반영했는지 확인할 것 — 이번이 두 번째로 같은 유형의 문제였음(1차: checklist/teacherDoc/news_comments, 2차: board_messages)
 
 #### REQ-36. 정탐 보고서 모음 페이지 (발표용 + PDF) ✅ 완료
 - **요청:** 학생들이 작성한 정탐 보고서와 사진이 쭉 모여서 "여호수아와 갈렙의 정탐 보고서"처럼 나오게 하고, 나중에 다같이 모였을 때 보여줄 수 있도록. 화면으로 볼 수도 있고 PDF로도 뽑을 수 있으면 좋겠음

@@ -7,8 +7,14 @@
 //   - teacher.html    → 역할표/조별명단/정책 입력이 저장 안 됨
 //   - news.html       → 댓글(의견) 등록이 실패함 (제출 버튼 눌러도 아무 반응 없음)
 //
+// 2026-07-09 추가 확인 — "채팅이 안 올라가요" 문의로 재점검: board.html(정탐대 소통방)의
+// "board_messages" 경로도 이 규칙에 없어서 똑같이 PERMISSION_DENIED로 막혀 있었습니다.
+// board.html은 REQ-19 규칙 반영 이후에 만들어진 페이지라 이 파일에 반영이 안 되어 있었던 것.
+// 화면(UI)은 정상 동작하는 것처럼 보이지만 실제로는 Firebase가 write를 거부해서 메시지가
+// 저장도, 다른 사람 화면에 표시도 안 됐던 것 — 코드 버그가 아니라 규칙 누락이었습니다.
+//
 // 고치는 방법: Firebase 콘솔 > Realtime Database > 규칙 탭에서, 현재 규칙에 아래
-// "checklist" / "teacherDoc" / "news_comments" 세 블록을 그대로 추가해주세요.
+// "checklist" / "teacherDoc" / "news_comments" / "board_messages" 네 블록을 그대로 추가해주세요.
 // (기존 submissions 규칙과 같은 수준의 개방형 권한이라 REQ-19에서 지적한 보안 이슈는 동일하게
 //  남아있습니다 — 나중에 firebase.rules.recommended.json으로 옮겨가는 걸 권장합니다.)
 
@@ -27,6 +33,10 @@
       ".write": true
     },
     "news_comments": {
+      ".read": true,
+      ".write": true
+    },
+    "board_messages": {
       ".read": true,
       ".write": true
     }
