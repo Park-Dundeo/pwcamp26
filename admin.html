@@ -215,7 +215,13 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     </div>
 
     <!-- 전체 피드 -->
-    <div class="section-title">전체 제출 피드</div>
+    <div class="section-title" style="display:flex;align-items:center;justify-content:space-between;">
+      <span>전체 제출 피드</span>
+      <label style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:#997404;cursor:pointer;">
+        <input type="checkbox" id="pendingOnlyToggle" onchange="updateFeed()" style="width:16px;height:16px;accent-color:#f59f00;">
+        🕐 검토 대기만
+      </label>
+    </div>
     <div class="feed-list" id="feedList">
       <div style="color:var(--gray);font-size:13px;text-align:center;padding:20px;">아직 제출된 내역이 없습니다</div>
     </div>
@@ -267,6 +273,8 @@ firebase.initializeApp({
 });
 const db = firebase.database();
 
+// ⚠️ 이 TEAM_MAP은 mission.html에도 복사본이 있음 — 목적지/경유지 변경 시 반드시 두 파일 모두 수정할 것
+// (index.html의 ROUTE_DATA 좌표·타임라인도 함께 확인)
 const TEAM_MAP = {
   1:{dest:'전쟁기념관',waypoint:'뚝섬유원지역'},
   2:{dest:'전쟁기념관',waypoint:'뚝섬유원지역'},
@@ -276,13 +284,19 @@ const TEAM_MAP = {
   6:{dest:'연세대 언더우드가 기념관',waypoint:'신촌역'},
 };
 
-const ADMIN_PW = 'pwave2026';
+// 관리자 비밀번호 (SHA-256 해시 저장 — 학생이 소스 보기로 비번을 알아내 셀프 승인하는 것 방지. 원본은 교사 공유방 참고)
+const ADMIN_PW_HASH = 'c36c31cf1efc4cab6cbca84c442b3b84a493f999182608f93fb5b2d76f9e53ec';
 let allData = {};
 let activeTeam = null;
 
+async function sha256(s) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
+
 // ── 비밀번호 ──
-function checkPw() {
-  if (document.getElementById('pwInput').value === ADMIN_PW) {
+async function checkPw() {
+  if (await sha256(document.getElementById('pwInput').value) === ADMIN_PW_HASH) {
     sessionStorage.setItem('admin_ok','1');
     showDashboard();
   } else {
@@ -512,7 +526,7 @@ function closeDetail(){
 
 // ── 전체 피드 ──
 function updateFeed(){
-  const items=[];
+  let items=[];
   for(let t=1;t<=6;t++){
     const d=allData[`team${t}`]||{};
     if(d.mission1?.photoData){
@@ -522,10 +536,15 @@ function updateFeed(){
       items.push({team:t,type:'report',barrier:d.mission2.barrier,time:d.mission2.submittedAt,status:d.mission2.status});
     }
   }
+  // "검토 대기만" 필터 (캠프 당일 승인 처리용)
+  if (document.getElementById('pendingOnlyToggle')?.checked) {
+    items = items.filter(it => it.status === 'pending');
+  }
   items.sort((a,b)=>b.time-a.time);
   const feed=document.getElementById('feedList');
   if(!items.length){
-    feed.innerHTML=`<div style="color:var(--gray);font-size:13px;text-align:center;padding:20px;">아직 제출된 내역이 없습니다</div>`;
+    const pendingMode = document.getElementById('pendingOnlyToggle')?.checked;
+    feed.innerHTML=`<div style="color:var(--gray);font-size:13px;text-align:center;padding:20px;">${pendingMode ? '🎉 검토 대기 중인 제출이 없습니다' : '아직 제출된 내역이 없습니다'}</div>`;
     return;
   }
   const statusTag = s => s==='approved' ? '<span class="review-badge approved" style="margin:0 0 0 6px;">승인</span>'

@@ -124,8 +124,14 @@ firebase.initializeApp({
 const db = firebase.database();
 
 // 선생님 코드 — 1차 구현은 admin.html의 관리자 비밀번호와 동일 값 사용
-const TEACHER_CODE = 'pwave2026';
+// 선생님 코드 (SHA-256 해시 저장 — admin.html 비밀번호와 동일값, 원본은 교사 공유방 참고)
+const TEACHER_CODE_HASH = 'c36c31cf1efc4cab6cbca84c442b3b84a493f999182608f93fb5b2d76f9e53ec';
 const CODE_OK_KEY = 'pwcamp_news_code_ok';
+
+async function sha256(s) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+}
 
 const CATS = ['전체', 'Day1', 'Day2', '웹', '장소', '식사', '우천 대체', '기타'];
 const STATUS_MAP = {
@@ -261,9 +267,9 @@ function closeCodeGate() {
   document.getElementById('codeOverlay').classList.remove('show');
   pendingNewsId = null;
 }
-function checkCode() {
+async function checkCode() {
   const input = document.getElementById('codeInput').value.trim();
-  if (input === TEACHER_CODE) {
+  if (await sha256(input) === TEACHER_CODE_HASH) {
     sessionStorage.setItem(CODE_OK_KEY, '1');
     document.getElementById('codeOverlay').classList.remove('show');
     if (pendingNewsId) doSubmitComment();

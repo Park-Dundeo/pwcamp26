@@ -169,7 +169,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 /* ── Report inputs ── */
 .report-group{margin-bottom:14px;}
 .report-label{font-size:12px;font-weight:700;color:var(--navy);margin-bottom:6px;display:block;}
-.report-input{width:100%;padding:13px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;resize:vertical;min-height:76px;line-height:1.65;transition:border-color .2s;}
+.report-input{width:100%;padding:13px;border:1.5px solid var(--border);border-radius:8px;font-size:16px;font-family:inherit;resize:vertical;min-height:76px;line-height:1.65;transition:border-color .2s;}
 .report-input:focus{outline:none;border-color:var(--blue);}
 
 /* ── Toast ── */
@@ -199,6 +199,17 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .reset-btn.team-only{background:#e7f5ff;color:var(--blue);}
 .reset-btn.full{background:#fff5f5;color:#f03e3e;}
 .reset-btn.cancel{background:#f1f3f5;color:var(--gray);margin-bottom:0;}
+
+/* ── 소형 화면 대응 (REQ-02) ── */
+@media(max-width:370px){
+  .content{padding:16px 12px 70px;}
+  .card-body{padding:14px;}
+  .header-title{font-size:18px;}
+  .dest-name{font-size:20px;}
+  .team-btn{padding:12px 2px;font-size:13px;}
+  .code-input{font-size:18px;letter-spacing:4px;}
+  .t-headline{font-size:22px;}
+}
 </style>
 </head>
 <body>
@@ -373,9 +384,10 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
       </div>
       <div class="card-body">
         <div class="mission-dest-chip m2">🏁 도착지: <span id="m2DestName">—</span></div>
-        <p style="font-size:13px;color:#495057;margin-bottom:16px;line-height:1.75;">
+        <p style="font-size:13px;color:#495057;margin-bottom:10px;line-height:1.75;">
           여호수아의 정탐꾼처럼,<br><b id="m2DestNameInline">이곳</b>에서 하나님이 보게 하시는 것을 적어요.
         </p>
+        <a id="m2GuideLink" href="guide.html" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--blue);text-decoration:none;background:#eef2ff;padding:8px 14px;border-radius:20px;margin-bottom:16px;">📖 이 장소의 견학 안내 보기 →</a>
         <div id="m2Form">
           <div class="report-group">
             <label class="report-label">🧱 우리가 본 장벽</label>
@@ -461,6 +473,8 @@ firebase.initializeApp({
 const db = firebase.database();
 
 // ── 조별 설정 ──
+// ⚠️ 이 TEAM_MAP은 admin.html에도 복사본이 있음 — 목적지/경유지 변경 시 반드시 두 파일 모두 수정할 것
+// (index.html의 ROUTE_DATA 좌표·타임라인도 함께 확인)
 const TEAM_MAP = {
   1:{dest:'전쟁기념관',waypoint:'뚝섬유원지역',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
   2:{dest:'전쟁기념관',waypoint:'뚝섬유원지역',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
@@ -471,18 +485,26 @@ const TEAM_MAP = {
 };
 
 // ── 조별 비밀번호 퀴즈 (REQ-07 확정) ──
+// 정답은 소스에서 바로 보이지 않도록 SHA-256 해시로 저장 (정규화 후 해시 비교)
+// 새 정답 추가/변경 시: 브라우저 콘솔에서 sha256(normalizeAnswer('정답')).then(console.log) 실행 후 결과 붙여넣기
 const QUIZ = {
-  1:{ question:'라합이 정탐꾼을 숨기고 창문에 내린 것의 색은?', answers:['붉은','빨간','붉은줄','빨간줄','홍색'] },
-  2:{ question:'이스라엘이 가나안을 정탐한 날수는? (숫자)', answers:['사십','40','40일'] },
-  3:{ question:'여리고성이 무너진 날은 며칠째? (숫자)', answers:['칠','7','7일'] },
-  4:{ question:'이번 캠프의 주제 한 단어는?', answers:['돌파'] },
-  5:{ question:'요단강을 건넌 후 기념으로 세운 것은?', answers:['돌','12돌','기념돌'] },
-  6:{ question:'여호수아가 "나와 내 집은 여호와를 ___하겠노라" 에서 빈칸은?', answers:['섬기','섬김','섬기겠노라'] },
+  1:{ question:'라합이 정탐꾼을 숨기고 창문에 내린 것의 색은?', answerHashes:['c00ed601d54c3e8fccc1c1f8829d8cdf6335b90fc6ad85564534de1761c0ab64','0ae988272a93c5b5b7821e8a21479561b2c5a25ce486fdb3daab588d3daad0a3','bdf77197ba810fdac70a497a4557b60a82dff19487db79ed5cb38043e8197329','d2eb548e879fe458a196945bd4197a0148c31a17bc82a852ab0baa337a8ed5a2','61d1db96b718cd8355140cb13b7f15d95a15146b4af581d0446b2e0615795949'] },
+  2:{ question:'이스라엘이 가나안을 정탐한 날수는? (숫자)', answerHashes:['7ab92cb8025fc2f9b75a66abff57a745f0f75c384775a5ab6b6bd47bb5f70697','d59eced1ded07f84c145592f65bdf854358e009c5cd705f5215bf18697fed103','7d12be69e9dee5133875b3f795c77acfcde079e6732be0b3e176265d4db93563'] },
+  3:{ question:'여리고성이 무너진 날은 며칠째? (숫자)', answerHashes:['e8eb2f9b25b9fd2fe1b1dec511314ed32c8b06ddd5cf23125699093c3c1fed4d','7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451','4191dd8d20f47dced8b1e95af0a2b477da7f98b6b27016e5eb2593f3d7af2bb4'] },
+  4:{ question:'이번 캠프의 주제 한 단어는?', answerHashes:['f16160e08a19570663b6f4bde7a68d21c62e313cf806a44123f011910443c9b5'] },
+  5:{ question:'요단강을 건넌 후 기념으로 세운 것은?', answerHashes:['c7e6ac93ca8c5b84f5c95c7ee9bb9a66c1c17d97761d89e1e6253487a59b6db8','82be3b2a8fbcf5e2eab0a6aa7309bd4bc25599d5d4d9df7de27f3a51dc227b87','916827c6675ccc9e95b6a0e785b36fd33db3e2703af7430305d8420cda3e01e3'] },
+  6:{ question:'여호수아가 "나와 내 집은 여호와를 ___하겠노라" 에서 빈칸은?', answerHashes:['2805e1cd088ead3eed817f8e9997e8d16ee75f3c72f28ca24561d71d00d79629','763ae0844dfe3b5a27867e6d6222a6e04c46faafad9373272611c44531196b43','50e473495debe72bee1e5e55ab00eb1e5f256b9813fb32e34da4cc4a1c79256b'] },
 };
 
 // 입력값 정규화: 앞뒤 공백/느낌표·물음표·공백 제거 후 비교
 function normalizeAnswer(s) {
   return (s || '').trim().replace(/[\s!?.]/g, '');
+}
+
+// SHA-256 해시 (https 환경 필요 — GitHub Pages는 https라 OK)
+async function sha256(s) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
 }
 
 let currentTeam = null;
@@ -577,6 +599,9 @@ function fillMissionDestChips(num) {
   document.getElementById('m1DestName').textContent = info.waypoint;
   document.getElementById('m2DestName').textContent = info.dest;
   document.getElementById('m2DestNameInline').textContent = info.dest;
+  // 조별 견학 코스 안내 링크 (1·2조=전쟁기념관 c / 3·4조=서대문형무소 b / 5·6조=언더우드가 a)
+  const course = num <= 2 ? 'c' : num <= 4 ? 'b' : 'a';
+  document.getElementById('m2GuideLink').href = `guide.html?course=${course}`;
 }
 
 // ── 조 선택 ──
@@ -617,10 +642,11 @@ function showLockScreen() {
 }
 
 // ── 코드 확인 ──
-function checkCode() {
+async function checkCode() {
   const input = normalizeAnswer(document.getElementById('codeInput').value);
   const quiz = QUIZ[currentTeam];
-  const correct = quiz && quiz.answers.some(a => normalizeAnswer(a) === input);
+  const inputHash = await sha256(input);
+  const correct = quiz && quiz.answerHashes.includes(inputHash);
   if (correct) {
     localStorage.setItem(`pwcamp_unlocked_${currentTeam}`, '1');
     document.getElementById('lockScreen').style.display = 'none';
@@ -915,7 +941,8 @@ function showToast(msg) {
 }
 
 // ── 초기화 모달 (테스트용, 교사/개발자 전용) ──
-const RESET_MASTER_PW = '3927';
+// 초기화 마스터 비밀번호 (SHA-256 해시 저장 — 원본은 REQUIREMENTS.md REQ-11 참고)
+const RESET_MASTER_PW_HASH = '8e6d48d590537629b874fa8c72f468e87bf53a44ed7a730281763dc8f4b6f249';
 
 function openResetModal() {
   document.getElementById('resetOverlay').classList.add('show');
@@ -929,9 +956,9 @@ function closeResetModal() {
   document.getElementById('resetOverlay').classList.remove('show');
 }
 
-function checkResetPw() {
+async function checkResetPw() {
   const input = document.getElementById('resetPwInput').value.trim();
-  if (input === RESET_MASTER_PW) {
+  if (await sha256(input) === RESET_MASTER_PW_HASH) {
     document.getElementById('resetStepPw').style.display = 'none';
     document.getElementById('resetStepChoice').style.display = 'block';
   } else {
