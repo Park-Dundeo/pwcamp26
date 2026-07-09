@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>가나안 정탐 보고서 — 파워웨이브 2026</title>
+<style>
+:root {
+  --navy:#1a2744; --blue:#3b5bdb; --gold:#f59f00;
+  --green:#2f9e44; --red:#e03131;
+  --gray:#868e96; --border:#dee2e6; --radius:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;min-height:100vh;}
+
+.app-header{background:linear-gradient(135deg,var(--navy),#2d4a9e);color:#fff;padding:22px 16px 24px;text-align:center;}
+.header-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
+.header-title{font-size:20px;font-weight:800;}
+.header-verse{font-size:12px;opacity:.8;margin-top:8px;line-height:1.6;max-width:420px;margin-left:auto;margin-right:auto;}
+
+.toolbar{max-width:640px;margin:14px auto 0;padding:0 16px;display:flex;gap:8px;}
+.tool-btn{flex:1;padding:13px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:6px;}
+.tool-btn.pdf{background:var(--navy);color:#fff;}
+.tool-btn.print{background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.08);}
+.tool-btn:disabled{opacity:.6;}
+.tool-status{max-width:640px;margin:8px auto 0;padding:0 16px;font-size:11.5px;color:var(--gray);text-align:center;}
+
+.content{max-width:640px;margin:0 auto;padding:16px 16px 60px;}
+.back-link{display:block;text-align:center;margin-top:14px;font-size:12px;color:var(--gray);text-decoration:none;}
+
+/* ── 보고서 페이지(팀별) ── */
+.report-page{background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:18px;overflow:hidden;}
+.rp-top{padding:20px;color:#fff;position:relative;}
+.rp-badge{font-size:11px;font-weight:800;letter-spacing:1.5px;opacity:.8;text-transform:uppercase;}
+.rp-team{font-size:24px;font-weight:800;margin-top:4px;}
+.rp-dest{font-size:13px;opacity:.9;margin-top:4px;}
+.rp-seal{position:absolute;right:16px;top:16px;font-size:11px;font-weight:800;background:rgba(255,255,255,.22);padding:5px 12px;border-radius:20px;}
+
+.rp-body{padding:20px;}
+.rp-photo-wrap{margin-bottom:18px;border-radius:10px;overflow:hidden;}
+.rp-photo{width:100%;display:block;}
+.rp-photo-cap{font-size:11px;color:var(--gray);text-align:center;padding:6px 0 0;}
+
+.rp-field{margin-bottom:16px;}
+.rp-field:last-child{margin-bottom:0;}
+.rp-field .rf-lbl{font-size:11.5px;font-weight:800;color:var(--navy);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.rp-field .rf-txt{font-size:14px;line-height:1.8;color:#343a40;background:#f8f9fa;border-radius:8px;padding:12px 14px;white-space:pre-wrap;}
+
+.rp-empty{padding:36px 20px;text-align:center;color:var(--gray);font-size:13px;line-height:1.8;}
+.rp-pending{padding:28px 20px;text-align:center;color:#997404;background:#fff9db;font-size:13px;font-weight:700;}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <div class="header-tag">DAY 1 · 정탐 보고서 모음</div>
+  <div class="header-title">🕊 가나안 정탐 보고서</div>
+  <div class="header-verse">"그들이 여호수아에게 말하여 이르되 우리가 당신이 우리를 보낸 땅에 이르러 보니 과연 젖과 꿀이 흐르는 곳이라 이것은 그 땅의 과일이니이다" — 민수기 13:27</div>
+</header>
+
+<div class="toolbar">
+  <button class="tool-btn pdf" id="pdfBtn" onclick="downloadPDF()">📄 PDF로 저장</button>
+  <button class="tool-btn print" onclick="window.print()">🖨 인쇄하기</button>
+</div>
+<div class="tool-status" id="toolStatus"></div>
+
+<div class="content" id="reportContent">
+  <div style="text-align:center;color:var(--gray);font-size:13px;padding:40px 0;">불러오는 중...</div>
+</div>
+
+<a class="back-link" href="index.html">← 기획 대시보드로 돌아가기</a>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
+
+<!-- PDF 생성용 라이브러리 (한글은 이미지로 캡처해서 PDF에 넣기 때문에 폰트 문제 없음) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyAZJQbC6dbLtn4D32FnXQIh5hZFs4iyWoQ",
+  authDomain: "pwcamp26.firebaseapp.com",
+  databaseURL: "https://pwcamp26-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "pwcamp26",
+  storageBucket: "pwcamp26.firebasestorage.app",
+  messagingSenderId: "860034291771",
+  appId: "1:860034291771:web:8de5a9e21dcfe28aefa41e"
+});
+const db = firebase.database();
+
+// ⚠️ mission.html/admin.html과 동일한 TEAM_MAP — 목적지 변경 시 이 파일도 함께 수정할 것
+const TEAM_MAP = {
+  1:{dest:'전쟁기념관',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
+  2:{dest:'전쟁기념관',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
+  3:{dest:'서대문형무소',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
+  4:{dest:'서대문형무소',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
+  5:{dest:'연세대 언더우드가 기념관',bg:'linear-gradient(135deg,#4a1a00,#e8590c)'},
+  6:{dest:'연세대 언더우드가 기념관',bg:'linear-gradient(135deg,#4a1a00,#e8590c)'},
+};
+
+function esc(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function renderTeamPage(t, d){
+  const info = TEAM_MAP[t];
+  const m1 = d.mission1, m2 = d.mission2;
+  const m1ok = m1?.status === 'approved';
+  const m2ok = m2?.status === 'approved';
+
+  let inner = '';
+  if (!m1 && !m2) {
+    inner = `<div class="rp-empty">📭 아직 이 조의 정탐 보고가 도착하지 않았습니다.</div>`;
+  } else if (!m2ok) {
+    inner = `<div class="rp-pending">🕐 정탐 보고서가 아직 관리자 승인 대기 중입니다.</div>`;
+  } else {
+    inner = `
+      ${m1ok ? `<div class="rp-photo-wrap"><img class="rp-photo" src="${m1.photoData}"></div><div class="rp-photo-cap" style="margin-bottom:16px;">📷 경유지 인증샷</div>` : ''}
+      <div class="rp-field">
+        <div class="rf-lbl">🧱 우리가 본 장벽</div>
+        <div class="rf-txt">${esc(m2.barrier)}</div>
+      </div>
+      <div class="rp-field">
+        <div class="rf-lbl">✨ 우리가 발견한 믿음</div>
+        <div class="rf-txt">${esc(m2.faith)}</div>
+      </div>
+      <div class="rp-field">
+        <div class="rf-lbl">🙏 우리의 돌파기도</div>
+        <div class="rf-txt">${esc(m2.prayer)}</div>
+      </div>`;
+  }
+
+  return `<div class="report-page" id="page-${t}">
+    <div class="rp-top" style="background:${info.bg}">
+      <div class="rp-badge">SPY REPORT · ${t}조</div>
+      <div class="rp-team">${t}조 정탐 보고</div>
+      <div class="rp-dest">📍 ${info.dest}</div>
+      ${m2ok ? '<div class="rp-seal">✅ 정탐 완료</div>' : ''}
+    </div>
+    <div class="rp-body">${inner}</div>
+  </div>`;
+}
+
+function renderAll(allData){
+  const el = document.getElementById('reportContent');
+  el.innerHTML = [1,2,3,4,5,6].map(t => renderTeamPage(t, allData[`team${t}`] || {})).join('');
+}
+
+db.ref('submissions').on('value', snap => {
+  renderAll(snap.val() || {});
+});
+
+// ── PDF 저장 (html2canvas로 각 팀 카드를 이미지로 캡처 → jsPDF로 A4 페이지에 삽입) ──
+async function downloadPDF(){
+  const btn = document.getElementById('pdfBtn');
+  const status = document.getElementById('toolStatus');
+  if (typeof html2canvas === 'undefined' || !window.jspdf) {
+    status.textContent = '⚠️ PDF 라이브러리를 불러오지 못했어요. 인터넷 연결을 확인하거나 "인쇄하기"를 이용해주세요.';
+    return;
+  }
+  btn.disabled = true;
+  const origText = btn.textContent;
+  const pages = document.querySelectorAll('.report-page');
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF('p', 'mm', 'a4');
+  const pageW = 210, pageH = 297, margin = 8;
+
+  try {
+    for (let i = 0; i < pages.length; i++) {
+      btn.textContent = `📄 생성 중... (${i+1}/${pages.length})`;
+      status.textContent = '';
+      const canvas = await html2canvas(pages[i], { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      const imgData = canvas.toDataURL('image/jpeg', 0.92);
+      const usableW = pageW - margin * 2;
+      const imgH = Math.min(canvas.height * usableW / canvas.width, pageH - margin * 2);
+      if (i > 0) pdf.addPage();
+      pdf.addImage(imgData, 'JPEG', margin, margin, usableW, imgH);
+    }
+    pdf.save('가나안_정탐보고서.pdf');
+    status.textContent = '✅ PDF 저장 완료!';
+  } catch (e) {
+    console.error(e);
+    status.textContent = '❌ PDF 생성에 실패했어요. "인쇄하기"로 시도해보세요.';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = origText;
+  }
+}
+
+// ── 인쇄용 스타일 ──
+const printStyle = document.createElement('style');
+printStyle.media = 'print';
+printStyle.textContent = `
+  .app-header, .toolbar, .tool-status, .back-link { display:none !important; }
+  body { background:#fff; }
+  .report-page { break-inside: avoid; page-break-after: always; box-shadow:none; border:1px solid #ddd; }
+`;
+document.head.appendChild(printStyle);
+</script>
+</body>
+</html>
