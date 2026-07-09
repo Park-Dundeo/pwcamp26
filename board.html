@@ -27,6 +27,10 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 
 .notice-banner{background:#fff9db;border:1.5px solid #ffe066;border-radius:10px;padding:10px 14px;font-size:11.5px;color:#846200;line-height:1.6;margin-bottom:10px;flex-shrink:0;}
 
+.admin-tools{display:none;flex-shrink:0;margin-bottom:10px;}
+.admin-tools.show{display:block;}
+.clear-all-btn{width:100%;padding:10px;border:1.5px solid #ffc9c9;background:#fff5f5;color:var(--red);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;}
+
 /* ── 채팅 피드 ── */
 .feed{flex:1;overflow-y:auto;padding:6px 4px 10px;display:flex;flex-direction:column;gap:10px;min-height:200px;}
 .msg-row{display:flex;flex-direction:column;max-width:82%;}
@@ -86,6 +90,10 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 
 <div class="content">
   <div class="notice-banner">💬 조장(각 조 1명)과 관리자만 글을 쓸 수 있어요. 누구나 읽을 수 있어요. 예의 있게 사용해주세요 🙏</div>
+
+  <div class="admin-tools" id="adminTools">
+    <button class="clear-all-btn" onclick="clearAllMessages()">🗑 전체 대화 초기화 (테스트용, 되돌릴 수 없음)</button>
+  </div>
 
   <div class="feed" id="feed">
     <div class="feed-empty">아직 등록된 메시지가 없습니다.<br>첫 메시지를 남겨보세요!</div>
@@ -189,6 +197,7 @@ function logoutRole(){
 function updateComposeUI(){
   document.getElementById('authGate').style.display = myRole ? 'none' : 'flex';
   document.getElementById('composeRow').style.display = myRole ? 'flex' : 'none';
+  document.getElementById('adminTools').classList.toggle('show', myRole === 'admin');
   renderWhoBadge();
 }
 
@@ -277,6 +286,16 @@ async function sendMessage(){
 }
 
 // 관리자: 메시지 삭제 (부적절한 내용 정리용)
+// 관리자: 전체 대화 초기화 (되돌릴 수 없어서 이중 확인)
+function clearAllMessages(){
+  if (myRole !== 'admin') return;
+  const count = Object.keys(allMessages).length;
+  if (!count) { alert('삭제할 메시지가 없어요.'); return; }
+  if (!confirm(`전체 메시지 ${count}개를 모두 삭제할까요?\n이 작업은 되돌릴 수 없어요.`)) return;
+  if (!confirm('정말로 진행할까요? 마지막 확인이에요.')) return;
+  db.ref('board_messages').remove();
+}
+
 function deleteMessage(id){
   if (myRole !== 'admin') return;
   if (!confirm('이 메시지를 삭제할까요?')) return;
