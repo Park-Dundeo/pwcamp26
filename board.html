@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>정탐대 소통방 — 파워웨이브 2026</title>
+<style>
+:root {
+  --navy:#1a2744; --blue:#3b5bdb; --gold:#f59f00;
+  --green:#2f9e44; --red:#e03131;
+  --gray:#868e96; --border:#dee2e6; --radius:12px; --sky:#e8eeff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{height:100%;}
+body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;}
+
+.app-header{background:linear-gradient(135deg,var(--navy),#2d4a9e);color:#fff;padding:18px 16px 20px;text-align:center;flex-shrink:0;position:relative;}
+.header-back{position:absolute;left:14px;top:16px;color:#fff;opacity:.8;text-decoration:none;font-size:12px;}
+.header-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
+.header-title{font-size:18px;font-weight:800;}
+.header-sub{font-size:11.5px;opacity:.75;margin-top:4px;}
+
+.who-badge{position:fixed;top:10px;right:10px;z-index:50;font-size:11px;font-weight:800;padding:6px 12px;border-radius:20px;background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.15);display:none;cursor:pointer;border:none;font-family:inherit;}
+.who-badge.show{display:block;}
+
+.content{max-width:560px;width:100%;margin:0 auto;padding:14px 12px 0;flex:1;display:flex;flex-direction:column;min-height:0;}
+
+.notice-banner{background:#fff9db;border:1.5px solid #ffe066;border-radius:10px;padding:10px 14px;font-size:11.5px;color:#846200;line-height:1.6;margin-bottom:10px;flex-shrink:0;}
+
+/* ── 채팅 피드 ── */
+.feed{flex:1;overflow-y:auto;padding:6px 4px 10px;display:flex;flex-direction:column;gap:10px;min-height:200px;}
+.msg-row{display:flex;flex-direction:column;max-width:82%;}
+.msg-row.mine{align-self:flex-end;align-items:flex-end;}
+.msg-row.theirs{align-self:flex-start;align-items:flex-start;}
+.msg-author{font-size:11px;font-weight:800;color:var(--navy);margin-bottom:3px;padding:0 4px;}
+.msg-author.admin{color:#c92a2a;}
+.msg-bubble{padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.msg-row.theirs .msg-bubble{background:#fff;color:#212529;border-bottom-left-radius:4px;}
+.msg-row.mine .msg-bubble{background:var(--blue);color:#fff;border-bottom-right-radius:4px;}
+.msg-row.admin-msg .msg-bubble{background:#fff5f5;border:1.5px solid #ffc9c9;color:#c92a2a;font-weight:700;}
+.msg-time{font-size:10px;color:var(--gray);margin-top:3px;padding:0 4px;display:flex;align-items:center;gap:6px;}
+.msg-del{background:none;border:none;color:var(--red);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;padding:0;}
+.feed-empty{text-align:center;color:var(--gray);font-size:12.5px;padding:40px 0;}
+
+/* ── 입력 영역 ── */
+.compose-wrap{flex-shrink:0;background:#fff;border-radius:var(--radius) var(--radius) 0 0;box-shadow:0 -2px 12px rgba(0,0,0,.06);padding:10px 12px calc(10px + env(safe-area-inset-bottom));}
+.compose-row{display:flex;gap:8px;}
+.compose-input{flex:1;padding:12px 14px;border:1.5px solid var(--border);border-radius:20px;font-size:14px;font-family:inherit;resize:none;max-height:90px;}
+.compose-input:focus{outline:none;border-color:var(--blue);}
+.compose-send{flex-shrink:0;width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;border:none;font-size:18px;cursor:pointer;}
+.compose-send:disabled{background:var(--border);}
+
+/* 인증 전 상태 */
+.auth-gate{display:flex;gap:8px;}
+.auth-btn{flex:1;padding:13px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.auth-btn.leader{background:var(--sky);color:var(--blue);}
+.auth-btn.admin{background:#fff5f5;color:var(--red);}
+
+/* ── 인증 모달 ── */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.show{display:flex;}
+.modal-box{background:#fff;border-radius:var(--radius);padding:22px 20px;width:100%;max-width:320px;}
+.modal-box h3{font-size:15px;font-weight:800;color:var(--navy);margin-bottom:14px;text-align:center;}
+.team-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.team-pick button{padding:11px 4px;border:2px solid var(--border);border-radius:8px;background:#fff;font-size:13px;font-weight:800;color:var(--navy);cursor:pointer;font-family:inherit;}
+.team-pick button.sel{border-color:var(--blue);background:var(--blue);color:#fff;}
+.modal-input{width:100%;padding:12px;border:1.5px solid var(--border);border-radius:8px;font-size:16px;font-family:inherit;margin-bottom:8px;text-align:center;}
+.modal-err{font-size:12px;color:var(--red);text-align:center;min-height:16px;margin-bottom:6px;}
+.modal-btn{width:100%;padding:13px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px;}
+.modal-btn.confirm{background:var(--navy);color:#fff;}
+.modal-btn.cancel{background:#f1f3f5;color:var(--gray);margin-bottom:0;}
+
+.back-link{display:block;text-align:center;padding:8px 0;font-size:11.5px;color:var(--gray);text-decoration:none;flex-shrink:0;}
+</style>
+</head>
+<body>
+
+<div class="who-badge" id="whoBadge" onclick="logoutRole()"></div>
+
+<header class="app-header">
+  <a class="header-back" href="index.html">← 대시보드</a>
+  <div class="header-tag">전체 조 · 실시간</div>
+  <div class="header-title">🕊 정탐대 소통방</div>
+  <div class="header-sub">조장 공지 · 질문 · 관리자 안내를 한 곳에서</div>
+</header>
+
+<div class="content">
+  <div class="notice-banner">💬 조장(각 조 1명)과 관리자만 글을 쓸 수 있어요. 누구나 읽을 수 있어요. 예의 있게 사용해주세요 🙏</div>
+
+  <div class="feed" id="feed">
+    <div class="feed-empty">아직 등록된 메시지가 없습니다.<br>첫 메시지를 남겨보세요!</div>
+  </div>
+
+  <div class="compose-wrap">
+    <div class="auth-gate" id="authGate">
+      <button class="auth-btn leader" onclick="openLeaderModal()">🙋 조장으로 글쓰기</button>
+      <button class="auth-btn admin" onclick="openAdminModal()">🔑 관리자로 글쓰기</button>
+    </div>
+    <div class="compose-row" id="composeRow" style="display:none;">
+      <textarea class="compose-input" id="composeInput" rows="1" maxlength="500" placeholder="메시지를 입력하세요..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMessage();}"></textarea>
+      <button class="compose-send" id="sendBtn" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+</div>
+
+<!-- 조장 인증 모달 -->
+<div class="modal-overlay" id="leaderModal">
+  <div class="modal-box">
+    <h3>🙋 조장 인증</h3>
+    <div class="team-pick" id="teamPick"></div>
+    <input class="modal-input" type="text" id="leaderCodeInput" placeholder="우리 조 정탐 코드(정답)">
+    <div class="modal-err" id="leaderErr"></div>
+    <button class="modal-btn confirm" onclick="checkLeaderAuth()">확인</button>
+    <button class="modal-btn cancel" onclick="closeModals()">취소</button>
+  </div>
+</div>
+
+<!-- 관리자 인증 모달 -->
+<div class="modal-overlay" id="adminModal">
+  <div class="modal-box">
+    <h3>🔑 관리자 인증</h3>
+    <input class="modal-input" type="password" id="adminCodeInput" placeholder="관리자 비밀번호">
+    <div class="modal-err" id="adminErr"></div>
+    <button class="modal-btn confirm" onclick="checkAdminAuth()">확인</button>
+    <button class="modal-btn cancel" onclick="closeModals()">취소</button>
+  </div>
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
+
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyAZJQbC6dbLtn4D32FnXQIh5hZFs4iyWoQ",
+  authDomain: "pwcamp26.firebaseapp.com",
+  databaseURL: "https://pwcamp26-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "pwcamp26",
+  storageBucket: "pwcamp26.firebasestorage.app",
+  messagingSenderId: "860034291771",
+  appId: "1:860034291771:web:8de5a9e21dcfe28aefa41e"
+});
+const db = firebase.database();
+
+// ⚠️ 이 QUIZ 정답 해시는 mission.html과 동일한 값이어야 함 — 정답 변경 시 두 파일 모두 수정할 것
+const QUIZ_HASHES = {
+  1:['c00ed601d54c3e8fccc1c1f8829d8cdf6335b90fc6ad85564534de1761c0ab64','0ae988272a93c5b5b7821e8a21479561b2c5a25ce486fdb3daab588d3daad0a3','bdf77197ba810fdac70a497a4557b60a82dff19487db79ed5cb38043e8197329','d2eb548e879fe458a196945bd4197a0148c31a17bc82a852ab0baa337a8ed5a2','61d1db96b718cd8355140cb13b7f15d95a15146b4af581d0446b2e0615795949'],
+  2:['7ab92cb8025fc2f9b75a66abff57a745f0f75c384775a5ab6b6bd47bb5f70697','d59eced1ded07f84c145592f65bdf854358e009c5cd705f5215bf18697fed103','7d12be69e9dee5133875b3f795c77acfcde079e6732be0b3e176265d4db93563'],
+  3:['e8eb2f9b25b9fd2fe1b1dec511314ed32c8b06ddd5cf23125699093c3c1fed4d','7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451','4191dd8d20f47dced8b1e95af0a2b477da7f98b6b27016e5eb2593f3d7af2bb4'],
+  4:['f16160e08a19570663b6f4bde7a68d21c62e313cf806a44123f011910443c9b5'],
+  5:['c7e6ac93ca8c5b84f5c95c7ee9bb9a66c1c17d97761d89e1e6253487a59b6db8','82be3b2a8fbcf5e2eab0a6aa7309bd4bc25599d5d4d9df7de27f3a51dc227b87','916827c6675ccc9e95b6a0e785b36fd33db3e2703af7430305d8420cda3e01e3'],
+  6:['2805e1cd088ead3eed817f8e9997e8d16ee75f3c72f28ca24561d71d00d79629','763ae0844dfe3b5a27867e6d6222a6e04c46faafad9373272611c44531196b43','50e473495debe72bee1e5e55ab00eb1e5f256b9813fb32e34da4cc4a1c79256b'],
+};
+// ⚠️ admin.html/news.html과 동일한 관리자 비밀번호 해시 (동일값 유지할 것)
+const ADMIN_PW_HASH = 'c36c31cf1efc4cab6cbca84c442b3b84a493f999182608f93fb5b2d76f9e53ec';
+
+function normalizeAnswer(s){ return (s||'').trim().replace(/[\s!?.]/g,''); }
+async function sha256(s){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+function esc(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+// 세션 인증 상태 (기기당 유지, 새 세션에서는 다시 인증)
+// 조장 인증은 localStorage로 영구 저장 (3일짜리 캠프 동안 매번 재인증 안 해도 되게 — mission.html 기기 잠금과 동일 패턴)
+// 관리자 인증은 admin.html과 동일하게 세션에서만 유지 (분실 기기 등 보안 고려)
+let myRole = sessionStorage.getItem('board_role') === 'admin' ? 'admin' : (localStorage.getItem('board_role') === 'leader' ? 'leader' : null);
+let myTeam = myRole === 'leader' ? localStorage.getItem('board_team') : null;
+let pickedTeam = null;
+
+function renderWhoBadge(){
+  const el = document.getElementById('whoBadge');
+  if (myRole === 'admin') { el.textContent = '🔑 관리자로 접속 중 (탭하여 로그아웃)'; el.classList.add('show'); }
+  else if (myRole === 'leader') { el.textContent = `🙋 ${myTeam}조 조장으로 접속 중 (탭하여 로그아웃)`; el.classList.add('show'); }
+  else { el.classList.remove('show'); }
+}
+
+function logoutRole(){
+  if (!myRole) return;
+  if (!confirm('로그아웃할까요? 다시 인증해야 글을 쓸 수 있어요.')) return;
+  if (myRole === 'leader') { localStorage.removeItem('board_role'); localStorage.removeItem('board_team'); }
+  sessionStorage.removeItem('board_role');
+  myRole = null; myTeam = null;
+  updateComposeUI();
+  renderFeed();
+}
+
+function updateComposeUI(){
+  document.getElementById('authGate').style.display = myRole ? 'none' : 'flex';
+  document.getElementById('composeRow').style.display = myRole ? 'flex' : 'none';
+  renderWhoBadge();
+}
+
+// ── 팀 선택 UI (조장 모달) ──
+function renderTeamPick(){
+  const grid = document.getElementById('teamPick');
+  grid.innerHTML = [1,2,3,4,5,6].map(n => `<button id="tp-${n}" onclick="pickTeam(${n})">${n}조</button>`).join('');
+}
+function pickTeam(n){
+  pickedTeam = n;
+  [1,2,3,4,5,6].forEach(i => document.getElementById(`tp-${i}`).classList.toggle('sel', i===n));
+}
+
+function openLeaderModal(){
+  renderTeamPick();
+  pickedTeam = null;
+  document.getElementById('leaderCodeInput').value = '';
+  document.getElementById('leaderErr').textContent = '';
+  document.getElementById('leaderModal').classList.add('show');
+}
+function openAdminModal(){
+  document.getElementById('adminCodeInput').value = '';
+  document.getElementById('adminErr').textContent = '';
+  document.getElementById('adminModal').classList.add('show');
+}
+function closeModals(){
+  document.getElementById('leaderModal').classList.remove('show');
+  document.getElementById('adminModal').classList.remove('show');
+}
+
+async function checkLeaderAuth(){
+  if (!pickedTeam) { document.getElementById('leaderErr').textContent = '조를 먼저 선택해주세요.'; return; }
+  const input = normalizeAnswer(document.getElementById('leaderCodeInput').value);
+  const hash = await sha256(input);
+  if (QUIZ_HASHES[pickedTeam].includes(hash)) {
+    myRole = 'leader'; myTeam = String(pickedTeam);
+    localStorage.setItem('board_role','leader');
+    localStorage.setItem('board_team', myTeam);
+    closeModals();
+    updateComposeUI();
+    renderFeed();
+  } else {
+    document.getElementById('leaderErr').textContent = '정답이 맞지 않아요. 다시 확인해주세요.';
+  }
+}
+
+async function checkAdminAuth(){
+  const input = document.getElementById('adminCodeInput').value;
+  if (await sha256(input) === ADMIN_PW_HASH) {
+    myRole = 'admin'; myTeam = null;
+    sessionStorage.setItem('board_role','admin');
+    closeModals();
+    updateComposeUI();
+    renderFeed();
+  } else {
+    document.getElementById('adminErr').textContent = '비밀번호가 틀렸어요.';
+  }
+}
+
+// ── 메시지 전송 ──
+async function sendMessage(){
+  const input = document.getElementById('composeInput');
+  const text = input.value.trim();
+  if (!text || !myRole) return;
+  const btn = document.getElementById('sendBtn');
+  btn.disabled = true;
+  try {
+    await db.ref('board_messages').push({
+      role: myRole,
+      team: myRole === 'leader' ? Number(myTeam) : null,
+      text,
+      postedAt: firebase.database.ServerValue.TIMESTAMP,
+    });
+    input.value = '';
+  } catch(e) {
+    console.error(e);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+// 관리자: 메시지 삭제 (부적절한 내용 정리용)
+function deleteMessage(id){
+  if (myRole !== 'admin') return;
+  if (!confirm('이 메시지를 삭제할까요?')) return;
+  db.ref(`board_messages/${id}`).remove();
+}
+
+function fmtTime(ts){
+  if (!ts) return '';
+  const d = new Date(ts);
+  const hh = String(d.getHours()).padStart(2,'0');
+  const mm = String(d.getMinutes()).padStart(2,'0');
+  return `${d.getMonth()+1}/${d.getDate()} ${hh}:${mm}`;
+}
+
+let allMessages = {};
+
+function renderFeed(){
+  const feed = document.getElementById('feed');
+  const ids = Object.keys(allMessages).sort((a,b) => (allMessages[a].postedAt||0) - (allMessages[b].postedAt||0));
+  if (!ids.length) {
+    feed.innerHTML = `<div class="feed-empty">아직 등록된 메시지가 없습니다.<br>첫 메시지를 남겨보세요!</div>`;
+    return;
+  }
+  const isMine = m => (myRole === 'admin' && m.role === 'admin') || (myRole === 'leader' && m.role === 'leader' && String(m.team) === String(myTeam));
+  feed.innerHTML = ids.map(id => {
+    const m = allMessages[id];
+    const mine = isMine(m);
+    const isAdmin = m.role === 'admin';
+    const authorLabel = isAdmin ? '📢 관리자' : `${m.team}조 조장`;
+    const delBtn = myRole === 'admin' ? `<button class="msg-del" onclick="deleteMessage('${id}')">삭제</button>` : '';
+    return `<div class="msg-row ${mine ? 'mine' : 'theirs'} ${isAdmin ? 'admin-msg' : ''}">
+      <div class="msg-author ${isAdmin ? 'admin' : ''}">${authorLabel}</div>
+      <div class="msg-bubble">${esc(m.text)}</div>
+      <div class="msg-time">${fmtTime(m.postedAt)}${delBtn}</div>
+    </div>`;
+  }).join('');
+  feed.scrollTop = feed.scrollHeight;
+}
+
+db.ref('board_messages').on('value', snap => {
+  allMessages = snap.val() || {};
+  renderFeed();
+});
+
+updateComposeUI();
+</script>
+</body>
+</html>
