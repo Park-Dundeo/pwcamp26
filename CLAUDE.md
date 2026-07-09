@@ -14,6 +14,7 @@
 | `emergency.html` | 비상 대응표 8종 (초안, 프로그램팀 검토 필요) | 전체 교사 |
 | `checklist.html` | 관문별 준비물·담당자·세팅/회수 체크리스트 | 프로그램팀 교사 |
 | `news.html` | 준비 소식 + 의견함(댓글). 댓글 작성엔 선생님 코드(`pwave2026`, admin.html과 동일값) 필요 | 전체 교사 |
+| `견학교육문서.md` | 견학지 담당 선생님이 작성한 코스 A/B/C(연세대 언더우드가 기념관/서대문형무소/전쟁기념관) 교육 자료 원문 보존용. 코드 아님, 참고 문서 | 프로그램팀·견학 설명 담당 |
 
 - 배포: `main` push 시 `.github/workflows/deploy.yml` → GitHub Pages 자동 배포. 빌드 스텝 없음, 저장소 루트를 그대로 올림.
 - 데이터: Firebase Realtime DB (`pwcamp26-default-rtdb`). 경로: `submissions/team{N}/mission{1,2}`(학생 제출, 사진은 Storage 대신 압축 후 base64로 DB 직접 저장), `checklist/{itemId}`(준비물 체크), `teacherDoc/{roles|roster|policy}`(교사 매뉴얼 공동편집), `news_comments/{newsId}`(의견함 댓글).
@@ -21,6 +22,7 @@
 - `localStorage` 키 `pwcamp_unlocked_{team}`으로 조별 잠금해제 상태 유지.
 - Firebase 규칙: `submissions`/`checklist`/`teacherDoc`/`news_comments` 네 경로 모두 read/write 허용 (2026-07-08 콘솔에 반영 완료, `firebase.rules.now.json` 참고). 새 최상위 경로를 추가로 쓰려면 이 규칙에 없는 경로는 기본 거부이므로 콘솔에서 함께 열어줘야 함.
 - `index.html`에 Kakao Maps JS SDK 연동(REQ-29) — Day1 조별 동선 카드에 지도 표시, 실제 배포 도메인 기준 동작 확인 완료. 카카오 콘솔에서 도메인 등록은 **[플랫폼 키] > [JavaScript 키] > [JavaScript SDK 도메인]**에 해야 함 — [앱 설정 > 플랫폼 > Web > 사이트 도메인]은 이름이 비슷하지만 카카오톡 공유/로그인용이라 지도 API와 무관, 헷갈리기 쉬우니 주의. `ROUTE_DATA`의 좌표 중 `verified:false`인 지점은 지하철역 등 공공정보 기준 추정치라 실제 운영 전 재확인 필요.
+- **5·6조 목적지 = 연세대 언더우드가 기념관** (2026-07-09부터, 기존 "양화진"에서 교체). 1차 경유지도 "홍대입구역"→"신촌역"으로 함께 변경됨 (`mission.html`/`admin.html`의 TEAM_MAP, `index.html` 카드·ROUTE_DATA 전부 갱신 완료). REQ-31 참고.
 
 ## 요구사항/백로그
 
