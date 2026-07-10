@@ -4,15 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>관리자 대시보드 — 파워웨이브 2026</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root {
-  --navy:#1a2744; --navy-mid:#243460; --blue:#3b5bdb;
-  --gold:#f59f00; --green:#2f9e44; --orange:#e8590c;
-  --gray:#868e96; --border:#dee2e6; --radius:10px;
-  --shadow:0 2px 12px rgba(0,0,0,.07);
+  --navy:#141d38; --navy-mid:#1f2c52; --blue:#3e63dd;
+  --gold:#f5a524; --green:#1ea04b; --orange:#e8590c;
+  --gray:#8b93a1; --border:#e3e7f0; --radius:14px;
+  --shadow:0 4px 20px rgba(20,29,56,.07);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;}
 
 /* ── Password gate ── */
 .pw-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
@@ -28,7 +29,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 
 /* ── Dashboard ── */
 .dashboard{display:none;}
-.site-header{background:linear-gradient(135deg,var(--navy),#2d4a9e);color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.site-header{background:linear-gradient(135deg,var(--navy) 0%,#22336b 55%,#2d4a9e 100%);color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
 .header-left .title{font-size:16px;font-weight:800;}
 .header-left .sub{font-size:11px;opacity:.7;margin-top:2px;}
 .header-right{display:flex;align-items:center;gap:10px;}
@@ -155,6 +156,18 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .nc-btn.applied{background:#ebfbee;color:var(--green);}
 .nc-btn.hold{background:#f1f3f5;color:var(--gray);}
 .nc-btn.delete{background:#fff5f5;color:#e03131;opacity:1;}
+
+/* ══ 2026-07-10 디자인 리프레시 (공통 폴리시) ══ */
+*{-webkit-tap-highlight-color:transparent;}
+body{letter-spacing:-0.011em;background:linear-gradient(180deg,#eef1f9 0%,#f2f4fa 100%);}
+h1,h2,h3,.header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline{letter-spacing:-0.025em;}
+button{transition:transform .12s ease,box-shadow .2s ease,opacity .2s ease,background .2s ease;}
+button:not(:disabled):active{transform:scale(.97);}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !important;box-shadow:0 0 0 3px rgba(62,99,221,.13);}
+.app-header,.site-header{position:relative;overflow:hidden;}
+.app-header::after,.site-header::after{content:'';position:absolute;top:-60%;right:-20%;width:70%;height:220%;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.07) 45%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.07) 55%,transparent 70%);transform:rotate(8deg);pointer-events:none;}
+.app-header>*,.site-header>*{position:relative;z-index:1;}
+@media(prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
 </style>
 </head>
 <body>

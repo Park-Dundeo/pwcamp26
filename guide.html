@@ -4,16 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>견학 코스 안내 — 파워웨이브 2026</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root {
-  --navy:#1a2744; --blue:#3b5bdb; --gold:#f59f00;
-  --green:#2f9e44; --red:#e03131;
-  --gray:#868e96; --border:#dee2e6; --radius:12px;
+  --navy:#141d38; --blue:#3e63dd; --gold:#f5a524;
+  --green:#1ea04b; --red:#e03131;
+  --gray:#8b93a1; --border:#e3e7f0; --radius:16px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;min-height:100vh;}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;min-height:100vh;}
 
-.app-header{background:linear-gradient(135deg,var(--navy),#2d4a9e);color:#fff;padding:20px 16px 22px;text-align:center;}
+.app-header{background:linear-gradient(135deg,var(--navy) 0%,#22336b 55%,#2d4a9e 100%);color:#fff;padding:20px 16px 22px;text-align:center;}
 .header-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
 .header-title{font-size:19px;font-weight:800;}
 .header-sub{font-size:12px;opacity:.75;margin-top:4px;}
@@ -21,7 +22,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .content{max-width:560px;margin:0 auto;padding:16px 16px 60px;}
 
 /* ── 캠프 주제 ── */
-.theme-card{background:linear-gradient(135deg,var(--navy),#2d4a9e);color:#fff;border-radius:var(--radius);padding:18px;margin-bottom:16px;}
+.theme-card{background:linear-gradient(135deg,var(--navy) 0%,#22336b 55%,#2d4a9e 100%);color:#fff;border-radius:var(--radius);padding:18px;margin-bottom:16px;}
 .theme-title{font-size:20px;font-weight:800;}
 .theme-verse-lbl{font-size:11px;opacity:.7;font-weight:700;margin-top:10px;}
 .theme-verse{font-size:13px;line-height:1.75;margin-top:4px;opacity:.92;}
@@ -37,7 +38,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .course-btn.selected .cb-tag,.course-btn.selected .cb-name,.course-btn.selected .cb-teams{color:#fff;}
 
 /* ── 카드 ── */
-.card{background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:14px;overflow:hidden;display:none;}
+.card{background:#fff;border-radius:var(--radius);box-shadow:0 4px 20px rgba(20,29,56,.07);margin-bottom:14px;overflow:hidden;display:none;}
 .card.visible{display:block;animation:fadeUp .3s ease;}
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 .card-top{padding:18px;color:#fff;}
@@ -81,11 +82,23 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .prayer-box p{font-size:13px;line-height:1.85;color:#2b8a3e;}
 
 .nav-row{display:flex;gap:8px;margin-top:4px;}
-.nav-btn{flex:1;padding:13px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.nav-btn{flex:1;padding:13px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;background:#fff;color:var(--navy);box-shadow:0 3px 14px rgba(20,29,56,.06);}
 .nav-btn:active{opacity:.8;}
 
 .src-note{font-size:11px;color:var(--gray);text-align:center;margin-top:16px;line-height:1.6;}
 .back-link{display:block;text-align:center;margin-top:14px;font-size:12px;color:var(--gray);text-decoration:none;}
+
+/* ══ 2026-07-10 디자인 리프레시 (공통 폴리시) ══ */
+*{-webkit-tap-highlight-color:transparent;}
+body{letter-spacing:-0.011em;background:linear-gradient(180deg,#eef1f9 0%,#f2f4fa 100%);}
+h1,h2,h3,.header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline{letter-spacing:-0.025em;}
+button{transition:transform .12s ease,box-shadow .2s ease,opacity .2s ease,background .2s ease;}
+button:not(:disabled):active{transform:scale(.97);}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !important;box-shadow:0 0 0 3px rgba(62,99,221,.13);}
+.app-header{position:relative;overflow:hidden;}
+.app-header::after{content:'';position:absolute;top:-60%;right:-20%;width:70%;height:220%;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.07) 45%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.07) 55%,transparent 70%);transform:rotate(8deg);pointer-events:none;}
+.app-header>*{position:relative;z-index:1;}
+@media(prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
 </style>
 </head>
 <body>
@@ -116,7 +129,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 const COURSES = {
   a: {
     tag: 'COURSE A', name: '연세대 언더우드가 기념관', teams: '5조 · 6조',
-    bg: 'linear-gradient(135deg,#4a1a00,#e8590c)',
+    bg: 'linear-gradient(135deg,#3d1600,#e8590c)',
     intro: `수난의 시대 조선 말, 복음을 들고 오신 선교사님들 중 한 가문을 만나봅니다. 당시 조선은 고린도와 에베소와 같이 토속신앙이 짙은 우상숭배로 성행하는 나라였습니다. 19세기 말 조선은 일본과 맺은 강화도 조약을 시작으로, 우리나라를 통째로 삼키려는 일본의 계략인 을사늑약으로 이어져 결국 나라를 잃게 되는 아픔의 이기이기도 했습니다. 그러나 아이러니하게도 이 국가적 절망의 시기부터 본격적으로 선교사님들이 조선에 들어오기 시작했습니다. 선교사님들은 대부분 자국에서 엄청난 기득권을 가진 귀족이자 엘리트들이었습니다. 하지만 그들은 세상의 특권을 기꺼이 버리고 복음을 들고서, 어둡고 우상이 가득한 조선을 찾았습니다. 그 중에서도 언더우드 선교사님은 우리 모두에게 익숙한 이름입니다. 한때 유명했던 이랜드라는 회사의 패션 브랜드 명칭이 있었을 정도로 우리 삶에 깊숙이 자리 잡고 있습니다.
 
 연세대학교 내에 있는 [언더우드가의 기념관]은 언더우드 선교사님의 아들이신 원한경(H. H. Underwood)박사가 1927년에 지은 실제 사택입니다. 집 안 곳곳에는 가문의 손길과 헌신의 흔적이 고스란히 남아 있습니다. 언더우드가의 선교는 대를 이어서도 계속되었습니다. 이 가문 뿐 아니라 다른 많은 선교사님들이 조선에서 병과 씨름하다 죽기도 하고 핍박으로 사형을 당하기도 했습니다. 더욱 가슴 아픈 것은 조선의 척박한 환경 속에서 사랑하는 자녀들을 먼저 잃고 이 땅에 묻어야 했다는 사실입니다. 조선은 조선인들에게만 처절한 것이 아니라, 선교사님들에게도 목숨을 걸어야 하는 척박한 환경이었습니다.
@@ -141,7 +154,7 @@ const COURSES = {
   },
   b: {
     tag: 'COURSE B', name: '서대문 형무소', teams: '4조 · 5조 · 6조',
-    bg: 'linear-gradient(135deg,#1a4429,#2f9e44)',
+    bg: 'linear-gradient(135deg,#123a22,#1ea04b)',
     intro: `서대문 형무소는 근현대사의 상징적인 명소들 중 하나가 아닐 수 없습니다. 이 곳은 당시의 시대상이 잘 드러나 당시 수감자들이 어떤 생활을 했을 지 생생하게 가늠할 수 있을 정도로 건물 상태와 내용들이 잘 보존이 되어 있습니다. 을사늑약(1905년) 이후, 한국은 일제에 의해 주권을 침탈당했습니다. 그런데 아이러니하게도 같은 시기 선교사님들이 우리나라에 본격적으로 들어오시게 됩니다. 그리고 이를 통해 상민과 천민사이 계몽이 일어납니다. 복음이 들어온 조선에 '인간은 그 신분에 귀천이 있지 않으며 오직 모두 같은 하나님의 귀한 형상'임을 깨닫게 됩니다. 어쩌면 일제강점기는 나라의 독립뿐 아니라 만연해 있던 실제적인 가치(인간의 인간 됨, 하나님을 영화롭게 하는 예배자로서의 존재)의 진위에 대한 거짓과 다양한 정치 경제 사회의 극단적인 부정과 부패를 돌파해 나가는 혼돈의 시기였을 수도 있겠습니다. 나라를 잃은 조선인들을 가만히 있지 않았습니다. 분연히 일어나 나라를 되찾으려는 운동을 시작합니다. 그리고 그 시작은 끝없이 계속되었습니다. 그 중에는 이 회영(당시 상위 0.1%의 금수저 집안, 신흥무관학교; 현 경희대학교, 설립자, 전 재산을 팔아 만주로 망명, 그 곳에서 독립투사들을 길러 냄, 그가 투자했던 전 재산 60만원은 현재 약 2조-3조의 가치로 평가됨)과 같은 양반들도 있었지만 일제강점기에 나라의 독립을 위해 죽음을 불사하고 투쟁했던 대부분의 사람들은 바로 그들… 무시와 천대를 받아왔던 상민, 천민들이었습니다. 그들의 처절하고도 슬픈 현실 속에서 하나님의 은혜를 발견하시는 은혜를 누리시기를 축복합니다.`,
     questions: [
       '도마(안중근) 어머니의 편지를 찾아보세요.',
@@ -174,7 +187,7 @@ const COURSES = {
   },
   c: {
     tag: 'COURSE C', name: '전쟁기념관', teams: '1조 · 2조 · 3조',
-    bg: 'linear-gradient(135deg,#1a2744,#3b5bdb)',
+    bg: 'linear-gradient(135deg,#141d38,#3e63dd)',
     intro: `일제강점기를 독립으로 이끌어낸 주역은 단연 대한민국, 전체였습니다. 그러나 당시 세계의 정세는 엄청난 파란으로 격동하는 중이었습니다. 무엇이 시발이 되었는지 우리는 가늠하기 어렵습니다. 그러나 세계는 양 극단의 갈래로 나뉘어지고, 전쟁으로 치달았습니다. 사실 인류역사에서의 전쟁은 구약에서도 흔히 발견할 수 있듯이, 또한 세계역사와 한국사에서도 마찬가지입니다만, 연속적 사건이었습니다. 세계전쟁이 우리 일상에서 일어나는 시기와 질투, 미움과 비난과 크게 다를까요? 그렇지 않다고 여겨집니다. 그렇게 작게 시작된 작은 다툼은 눈덩이가 눈밭을 구르듯 회를 거듭할수록 커졌을 것입니다. 좌와 우, 빨강과 파랑으로 나뉜 세계전쟁에서 일본은 대패합니다. 그렇게 대한제국도 이제는 독립국, 대한민국으로 다시 태어나게 됩니다. 그러나 이내 또다시 내전이 일어납니다. 막 양극의 이념을 실제적으로 낳은 세계전쟁은 끝난 것 같았습니다. 그러나 아주 작은 나라 이제 막 일제의 강탈에서 벗어나 소생하고 있었던 대한민국안에서 다시 일어났습니다. 우리는 독립과 그 후의 혼란스러운 대내외적인 극한 상황에서 서로의 미래를 절망적으로 바라보고 있었습니다. 서로 다른 생각은 서로를 미워하기에 충분했고 그것은 가족들 간에도 예외가 될 수 없었습니다. 세계 2차 대전은 독일 히틀러의 자살과 일본의 대패로 마무리가 되어 가는 것 같았지만 대한민국이라는 작은 나라에서는 그 양극단의 다툼이 오히려 커져만 갔습니다.`,
     questions: [
       '6.25 전쟁에서 대한민국을 도왔던 나라들이 얼마나 될까요?',

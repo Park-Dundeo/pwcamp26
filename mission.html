@@ -4,24 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>가나안 정탐 미션 — 파워웨이브 2026</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root {
-  --navy:#1a2744; --blue:#3b5bdb; --gold:#f59f00;
-  --green:#2f9e44; --orange:#e8590c;
-  --gray:#868e96; --border:#dee2e6; --radius:12px;
+  --navy:#141d38; --blue:#3e63dd; --gold:#f5a524;
+  --green:#1ea04b; --orange:#e8590c;
+  --gray:#8b93a1; --border:#e3e7f0; --radius:16px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;min-height:100vh;}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;min-height:100vh;}
 
 /* ── Header ── */
-.app-header{background:linear-gradient(135deg,var(--navy),#2d4a9e);color:#fff;padding:22px 16px 26px;text-align:center;}
+.app-header{background:linear-gradient(135deg,var(--navy) 0%,#22336b 55%,#2d4a9e 100%);color:#fff;padding:22px 16px 26px;text-align:center;}
 .header-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
 .header-title{font-size:21px;font-weight:800;}
 .header-sub{font-size:13px;opacity:.75;margin-top:4px;}
 
 /* ── Layout ── */
 .content{max-width:480px;margin:0 auto;padding:20px 16px 80px;}
-.card{background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:16px;overflow:hidden;}
+.card{background:#fff;border-radius:var(--radius);box-shadow:0 4px 20px rgba(20,29,56,.07);margin-bottom:16px;overflow:hidden;}
 .card-body{padding:18px;}
 
 /* ── Purpose card ── */
@@ -119,13 +120,13 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .t-btn:active{opacity:.85;}
 
 /* ── Roadview placeholder (미사용, REQ-04에서 GPS 게이트로 교체됨 — 잔존 스타일) ── */
-.rv-placeholder{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#2d3a5e,#1a2744);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;margin-bottom:14px;}
+.rv-placeholder{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#25315a,#141d38);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;margin-bottom:14px;}
 .rv-icon{font-size:32px;margin-bottom:8px;opacity:.8;}
 .rv-text{font-size:13px;font-weight:600;}
 .rv-sub{font-size:11px;opacity:.6;margin-top:4px;}
 
 /* ── 샘플 포즈 일러스트 ── */
-.pose-sample{width:100%;background:linear-gradient(135deg,#2d3a5e,#1a2744);border-radius:10px;padding:16px 0 12px;margin-bottom:14px;text-align:center;}
+.pose-sample{width:100%;background:linear-gradient(135deg,#25315a,#141d38);border-radius:10px;padding:16px 0 12px;margin-bottom:14px;text-align:center;}
 .pose-svg{width:70%;max-width:220px;height:auto;}
 .pose-caption{color:#fff;font-size:12px;font-weight:600;margin-top:8px;opacity:.9;}
 
@@ -172,9 +173,9 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .progress-bar{height:100%;background:var(--blue);border-radius:3px;transition:width .3s;width:0%;}
 
 /* ── Buttons ── */
-.submit-btn{width:100%;padding:16px;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s;}
-.submit-btn.primary{background:var(--blue);color:#fff;}
-.submit-btn.primary:active{opacity:.8;}
+.submit-btn{width:100%;padding:16px;border:none;border-radius:14px;font-size:15px;font-weight:800;letter-spacing:-0.01em;cursor:pointer;font-family:inherit;transition:all .2s;}
+.submit-btn.primary{background:linear-gradient(135deg,var(--blue),#5a7cfa);color:#fff;box-shadow:0 4px 14px rgba(62,99,221,.35);}
+.submit-btn.primary:active{opacity:.9;box-shadow:0 2px 8px rgba(62,99,221,.3);}
 .submit-btn:disabled{background:var(--border);color:var(--gray);cursor:not-allowed;}
 
 /* ── Done status ── */
@@ -204,7 +205,7 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .toast.show{transform:translateX(-50%) translateY(0);}
 
 /* ── Fixed team badge ── */
-.fixed-team-badge{display:none;background:#fff;border-radius:var(--radius);box-shadow:0 2px 12px rgba(0,0,0,.07);margin-bottom:16px;padding:14px 18px;text-align:center;font-size:13px;font-weight:700;color:var(--navy);}
+.fixed-team-badge{display:none;background:#fff;border-radius:var(--radius);box-shadow:0 4px 20px rgba(20,29,56,.07);margin-bottom:16px;padding:14px 18px;text-align:center;font-size:13px;font-weight:700;color:var(--navy);}
 .fixed-team-badge b{color:var(--blue);font-size:15px;}
 
 /* ── Reset footer (테스트용) ── */
@@ -237,6 +238,18 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
   .code-input{font-size:18px;letter-spacing:4px;}
   .t-headline{font-size:22px;}
 }
+
+/* ══ 2026-07-10 디자인 리프레시 (공통 폴리시) ══ */
+*{-webkit-tap-highlight-color:transparent;}
+body{letter-spacing:-0.011em;background:linear-gradient(180deg,#eef1f9 0%,#f2f4fa 100%);}
+h1,h2,h3,.header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline{letter-spacing:-0.025em;}
+button{transition:transform .12s ease,box-shadow .2s ease,opacity .2s ease,background .2s ease;}
+button:not(:disabled):active{transform:scale(.97);}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !important;box-shadow:0 0 0 3px rgba(62,99,221,.13);}
+.app-header{position:relative;overflow:hidden;}
+.app-header::after{content:'';position:absolute;top:-60%;right:-20%;width:70%;height:220%;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.07) 45%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.07) 55%,transparent 70%);transform:rotate(8deg);pointer-events:none;}
+.app-header>*{position:relative;z-index:1;}
+@media(prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
 </style>
 </head>
 <body>
@@ -552,12 +565,12 @@ const db = firebase.database();
 // 서대문형무소행 3개 조: 청계천/광화문광장/덕수궁 돌담길 → 독립문역에서 합류 (2026-07-09 적용)
 // lat/lng/radius: 미션1 GPS 도착 확인용 (REQ-04, 좌표는 추정치 — 실제 운영 전 재확인 권장)
 const TEAM_MAP = {
-  1:{dest:'전쟁기념관',waypoint:'노들섬',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)',lat:37.517700,lng:126.956300,radius:450},
-  2:{dest:'전쟁기념관',waypoint:'이촌한강공원',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)',lat:37.522200,lng:126.970100,radius:450},
-  3:{dest:'전쟁기념관',waypoint:'서울로7017',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)',lat:37.554700,lng:126.970800,radius:350},
-  4:{dest:'서대문형무소',waypoint:'청계천(청계광장)',bg:'linear-gradient(135deg,#1a4429,#2f9e44)',lat:37.569500,lng:126.978400,radius:300},
-  5:{dest:'서대문형무소',waypoint:'광화문광장',bg:'linear-gradient(135deg,#1a4429,#2f9e44)',lat:37.572000,lng:126.976900,radius:300},
-  6:{dest:'서대문형무소',waypoint:'덕수궁 돌담길',bg:'linear-gradient(135deg,#1a4429,#2f9e44)',lat:37.565800,lng:126.975200,radius:400},
+  1:{dest:'전쟁기념관',waypoint:'노들섬',bg:'linear-gradient(135deg,#141d38,#3e63dd)',lat:37.517700,lng:126.956300,radius:450},
+  2:{dest:'전쟁기념관',waypoint:'이촌한강공원',bg:'linear-gradient(135deg,#141d38,#3e63dd)',lat:37.522200,lng:126.970100,radius:450},
+  3:{dest:'전쟁기념관',waypoint:'서울로7017',bg:'linear-gradient(135deg,#141d38,#3e63dd)',lat:37.554700,lng:126.970800,radius:350},
+  4:{dest:'서대문형무소',waypoint:'청계천(청계광장)',bg:'linear-gradient(135deg,#123a22,#1ea04b)',lat:37.569500,lng:126.978400,radius:300},
+  5:{dest:'서대문형무소',waypoint:'광화문광장',bg:'linear-gradient(135deg,#123a22,#1ea04b)',lat:37.572000,lng:126.976900,radius:300},
+  6:{dest:'서대문형무소',waypoint:'덕수궁 돌담길',bg:'linear-gradient(135deg,#123a22,#1ea04b)',lat:37.565800,lng:126.975200,radius:400},
 };
 
 // ── 조별 비밀번호 퀴즈 (REQ-07 확정) ──
