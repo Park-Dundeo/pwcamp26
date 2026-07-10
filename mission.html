@@ -7,15 +7,15 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root {
-  --navy:#141d38; --blue:#3e63dd; --gold:#f5a524;
-  --green:#1ea04b; --orange:#e8590c;
-  --gray:#8b93a1; --border:#e3e7f0; --radius:16px;
+  --navy:#2B2350; --blue:#6741D9; --gold:#FFB01F;
+  --green:#0CA678; --orange:#FF6B2C;
+  --gray:#8D8578; --border:#E8E0D0; --radius:16px;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:#212529;min-height:100vh;}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#FBF7EE;color:#212529;min-height:100vh;}
 
 /* ── Header ── */
-.app-header{background:linear-gradient(135deg,var(--navy) 0%,#22336b 55%,#2d4a9e 100%);color:#fff;padding:22px 16px 26px;text-align:center;}
+.app-header{background:linear-gradient(120deg,#E8481F 0%,#D6336C 48%,#5F3DC4 100%);color:#fff;padding:22px 16px 26px;text-align:center;}
 .header-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
 .header-title{font-size:21px;font-weight:800;}
 .header-sub{font-size:13px;opacity:.75;margin-top:4px;}
@@ -31,7 +31,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .purpose-text{font-size:12.5px;color:#495057;line-height:1.75;}
 
 /* ── Privacy notice ── */
-.privacy-note{font-size:11px;color:var(--gray);line-height:1.6;background:#f8f9fa;border-radius:8px;padding:10px 12px;margin-top:10px;}
+.privacy-note{font-size:11px;color:var(--gray);line-height:1.6;background:#F6F1E7;border-radius:8px;padding:10px 12px;margin-top:10px;}
 
 /* ── Team selector ── */
 .section-label{font-size:12px;font-weight:700;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
@@ -57,8 +57,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 
 /* ── 미션 카드 내 목적지 안내 칩 ── */
 .mission-dest-chip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;padding:7px 12px;border-radius:20px;margin-bottom:14px;}
-.mission-dest-chip.m1{background:#eef2ff;color:var(--blue);}
-.mission-dest-chip.m2{background:#ebfbee;color:var(--green);}
+.mission-dest-chip.m1{background:#EFEAFB;color:var(--blue);}
+.mission-dest-chip.m2{background:#E3FAF3;color:var(--green);}
 .dest-waypoint{font-size:13px;opacity:.85;}
 .dest-waypoint b{background:rgba(255,255,255,.2);padding:2px 10px;border-radius:20px;}
 
@@ -91,8 +91,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 
 /* ── Mission cards ── */
 .mission-header{padding:14px 16px;display:flex;align-items:center;gap:10px;}
-.mission-header.m1{background:linear-gradient(90deg,#fff9e6,#fffdf5);}
-.mission-header.m2{background:linear-gradient(90deg,#ebfbee,#f5fff7);}
+.mission-header.m1{background:linear-gradient(90deg,#FFF4D6,#fffdf5);}
+.mission-header.m2{background:linear-gradient(90deg,#E3FAF3,#f5fff7);}
 .mission-num{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
 .mission-num.m1{background:var(--gold);}
 .mission-num.m2{background:var(--green);}
@@ -120,21 +120,21 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .t-btn:active{opacity:.85;}
 
 /* ── Roadview placeholder (미사용, REQ-04에서 GPS 게이트로 교체됨 — 잔존 스타일) ── */
-.rv-placeholder{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#25315a,#141d38);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;margin-bottom:14px;}
+.rv-placeholder{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#3B2E7E,#2B2350);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;margin-bottom:14px;}
 .rv-icon{font-size:32px;margin-bottom:8px;opacity:.8;}
 .rv-text{font-size:13px;font-weight:600;}
 .rv-sub{font-size:11px;opacity:.6;margin-top:4px;}
 
 /* ── 샘플 포즈 일러스트 ── */
-.pose-sample{width:100%;background:linear-gradient(135deg,#25315a,#141d38);border-radius:10px;padding:16px 0 12px;margin-bottom:14px;text-align:center;}
+.pose-sample{width:100%;background:linear-gradient(135deg,#3B2E7E,#2B2350);border-radius:10px;padding:16px 0 12px;margin-bottom:14px;text-align:center;}
 .pose-svg{width:70%;max-width:220px;height:auto;}
 .pose-caption{color:#fff;font-size:12px;font-weight:600;margin-top:8px;opacity:.9;}
 
 /* ── GPS 도착 확인 게이트 ── */
 .geo-box{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:22px 16px;border-radius:10px;margin-bottom:14px;}
-#geoIdle, #geoChecking, #geoFar{background:#eef2ff;}
+#geoIdle, #geoChecking, #geoFar{background:#EFEAFB;}
 #geoError{background:#fff5f5;}
-#geoOk.ok{background:#ebfbee;}
+#geoOk.ok{background:#E3FAF3;}
 .geo-icon{font-size:30px;}
 .geo-icon.spin{animation:geoSpin 1.2s linear infinite;}
 @keyframes geoSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
@@ -142,19 +142,19 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .geo-skip{background:none;border:none;color:var(--gray);font-size:11.5px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:4px;}
 .geo-map-links{display:flex;gap:8px;width:100%;}
 .geo-map-links a{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:11px 8px;border-radius:8px;font-size:12.5px;font-weight:700;text-decoration:none;}
-.geo-map-links a.kko{background:#fff9db;color:#997404;}
-.geo-map-links a.nvr{background:#ebfbee;color:var(--green);}
+.geo-map-links a.kko{background:#FFF4D6;color:#8A6410;}
+.geo-map-links a.nvr{background:#E3FAF3;color:var(--green);}
 
 /* ── Steps ── */
 .steps{margin-bottom:14px;}
-.step-row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #f1f3f5;font-size:13px;}
+.step-row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid #F1EBDF;font-size:13px;}
 .step-row:last-child{border-bottom:none;}
 .step-n{width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
 .step-text b{display:block;color:#1a2744;}
 .step-text span{color:#868e96;font-size:12px;}
 
 /* ── 미션 규칙 안내 (위치 확인 전에도 항상 노출) ── */
-.mission-rules{background:#f8f9fa;border-radius:10px;padding:14px 16px 6px;margin-bottom:16px;}
+.mission-rules{background:#F6F1E7;border-radius:10px;padding:14px 16px 6px;margin-bottom:16px;}
 .mission-rules-title{font-size:12px;font-weight:800;color:var(--navy);margin-bottom:4px;}
 .mission-rules .steps{margin-bottom:8px;}
 .mission-rules .step-row{border-bottom-color:#e9ecef;}
@@ -179,10 +179,10 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .submit-btn:disabled{background:var(--border);color:var(--gray);cursor:not-allowed;}
 
 /* ── Done status ── */
-.status-done{display:flex;align-items:center;gap:10px;background:#ebfbee;border:1.5px solid #b2f2bb;border-radius:10px;padding:14px 16px;font-size:14px;font-weight:700;color:var(--green);}
+.status-done{display:flex;align-items:center;gap:10px;background:#E3FAF3;border:1.5px solid #96E6CF;border-radius:10px;padding:14px 16px;font-size:14px;font-weight:700;color:var(--green);}
 
 /* ── Pending review status ── */
-.status-pending{display:flex;align-items:center;gap:10px;background:#fff9db;border:1.5px solid #ffe066;border-radius:10px;padding:14px 16px;font-size:14px;font-weight:700;color:#997404;}
+.status-pending{display:flex;align-items:center;gap:10px;background:#FFF4D6;border:1.5px solid #FFD43B;border-radius:10px;padding:14px 16px;font-size:14px;font-weight:700;color:#8A6410;}
 .status-pending .p-dot{width:8px;height:8px;border-radius:50%;background:#f59f00;animation:blink 1.2s infinite;flex-shrink:0;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
 
@@ -224,9 +224,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .reset-err{font-size:12px;color:#f03e3e;text-align:center;min-height:16px;margin-bottom:8px;}
 .reset-btn{width:100%;padding:14px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px;}
 .reset-btn.confirm{background:var(--navy);color:#fff;}
-.reset-btn.team-only{background:#e7f5ff;color:var(--blue);}
+.reset-btn.team-only{background:#EFEAFB;color:var(--blue);}
 .reset-btn.full{background:#fff5f5;color:#f03e3e;}
-.reset-btn.cancel{background:#f1f3f5;color:var(--gray);margin-bottom:0;}
+.reset-btn.cancel{background:#F1EBDF;color:var(--gray);margin-bottom:0;}
 
 /* ── 소형 화면 대응 (REQ-02) ── */
 @media(max-width:370px){
@@ -239,16 +239,19 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
   .t-headline{font-size:22px;}
 }
 
-/* ══ 2026-07-10 디자인 리프레시 (공통 폴리시) ══ */
+/* ══ 2026-07-10 디자인 컨셉 v2: SUMMER BREAKTHROUGH (여름 캠프 포스터) ══ */
+@font-face{font-family:'GmarketSansBold';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');font-weight:normal;font-display:swap;}
 *{-webkit-tap-highlight-color:transparent;}
-body{letter-spacing:-0.011em;background:linear-gradient(180deg,#eef1f9 0%,#f2f4fa 100%);}
-h1,h2,h3,.header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline{letter-spacing:-0.025em;}
+body{letter-spacing:-0.011em;background:#FBF7EE;color:#2B2350;}
+.header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline,.site-title{font-family:'GmarketSansBold','Pretendard Variable',sans-serif;letter-spacing:0;}
+h1,h2,h3{letter-spacing:-0.02em;}
+.header-tag,.rp-badge,.dest-teams{background:#FFD43B !important;color:#2B2350 !important;box-shadow:2px 2px 0 rgba(43,35,80,.25);}
 button{transition:transform .12s ease,box-shadow .2s ease,opacity .2s ease,background .2s ease;}
-button:not(:disabled):active{transform:scale(.97);}
-input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !important;box-shadow:0 0 0 3px rgba(62,99,221,.13);}
-.app-header{position:relative;overflow:hidden;}
-.app-header::after{content:'';position:absolute;top:-60%;right:-20%;width:70%;height:220%;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.07) 45%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.07) 55%,transparent 70%);transform:rotate(8deg);pointer-events:none;}
-.app-header>*{position:relative;z-index:1;}
+button:not(:disabled):active{transform:translate(1px,2px);}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !important;box-shadow:0 0 0 3px rgba(103,65,217,.15);}
+.app-header,.site-header{position:relative;overflow:hidden;}
+.app-header::after,.site-header::after{content:'';position:absolute;top:-60%;right:-15%;width:75%;height:230%;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.10) 45%,rgba(255,220,120,.18) 50%,rgba(255,255,255,.10) 55%,transparent 70%);transform:rotate(8deg);pointer-events:none;}
+.app-header>*,.site-header>*{position:relative;z-index:1;}
 @media(prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
 </style>
 </head>
@@ -471,7 +474,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
         <p style="font-size:13px;color:#495057;margin-bottom:10px;line-height:1.75;">
           여호수아의 정탐꾼처럼,<br><b id="m2DestNameInline">이곳</b>에서 하나님이 보게 하시는 것을 적어요.
         </p>
-        <a id="m2GuideLink" href="guide.html" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--blue);text-decoration:none;background:#eef2ff;padding:8px 14px;border-radius:20px;margin-bottom:16px;">📖 이 장소의 견학 안내 보기 →</a>
+        <a id="m2GuideLink" href="guide.html" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--blue);text-decoration:none;background:#EFEAFB;padding:8px 14px;border-radius:20px;margin-bottom:16px;">📖 이 장소의 견학 안내 보기 →</a>
         <div id="m2Form">
           <div class="report-group">
             <label class="report-label">🧱 우리가 본 장벽</label>
@@ -510,7 +513,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
 
   </div>
 
-  <a href="board.html" style="display:block;text-align:center;margin:8px 0 4px;font-size:12.5px;color:var(--blue);font-weight:700;text-decoration:none;background:#eef2ff;padding:11px;border-radius:10px;">🕊 정탐대 소통방 가기 →</a>
+  <a href="board.html" style="display:block;text-align:center;margin:8px 0 4px;font-size:12.5px;color:var(--blue);font-weight:700;text-decoration:none;background:#EFEAFB;padding:11px;border-radius:10px;">🕊 정탐대 소통방 가기 →</a>
 
   <!-- 테스트용 초기화 (교사/개발자 전용) -->
   <div class="reset-footer">
@@ -565,12 +568,12 @@ const db = firebase.database();
 // 서대문형무소행 3개 조: 청계천/광화문광장/덕수궁 돌담길 → 독립문역에서 합류 (2026-07-09 적용)
 // lat/lng/radius: 미션1 GPS 도착 확인용 (REQ-04, 좌표는 추정치 — 실제 운영 전 재확인 권장)
 const TEAM_MAP = {
-  1:{dest:'전쟁기념관',waypoint:'노들섬',bg:'linear-gradient(135deg,#141d38,#3e63dd)',lat:37.517700,lng:126.956300,radius:450},
-  2:{dest:'전쟁기념관',waypoint:'이촌한강공원',bg:'linear-gradient(135deg,#141d38,#3e63dd)',lat:37.522200,lng:126.970100,radius:450},
-  3:{dest:'전쟁기념관',waypoint:'서울로7017',bg:'linear-gradient(135deg,#141d38,#3e63dd)',lat:37.554700,lng:126.970800,radius:350},
-  4:{dest:'서대문형무소',waypoint:'청계천(청계광장)',bg:'linear-gradient(135deg,#123a22,#1ea04b)',lat:37.569500,lng:126.978400,radius:300},
-  5:{dest:'서대문형무소',waypoint:'광화문광장',bg:'linear-gradient(135deg,#123a22,#1ea04b)',lat:37.572000,lng:126.976900,radius:300},
-  6:{dest:'서대문형무소',waypoint:'덕수궁 돌담길',bg:'linear-gradient(135deg,#123a22,#1ea04b)',lat:37.565800,lng:126.975200,radius:400},
+  1:{dest:'전쟁기념관',waypoint:'노들섬',bg:'linear-gradient(135deg,#3B2E7E,#7048E8)',lat:37.517700,lng:126.956300,radius:450},
+  2:{dest:'전쟁기념관',waypoint:'이촌한강공원',bg:'linear-gradient(135deg,#3B2E7E,#7048E8)',lat:37.522200,lng:126.970100,radius:450},
+  3:{dest:'전쟁기념관',waypoint:'서울로7017',bg:'linear-gradient(135deg,#3B2E7E,#7048E8)',lat:37.554700,lng:126.970800,radius:350},
+  4:{dest:'서대문형무소',waypoint:'청계천(청계광장)',bg:'linear-gradient(135deg,#0B4F43,#0CA678)',lat:37.569500,lng:126.978400,radius:300},
+  5:{dest:'서대문형무소',waypoint:'광화문광장',bg:'linear-gradient(135deg,#0B4F43,#0CA678)',lat:37.572000,lng:126.976900,radius:300},
+  6:{dest:'서대문형무소',waypoint:'덕수궁 돌담길',bg:'linear-gradient(135deg,#0B4F43,#0CA678)',lat:37.565800,lng:126.975200,radius:400},
 };
 
 // ── 조별 비밀번호 퀴즈 (REQ-07 확정) ──

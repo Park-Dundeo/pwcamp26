@@ -7,20 +7,20 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
 :root {
-  --navy:#141d38; --navy-mid:#1f2c52; --blue:#3e63dd; --blue-light:#5a7cfa;
-  --sky:#e8eeff; --gold:#f5a524; --gold-light:#fff9e6;
-  --green:#1ea04b; --green-light:#ebfbee;
-  --red:#e03131; --red-light:#fff5f5;
-  --orange:#e8590c; --orange-light:#fff4e6;
-  --gray:#8b93a1; --gray-light:#f8f9fa; --border:#e3e7f0;
-  --text:#212529; --text-soft:#495057;
+  --navy:#2B2350; --navy-mid:#3B2E7E; --blue:#6741D9; --blue-light:#845EF7;
+  --sky:#EFEAFB; --gold:#FFB01F; --gold-light:#FFF4D6;
+  --green:#0CA678; --green-light:#E3FAF3;
+  --red:#F03E3E; --red-light:#fff5f5;
+  --orange:#FF6B2C; --orange-light:#FFEEDB;
+  --gray:#8D8578; --gray-light:#F6F1E7; --border:#E8E0D0;
+  --text:#2B2350; --text-soft:#5D5680;
   --radius:14px; --shadow:0 2px 12px rgba(0,0,0,0.07);
   /* 지하철 라인 */
   --line2:#3CAC49; --line3:#EF7C1C; --line5:#996CAC;
   --line6:#CD7C2F; --line7:#747F00; --line8:#E6186C;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#f0f2f8;color:var(--text);line-height:1.65;}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#FBF7EE;color:var(--text);line-height:1.65;}
 
 /* ── Header ── */
 .site-header{background:linear-gradient(135deg,var(--navy) 0%,#2d4a9e 100%);color:#fff;padding:22px 20px;}
@@ -40,7 +40,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .tab-btn.active{color:var(--blue);border-bottom-color:var(--blue);}
 .menu-wrap{position:relative;flex-shrink:0;padding:0 14px;}
 .menu-btn{padding:9px 14px;font-size:12.5px;font-weight:700;color:var(--navy);background:var(--sky);border:none;border-radius:20px;cursor:pointer;font-family:inherit;white-space:nowrap;display:flex;align-items:center;gap:4px;}
-.menu-btn:hover{background:#d8e4ff;}
+.menu-btn:hover{background:#E2D9F8;}
 .menu-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:14px;background:#fff;border-radius:10px;box-shadow:0 10px 32px rgba(0,0,0,.2);padding:8px;min-width:230px;z-index:100;}
 .menu-dropdown.open{display:block;}
 .menu-group-label{font-size:10px;font-weight:800;color:var(--gray);letter-spacing:.5px;text-transform:uppercase;padding:9px 10px 4px;}
@@ -55,7 +55,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 /* ── Tags ── */
 .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
 .tag-done{background:var(--green-light);color:var(--green);}
-.tag-todo{background:#f1f3f5;color:var(--gray);}
+.tag-todo{background:#F1EBDF;color:var(--gray);}
 .tag-check{background:var(--orange-light);color:var(--orange);}
 .tag-key{background:var(--sky);color:var(--blue);}
 
@@ -67,7 +67,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 
 /* ── Item list ── */
 .item-list{list-style:none;}
-.item-list li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #f1f3f5;font-size:13px;}
+.item-list li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #F1EBDF;font-size:13px;}
 .item-list li:last-child{border-bottom:none;}
 .item-label{flex:1;}
 .item-label b{color:var(--navy-mid);}
@@ -88,8 +88,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .day-preview-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:transform .15s,box-shadow .15s;border:none;text-align:left;font-family:inherit;width:100%;}
 .day-preview-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.12);}
 .day-preview-top{padding:16px 18px;color:#fff;}
-.day-preview-top.d1{background:linear-gradient(135deg,#141d38,#3e63dd);}
-.day-preview-top.d2{background:linear-gradient(135deg,#3d1600,#e8590c);}
+.day-preview-top.d1{background:linear-gradient(135deg,#3B2E7E,#7048E8);}
+.day-preview-top.d2{background:linear-gradient(135deg,#7A2E0E,#FF6B2C);}
 .day-preview-tag{font-size:10px;font-weight:800;letter-spacing:1.5px;opacity:.75;text-transform:uppercase;}
 .day-preview-title{font-size:17px;font-weight:800;margin:4px 0 8px;}
 .day-preview-keyword{font-size:11.5px;font-weight:700;background:rgba(255,255,255,.2);display:inline-block;padding:3px 11px;border-radius:20px;}
@@ -99,7 +99,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 
 .timetable-daysep{font-size:11.5px;font-weight:800;color:var(--navy);background:var(--sky);padding:7px 11px;border-radius:6px;margin:16px 0 4px;}
 .timetable-daysep:first-child{margin-top:0;}
-.timetable-row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #f1f3f5;font-size:13px;}
+.timetable-row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #F1EBDF;font-size:13px;}
 .timetable-row:last-child{border-bottom:none;}
 .timetable-time{flex-shrink:0;width:92px;font-weight:800;color:var(--blue);font-size:12px;}
 .timetable-day{display:inline-block;font-size:10px;font-weight:800;color:#fff;background:var(--gray);padding:1px 7px;border-radius:10px;margin-right:6px;}
@@ -165,9 +165,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 
 /* 지도 버튼 */
 .map-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:var(--sky);color:var(--blue);font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;text-decoration:none;transition:background .2s;}
-.map-btn:hover{background:#d8e4ff;}
-.guide-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:#fff3bf;color:#997404;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;text-decoration:none;transition:background .2s;}
-.guide-btn:hover{background:#ffe066;}
+.map-btn:hover{background:#E2D9F8;}
+.guide-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:#FFE8A3;color:#8A6410;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;text-decoration:none;transition:background .2s;}
+.guide-btn:hover{background:#FFD43B;}
 
 /* ══════════════════════════════
    조별 동선 지도 (REQ-29, Kakao Maps)
@@ -190,11 +190,11 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .kmap-info .ki-warn{color:#e03131;font-size:10.5px;font-weight:700;margin-bottom:6px;}
 .kmap-info .ki-links{display:flex;gap:6px;}
 .kmap-info .ki-links a{flex:1;text-align:center;font-size:11px;font-weight:700;padding:6px 4px;border-radius:6px;text-decoration:none;}
-.kmap-info .ki-links a.kko{background:#fff9db;color:#997404;}
+.kmap-info .ki-links a.kko{background:#FFF4D6;color:#8A6410;}
 .kmap-info .ki-links a.nvr{background:var(--green-light);color:var(--green);}
 
 .point-list{display:flex;flex-direction:column;gap:0;}
-.point-item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #f1f3f5;font-size:12.5px;}
+.point-item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #F1EBDF;font-size:12.5px;}
 .point-item:last-child{border-bottom:none;}
 .point-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;margin-top:1px;}
 .point-num.start{background:var(--navy);} .point-num.mission{background:var(--gold);}
@@ -205,7 +205,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .point-warn{font-size:10px;color:#e03131;font-weight:700;}
 .point-links{display:flex;gap:6px;flex-shrink:0;}
 .point-links a{font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:6px;text-decoration:none;white-space:nowrap;}
-.point-links a.kko{background:#fff9db;color:#997404;}
+.point-links a.kko{background:#FFF4D6;color:#8A6410;}
 .point-links a.nvr{background:var(--green-light);color:var(--green);}
 
 /* ══════════════════════════════
@@ -223,14 +223,14 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .mission-body{padding:16px;}
 
 /* 로드뷰 placeholder */
-.roadview-box{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#25315a,#141d38);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;margin-bottom:14px;position:relative;overflow:hidden;}
+.roadview-box{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#3B2E7E,#2B2350);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;margin-bottom:14px;position:relative;overflow:hidden;}
 .roadview-box .rv-icon{font-size:36px;margin-bottom:8px;opacity:.8;}
 .roadview-box .rv-label{font-size:13px;font-weight:600;opacity:.9;}
 .roadview-box .rv-sub{font-size:11px;opacity:.6;margin-top:4px;}
 .roadview-box .rv-dot{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--gold);bottom:14px;right:14px;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.3);}}
 
-.mission-step{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #f1f3f5;font-size:13px;}
+.mission-step{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #F1EBDF;font-size:13px;}
 .mission-step:last-child{border-bottom:none;}
 .step-num{width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
 .step-text{flex:1;}
@@ -249,9 +249,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 ══════════════════════════════ */
 .phase{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:14px;}
 .phase-header{padding:13px 16px;display:flex;align-items:center;gap:10px;}
-.phase-header.p1{background:linear-gradient(90deg,#e8eeff,#f8f9ff);}
-.phase-header.p2{background:linear-gradient(90deg,#ebfbee,#f5fff7);}
-.phase-header.p3{background:linear-gradient(90deg,#fff9e6,#fffdf5);}
+.phase-header.p1{background:linear-gradient(90deg,#EFEAFB,#f8f9ff);}
+.phase-header.p2{background:linear-gradient(90deg,#E3FAF3,#f5fff7);}
+.phase-header.p3{background:linear-gradient(90deg,#FFF4D6,#fffdf5);}
 .phase-num{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;flex-shrink:0;}
 .phase-num.p1{background:var(--blue);}
 .phase-num.p2{background:var(--green);}
@@ -293,15 +293,18 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
   .loc-grid,.gate-grid{grid-template-columns:1fr;}
 }
 
-/* ══ 2026-07-10 디자인 리프레시 (공통 폴리시) ══ */
+/* ══ 2026-07-10 디자인 컨셉 v2: SUMMER BREAKTHROUGH (여름 캠프 포스터) ══ */
+@font-face{font-family:'GmarketSansBold';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');font-weight:normal;font-display:swap;}
 *{-webkit-tap-highlight-color:transparent;}
-body{letter-spacing:-0.011em;background:linear-gradient(180deg,#eef1f9 0%,#f2f4fa 100%);}
-h1,h2,h3,.header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline{letter-spacing:-0.025em;}
+body{letter-spacing:-0.011em;background:#FBF7EE;color:#2B2350;}
+.header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline,.site-title{font-family:'GmarketSansBold','Pretendard Variable',sans-serif;letter-spacing:0;}
+h1,h2,h3{letter-spacing:-0.02em;}
+.header-tag,.rp-badge,.dest-teams{background:#FFD43B !important;color:#2B2350 !important;box-shadow:2px 2px 0 rgba(43,35,80,.25);}
 button{transition:transform .12s ease,box-shadow .2s ease,opacity .2s ease,background .2s ease;}
-button:not(:disabled):active{transform:scale(.97);}
-input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !important;box-shadow:0 0 0 3px rgba(62,99,221,.13);}
+button:not(:disabled):active{transform:translate(1px,2px);}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !important;box-shadow:0 0 0 3px rgba(103,65,217,.15);}
 .app-header,.site-header{position:relative;overflow:hidden;}
-.app-header::after,.site-header::after{content:'';position:absolute;top:-60%;right:-20%;width:70%;height:220%;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.07) 45%,rgba(255,255,255,.12) 50%,rgba(255,255,255,.07) 55%,transparent 70%);transform:rotate(8deg);pointer-events:none;}
+.app-header::after,.site-header::after{content:'';position:absolute;top:-60%;right:-15%;width:75%;height:230%;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.10) 45%,rgba(255,220,120,.18) 50%,rgba(255,255,255,.10) 55%,transparent 70%);transform:rotate(8deg);pointer-events:none;}
 .app-header>*,.site-header>*{position:relative;z-index:1;}
 @media(prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
 </style>
@@ -584,7 +587,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
       </div>
 
       <!-- 공통: 식사 → 도봉숲속마을 이동 (3개 조 동일) -->
-      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;background:#f8f9fa;">
+      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;background:#F6F1E7;">
         <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">🚩 1·2·3조 공통 — 견학 이후</div>
         <div class="route-timeline">
           <div class="rt-step">
@@ -745,7 +748,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
       </div>
 
       <!-- 공통: 식사 → 도봉숲속마을 이동 (3개 조 동일) -->
-      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;background:#f8f9fa;">
+      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;background:#F6F1E7;">
         <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">🚩 4·5·6조 공통 — 견학 이후</div>
         <div class="route-timeline">
           <div class="rt-step">
