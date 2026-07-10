@@ -507,7 +507,28 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
         </div>
       </div>
 
-      <div class="map-caption" style="margin-bottom:12px;">지도 위 선은 실제 이동 경로가 아니라, 장소 간 이동 순서를 보여주는 안내선입니다. 정확한 대중교통 경로와 소요 시간은 카카오맵 또는 네이버지도에서 확인해주세요. 식사·도봉숲속마을 이동은 3개 조 공통(하단 참고).</div>
+      <!-- 공통: 식사 → 도봉숲속마을 이동 (3개 조 동일) -->
+      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;background:#f8f9fa;">
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">🚩 1·2·3조 공통 — 견학 이후</div>
+        <div class="route-timeline">
+          <div class="rt-step">
+            <div class="rt-icon food">🍽</div>
+            <div class="rt-content">
+              <div class="rt-title">식사 — 삼각지·용산 인근</div>
+              <div class="rt-sub">조별 자유 식사 (방식 미정)</div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon bus">🚌</div>
+            <div class="rt-content">
+              <div class="rt-title">도봉숲속마을 이동</div>
+              <div class="rt-sub">집결 시간·장소 추후 확정</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="map-caption" style="margin-bottom:12px;">지도 위 선은 실제 이동 경로가 아니라, 장소 간 이동 순서를 보여주는 안내선입니다. 정확한 대중교통 경로와 소요 시간은 카카오맵 또는 네이버지도에서 확인해주세요. 식사·도봉숲속마을 이동은 3개 조 공통(위 참고).</div>
       <a class="map-btn" href="https://map.naver.com/v5/search/전쟁기념관" target="_blank">🗺 전쟁기념관 네이버 지도로 보기 →</a>
       <a class="guide-btn" href="guide.html?course=c">📖 견학 코스 안내 보기 →</a>
     </div>
@@ -801,6 +822,8 @@ const ROUTE_DATA = {
       { order:1, type:'출발', name:'나비쇼핑몰 / 강동역', lat:37.535000, lng:127.132000, description:'조별 출발 · 인솔 교사 동행', stay:null, mission:null, verified:false },
       { order:2, type:'1차 미션', name:'노들섬', lat:37.517700, lng:126.956300, description:'신용산역 방면 버스 · 한강대교 배경', stay:null, mission:'인증샷: 잔디마당 · 한강대교 배경 · 전망 계단', verified:false },
       { order:3, type:'2차 견학', name:'전쟁기념관', lat:37.536300, lng:126.977000, description:'희생 · 평화 · 감사', stay:'약 60분', mission:'우리가 본 장벽 / 발견한 믿음 / 돌파기도 보고서 작성', verified:true },
+      { order:4, type:'식사 권역', name:'삼각지 · 용산 인근', lat:37.534400, lng:126.994600, description:'조별 자유 식사 (방식 미정)', stay:null, mission:null, verified:false },
+      { order:5, type:'최종 이동', name:'도봉숲속마을', lat:37.669700, lng:127.045900, description:'집결 시간·장소 추후 확정', stay:null, mission:null, verified:false },
     ],
   },
   war2: {
@@ -809,6 +832,8 @@ const ROUTE_DATA = {
       { order:1, type:'출발', name:'나비쇼핑몰 / 강동역', lat:37.535000, lng:127.132000, description:'조별 출발 · 인솔 교사 동행', stay:null, mission:null, verified:false },
       { order:2, type:'1차 미션', name:'이촌한강공원', lat:37.522200, lng:126.970100, description:'이촌역 4번 출구 방면 약 500m', stay:null, mission:'인증샷: 강변 산책로 · 한강철교/한강대교 배경', verified:false },
       { order:3, type:'2차 견학', name:'전쟁기념관', lat:37.536300, lng:126.977000, description:'희생 · 평화 · 감사', stay:'약 60분', mission:'우리가 본 장벽 / 발견한 믿음 / 돌파기도 보고서 작성', verified:true },
+      { order:4, type:'식사 권역', name:'삼각지 · 용산 인근', lat:37.534400, lng:126.994600, description:'조별 자유 식사 (방식 미정)', stay:null, mission:null, verified:false },
+      { order:5, type:'최종 이동', name:'도봉숲속마을', lat:37.669700, lng:127.045900, description:'집결 시간·장소 추후 확정', stay:null, mission:null, verified:false },
     ],
   },
   war3: {
@@ -817,6 +842,8 @@ const ROUTE_DATA = {
       { order:1, type:'출발', name:'나비쇼핑몰 / 강동역', lat:37.535000, lng:127.132000, description:'조별 출발 · 인솔 교사 동행', stay:null, mission:null, verified:false },
       { order:2, type:'1차 미션', name:'서울로7017', lat:37.554700, lng:126.970800, description:'서울역 고가 보행길', stay:null, mission:'인증샷: 고가 보행길 · 서울역 배경 · 도심 전망', verified:false },
       { order:3, type:'2차 견학', name:'전쟁기념관', lat:37.536300, lng:126.977000, description:'희생 · 평화 · 감사', stay:'약 60분', mission:'우리가 본 장벽 / 발견한 믿음 / 돌파기도 보고서 작성', verified:true },
+      { order:4, type:'식사 권역', name:'삼각지 · 용산 인근', lat:37.534400, lng:126.994600, description:'조별 자유 식사 (방식 미정)', stay:null, mission:null, verified:false },
+      { order:5, type:'최종 이동', name:'도봉숲속마을', lat:37.669700, lng:127.045900, description:'집결 시간·장소 추후 확정', stay:null, mission:null, verified:false },
     ],
   },
   b: {
