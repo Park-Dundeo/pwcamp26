@@ -5,15 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>준비물 체크리스트 — 파워웨이브 2026</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&display=swap">
 <style>
 :root {
-  --navy:#2B2350; --blue:#6741D9; --gold:#FFB01F;
-  --green:#0CA678; --gray:#8B84A3; --border:#E4E0F5; --radius:16px; --sky:#EFEAFB;
+  --navy:#123A5E; --blue:#2E9EF0; --gold:#FFB01F;
+  --green:#0CA678; --gray:#6E86A8; --border:#DCEEFB; --radius:16px; --sky:#E7F5FF;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#ffffff;color:#212529;min-height:100vh;}
 
-.app-header{background:linear-gradient(120deg,#E8481F 0%,#D6336C 48%,#5F3DC4 100%);color:#fff;padding:20px 16px 22px;text-align:center;}
+.app-header{background:linear-gradient(120deg,#155F9C 0%,#2E9EF0 55%,#4FC3F7 100%);color:#fff;padding:20px 16px 22px;text-align:center;}
 .header-back{position:absolute;left:14px;top:16px;color:#fff;opacity:.8;text-decoration:none;font-size:12px;}
 .header-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
 .header-title{font-size:19px;font-weight:800;}
@@ -33,7 +34,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 
 .table-scroll{overflow-x:auto;background:#fff;border-radius:var(--radius);box-shadow:0 4px 20px rgba(20,29,56,.07);margin-bottom:8px;}
 table.checklist-table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:920px;}
-table.checklist-table th{background:#F5F3FB;color:var(--gray);padding:9px 10px;text-align:left;font-size:10.5px;letter-spacing:.3px;text-transform:uppercase;border-bottom:2px solid var(--border);white-space:nowrap;}
+table.checklist-table th{background:#EEF6FB;color:var(--gray);padding:9px 10px;text-align:left;font-size:10.5px;letter-spacing:.3px;text-transform:uppercase;border-bottom:2px solid var(--border);white-space:nowrap;}
 table.checklist-table td{padding:7px 8px;border-bottom:1px solid var(--border);vertical-align:middle;}
 table.checklist-table tr:last-child td{border-bottom:none;}
 table.checklist-table input, table.checklist-table select{width:100%;padding:7px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;font-family:inherit;background:#fff;}
@@ -51,19 +52,19 @@ select.status-select.확인필요{color:#e03131;}
 
 .back-link{display:block;text-align:center;margin-top:22px;font-size:12px;color:var(--gray);text-decoration:none;}
 
-/* ══ 2026-07-10 디자인 컨셉 v2: SUMMER BREAKTHROUGH (여름 캠프 포스터) ══ */
-@font-face{font-family:'GmarketSansBold';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');font-weight:normal;font-display:swap;}
+/* == 2026-07-11 design v3: POWER WAVE (full visual replacement of SUMMER BREAKTHROUGH) == */
 *{-webkit-tap-highlight-color:transparent;}
-body{letter-spacing:-0.011em;background:#ffffff;color:#2B2350;}
-.header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline,.site-title{font-family:'GmarketSansBold','Pretendard Variable',sans-serif;letter-spacing:0;}
-h1,h2,h3{letter-spacing:-0.02em;}
-.header-tag,.rp-badge,.dest-teams{background:#FFD43B !important;color:#2B2350 !important;box-shadow:2px 2px 0 rgba(43,35,80,.25);}
+body{letter-spacing:-0.011em;background:#ffffff;color:#123A5E;}
+.header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline,.site-title{font-family:'Jua','Pretendard Variable',sans-serif;letter-spacing:.2px;}
+h1,h2,h3{letter-spacing:-0.01em;}
+.header-tag,.rp-badge,.dest-teams{background:#FFD43B !important;color:#123A5E !important;box-shadow:2px 2px 0 rgba(18,58,94,.25);}
 button{transition:transform .12s ease,box-shadow .2s ease,opacity .2s ease,background .2s ease;}
 button:not(:disabled):active{transform:translate(1px,2px);}
-input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !important;box-shadow:0 0 0 3px rgba(103,65,217,.15);}
-.app-header,.site-header{position:relative;overflow:hidden;}
-.app-header::after,.site-header::after{content:'';position:absolute;top:-60%;right:-15%;width:75%;height:230%;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.10) 45%,rgba(255,220,120,.18) 50%,rgba(255,255,255,.10) 55%,transparent 70%);transform:rotate(8deg);pointer-events:none;}
-.app-header>*,.site-header>*{position:relative;z-index:1;}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !important;box-shadow:0 0 0 3px rgba(46,158,240,.18);}
+.app-header,.site-header{position:relative;overflow:hidden;padding-bottom:32px !important;border-radius:0 0 26px 26px;}
+.app-header::before,.site-header::before{content:'';position:absolute;left:0;right:0;bottom:0;height:22px;background:#fff;-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 22' preserveAspectRatio='none'%3E%3Cpath d='M0,11 C150,22 350,0 600,11 C850,22 1050,0 1200,11 L1200,22 L0,22 Z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 22' preserveAspectRatio='none'%3E%3Cpath d='M0,11 C150,22 350,0 600,11 C850,22 1050,0 1200,11 L1200,22 L0,22 Z'/%3E%3C/svg%3E");-webkit-mask-size:100% 100%;mask-size:100% 100%;z-index:1;}
+.app-header>*,.site-header>*{position:relative;z-index:2;}
+.submit-btn.primary,.unlock-btn,.t-btn,.reset-btn.confirm,.modal-btn.confirm{background:linear-gradient(135deg,#FF8A3D,#FF6B2C) !important;color:#fff !important;box-shadow:0 4px 14px rgba(255,107,44,.35) !important;}
 @media(prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
 </style>
 </head>

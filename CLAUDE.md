@@ -7,7 +7,8 @@
 | 파일 | 용도 | 접근 대상 |
 |---|---|---|
 | `index.html` | 교사용 기획 대시보드 (읽기 전용) + 전체 페이지 링크 허브 | 프로그램팀 교사 |
-| `mission.html` | 학생용 미션 페이지 (조 선택 → 코드 잠금해제 → 미션1 사진 → 미션2 보고서) | 학생 (조당 1명) |
+| `mission.html` | 학생용 미션 페이지 (조 선택 → 코드 잠금해제 → 미션1 사진 → 미션2 보고서). 4탭 앱 셸의 "미션" 탭 | 학생 (조당 1명) |
+| `map.html` | 우리 조 이동 경로 지도(REQ-44). `localStorage.pwcamp_team`으로 mission.html과 조 정보 동기화. 4탭 앱 셸의 "지도" 탭 | 학생 |
 | `admin.html` | 실시간 제출 현황 모니터링 + 준비 소식 의견함 모더레이션 (비밀번호는 코드에 해시로만 저장, 원본은 교사 공유방) | 관리자 |
 | `teacher.html` | 교사용 실행 매뉴얼 (타임테이블·역할표·비상연락망·조별명단·정책) | 전체 교사 |
 | `station.html` | Day2 6관문+Final+우천대체 담당자 카드 (게임/30초 멘트/통과기준/안전/준비물). 2·3·4관문·Final은 2026-07-10 물 보급 테마 게임으로 교체, "믿음의 잔 수호전"은 특정 관문이 아니라 물 게임 전체의 공용 우천 대체(맨 끝 카드) | 관문 담당 교사 |
@@ -30,6 +31,8 @@
 - **⚠️ QUIZ_HASHES / ADMIN_PW_HASH가 mission.html·admin.html·news.html·board.html 4곳에 중복 저장되어 있음.** 퀴즈 정답이나 관리자 비밀번호를 바꿀 때 반드시 4개 파일 전부 동일한 해시로 갱신할 것 — 하나라도 빠지면 그 페이지만 옛 비밀번호로 계속 동작해 혼란을 줌.
 - **⚠️ TEAM_MAP이 mission.html·admin.html·report.html 3곳 + index.html의 ROUTE_DATA에 중복 저장되어 있음.** 목적지/경유지/조 배정을 바꿀 때는 이 4곳을 전부 함께 수정할 것 — 실제로 2026-07-09 견학지 축소 때 admin.html 쪽이 누락될 뻔한 적 있음(REQ-31 참고).
 - **`assets/` 폴더** — 캠프 지도·미션 참고사진 등 이미지 파일 보관용(예: `dobong-camp-map.jpg`, `pose-team1~6.jpg`). 원본 넣기 전에 `sips -Z 700 -s formatOptions 70`로 리사이즈·압축할 것 (예시: 900KB→90KB대로 축소됨).
+- **4탭 앱 셸 (REQ-44, POWER WAVE):** `mission.html`/`map.html`/`board.html`/`index.html` 4개 페이지에 동일한 `.pw-tabbar` 하단 고정 네비게이션(🎯미션/🗺지도/💬소통방/👥교사)이 붙어있음. 각 페이지는 여전히 완전히 독립된 파일 — SPA가 아니라 탭 클릭 시 실제 페이지 이동. 나머지 8개 운영 페이지(admin/teacher/station/checklist/emergency/news/report/guide)는 별도 탭 없이 index.html의 "☰ 전체 도구" 드롭다운을 거쳐 접근("교사" 탭 = index.html). 새 학생용 페이지를 추가할 때 이 4탭 세트에 넣을지 판단할 것.
+- **디자인 시스템 v3 "POWER WAVE" (REQ-44, 2026-07-11부터 v2 SUMMER BREAKTHROUGH 대체):** 팔레트는 하늘색·블루(`--navy:#123A5E`/`--blue:#2E9EF0`) + 오렌지 CTA(`#FF6B2C`), 폰트는 Jua(Google Fonts, 헤더/타이틀류), 헤더 하단에 흰 웨이브 디바이더(`.app-header::before`의 SVG mask). 11개 파일 색상 치환에 쓴 스크립트는 `retint.py` 패턴(정확한 하드코딩 hex 문자열을 파일에서 그대로 추출해 전체 치환) — 향후 팔레트를 또 바꿀 일이 있으면 같은 방식 재사용 가능.
 - **홈 버튼 컨벤션 (REQ-43):** `mission.html` 제외 전 페이지 헤더에 `index.html`로 돌아가는 링크 필수. 헤더가 `text-align:center`형(대부분)이면 `.header-back{position:absolute;left:14px;top:16px;...}` + `<a class="header-back" href="index.html">← 대시보드</a>`를 헤더 첫 줄에. `admin.html`처럼 flex 레이아웃(header-left/header-right)이면 `header-right`에 `.home-link` 스타일로 추가. 새 페이지 만들 때 이 패턴 그대로 넣을 것.
 - **2026-07-09 견학지 재편 (REQ-37, REQ-38):** 견학지가 3곳→2곳으로 축소됨(연세대 언더우드가 기념관 보류). 현재 배정: **1·2·3조 = 전쟁기념관(경유지 각각 노들섬/이촌한강공원/서울로7017), 4·5·6조 = 서대문형무소(경유지 각각 청계천/광화문광장/덕수궁 돌담길)**. 전쟁기념관행은 대화에서 "전쟁 1조/2조/3조"로 표기된 걸 캠프 팀번호 1/2/3조로 그대로 해석한 것이라 확인 필요. 서대문형무소행 3곳은 구체 지정 없이 자체 선정한 것이라 실제 답사 후 교체 가능성 있음.
 - **2026-07-09 미션1 방식 변경 (REQ-04):** 로드뷰 재현샷 방식은 폐기, **GPS 도착 확인(하버사인 거리, 조별 반경 300~450m) + 샘플 포즈 인증샷**으로 교체. `mission.html`의 `TEAM_MAP`에 각 조 `lat`/`lng`/`radius` 추가됨(REQ-37/38 좌표 재사용, 추정치). 위치 확인 실패 시 "위치 확인 없이 계속하기" 예외가 있고, `admin.html`에 GPS 확인 여부 배지로 표시됨 — 완전한 부정 방지가 아니라 관리자 승인(REQ-13)이 최종 검증 수단.
@@ -40,9 +43,9 @@
 
 ## 현재 구현 상태 (2026-07-11 기준, origin/main에 push 완료)
 
-- 완료(REQ-01~41 중 대부분, REQUIREMENTS.md "완료된 기능" 참고): 조별 코드 잠금해제·고정, 미션1→미션2 순차 해금, 관리자 승인/반려 기반 진행, 목적지 배너 단계적 공개, 미션 전환 스토리텔링, Day1 목적문구·보고서 3항목(장벽/믿음/돌파기도), Day2 6관문+Final 구조, 개인정보 안내, 운영 페이지 5종(teacher/station/emergency/checklist/news) + 후속 고도화, Kakao Maps 조별 동선 지도(REQ-29), 견학지 담당 선생님 자료 반영·견학 코스 안내 웹페이지(guide.html), 치팅 방지 해시화(REQ-33), 정탐대 소통방(board.html), 정탐 보고서 발표용 모음(report.html), 견학지 2곳 재편 + GPS 기반 미션1(REQ-04/37/38), index.html 메인 개편(REQ-39, Day1·Day2 미리보기+3일 전체 시간표), 전체 11페이지 디자인 리프레시 "SUMMER BREAKTHROUGH"(REQ-40, 헤더 일관성 수정 포함), Day2 관문 게임 물 보급 테마 전면 교체(REQ-41)
+- 완료(REQ-01~44 중 대부분, REQUIREMENTS.md "완료된 기능" 참고): 조별 코드 잠금해제·고정, 미션1→미션2 순차 해금, 관리자 승인/반려 기반 진행, 목적지 배너 단계적 공개, 미션 전환 스토리텔링, Day1 목적문구·보고서 3항목(장벽/믿음/돌파기도), Day2 6관문+Final 구조, 개인정보 안내, 운영 페이지 5종(teacher/station/emergency/checklist/news) + 후속 고도화, Kakao Maps 조별 동선 지도(REQ-29), 견학지 담당 선생님 자료 반영·견학 코스 안내 웹페이지(guide.html), 치팅 방지 해시화(REQ-33), 정탐대 소통방(board.html), 정탐 보고서 발표용 모음(report.html), 견학지 2곳 재편 + GPS 기반 미션1(REQ-04/37/38), index.html 메인 개편(REQ-39, Day1·Day2 미리보기+3일 전체 시간표), Day2 관문 게임 물 보급 테마 전면 교체(REQ-41), **디자인 v3 "POWER WAVE" 전면 교체 + 4탭 앱 셸 + map.html 신규(REQ-44, SUMMER BREAKTHROUGH·REQ-40 대체)**
 - **미완료 — 결정 대기:** REQ-30(Day1 정탐 보고 후 텀블러 증정 운영) — 기존 REQ-17 미션2 정탐 보고서를 교체할지, 별도 미션3로 신설할지 확정 필요. 그 외 REQ-02(모바일 반응형 전면 개선), REQ-06(Firebase 규칙 세분화/관리자 인증 전환), REQ-15(Day2 물놀이 업그레이드 초안), REQ-19 일부(진짜 관리자 전용 DB 접근 제한)는 백로그에 남아있음
-- 페이지 수가 3개→11개로 늘어남(teacher/station/emergency/checklist/news/board/report/guide 추가). 새 페이지를 또 추가하면 파일 구성 표(이 문서 상단)와 REQUIREMENTS.md 페이지 구성 표를 함께 갱신할 것
-- **디자인 시스템 v2 "SUMMER BREAKTHROUGH" 적용 중 — 새 색상은 항상 CSS 변수(`var(--navy)` 등)로 작성할 것.** 하드코딩 hex를 쓰면 다음 팔레트 스윕 때 자동으로 안 잡혀서 나만 옛 색으로 남는다 (실제로 2026-07-11에 index.html 헤더 + 제가 REQ-29/39에서 넣은 하드코딩 색상 6곳이 이렇게 빠져있다가 뒤늦게 발견·수정됨)
+- 페이지 수가 3개→12개로 늘어남(teacher/station/emergency/checklist/news/board/report/guide/map 추가). 새 페이지를 또 추가하면 파일 구성 표(이 문서 상단)와 REQUIREMENTS.md 페이지 구성 표를 함께 갱신할 것
+- **디자인 시스템 v3 "POWER WAVE" 적용 중 — 새 색상은 항상 CSS 변수(`var(--navy)` 등)로 작성할 것.** 하드코딩 hex를 쓰면 다음 팔레트 스윕 때 자동으로 안 잡혀서 나만 옛 색으로 남는다 (v2 때 실제로 이렇게 6곳이 빠졌다가 뒤늦게 발견·수정된 전례 있음)
 
 ⚠️ **작업 시작 전 항상 `git fetch && git status`로 origin 대비 뒤처지지 않았는지 먼저 확인할 것.** 이 프로젝트는 다른 세션/사람이 병행으로 직접 push하는 경우가 있어, 로컬이 stale한 상태로 요구사항을 재작성하면 이미 구현된 것을 다시 요청하거나 REQ 번호가 충돌한다.

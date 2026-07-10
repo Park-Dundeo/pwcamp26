@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>관리자 대시보드 — 파워웨이브 2026</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&display=swap">
 <style>
 :root {
-  --navy:#2B2350; --navy-mid:#3B2E7E; --blue:#6741D9;
+  --navy:#123A5E; --navy-mid:#1C63A8; --blue:#2E9EF0;
   --gold:#FFB01F; --green:#0CA678; --orange:#FF6B2C;
-  --gray:#8B84A3; --border:#E4E0F5; --radius:14px;
+  --gray:#6E86A8; --border:#DCEEFB; --radius:14px;
   --shadow:0 4px 20px rgba(20,29,56,.07);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -29,7 +30,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 
 /* ── Dashboard ── */
 .dashboard{display:none;}
-.site-header{background:linear-gradient(120deg,#E8481F 0%,#D6336C 48%,#5F3DC4 100%);color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.site-header{background:linear-gradient(120deg,#155F9C 0%,#2E9EF0 55%,#4FC3F7 100%);color:#fff;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
 .header-left .title{font-size:16px;font-weight:800;}
 .header-left .sub{font-size:11px;opacity:.7;margin-top:2px;}
 .header-right{display:flex;align-items:center;gap:10px;}
@@ -69,7 +70,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .team-pills{padding:0 12px 12px;display:flex;gap:6px;}
 .pill{flex:1;padding:5px 4px;border-radius:6px;font-size:11px;font-weight:700;text-align:center;}
 .pill.done{background:#E3FAF3;color:var(--green);}
-.pill.wait{background:#F0EDF9;color:var(--gray);}
+.pill.wait{background:#E4EFF7;color:var(--gray);}
 
 /* Detail panel */
 .detail-panel{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden;display:none;animation:fadeIn .25s ease;}
@@ -81,10 +82,10 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .detail-body{padding:18px;}
 .detail-section{font-size:12px;font-weight:700;color:var(--gray);letter-spacing:.5px;margin-bottom:10px;}
 .detail-photo{width:100%;border-radius:8px;max-height:340px;object-fit:cover;margin-bottom:8px;}
-.detail-empty{background:#F5F3FB;border-radius:8px;padding:20px;text-align:center;color:var(--gray);font-size:13px;}
+.detail-empty{background:#EEF6FB;border-radius:8px;padding:20px;text-align:center;color:var(--gray);font-size:13px;}
 .submit-time{font-size:11px;color:var(--gray);margin-bottom:14px;}
 .divider{border:none;border-top:1px solid var(--border);margin:16px 0;}
-.report-box{background:#F5F3FB;border-radius:8px;padding:14px;}
+.report-box{background:#EEF6FB;border-radius:8px;padding:14px;}
 .report-row{padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
 .report-row:last-child{border-bottom:none;}
 .report-row .lbl{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px;}
@@ -137,40 +138,40 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .wipe-btn{width:100%;padding:14px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px;}
 .wipe-btn.confirm{background:var(--navy);color:#fff;}
 .wipe-btn.danger{background:#e03131;color:#fff;}
-.wipe-btn.cancel{background:#F0EDF9;color:var(--gray);margin-bottom:0;}
+.wipe-btn.cancel{background:#E4EFF7;color:var(--gray);margin-bottom:0;}
 
 /* ── 준비 소식 의견함 ── */
 .news-comment-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
 .nc-item{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:12px 14px;font-size:13px;}
 .nc-item.resolved{opacity:.55;}
 .nc-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
-.nc-news{font-size:11px;font-weight:800;color:var(--blue);background:var(--sky, #EFEAFB);padding:2px 8px;border-radius:20px;}
-.nc-topic{font-size:11px;font-weight:700;color:#495057;background:#F0EDF9;padding:2px 8px;border-radius:20px;}
+.nc-news{font-size:11px;font-weight:800;color:var(--blue);background:var(--sky, #E7F5FF);padding:2px 8px;border-radius:20px;}
+.nc-topic{font-size:11px;font-weight:700;color:#495057;background:#E4EFF7;padding:2px 8px;border-radius:20px;}
 .nc-name{font-weight:700;color:var(--navy);}
 .nc-time{font-size:11px;color:var(--gray);margin-left:auto;}
 .nc-text{color:#495057;line-height:1.6;margin-bottom:8px;}
 .nc-actions{display:flex;gap:6px;flex-wrap:wrap;}
 .nc-btn{font-size:11px;font-weight:700;padding:5px 10px;border:none;border-radius:6px;cursor:pointer;font-family:inherit;opacity:.5;}
 .nc-btn.status.active{opacity:1;box-shadow:0 0 0 1.5px currentColor inset;}
-.nc-btn.new{background:#EFEAFB;color:var(--blue);}
+.nc-btn.new{background:#E7F5FF;color:var(--blue);}
 .nc-btn.checked{background:#FFF4D6;color:#8A6410;}
 .nc-btn.applied{background:#E3FAF3;color:var(--green);}
-.nc-btn.hold{background:#F0EDF9;color:var(--gray);}
+.nc-btn.hold{background:#E4EFF7;color:var(--gray);}
 .nc-btn.delete{background:#fff5f5;color:#e03131;opacity:1;}
 
-/* ══ 2026-07-10 디자인 컨셉 v2: SUMMER BREAKTHROUGH (여름 캠프 포스터) ══ */
-@font-face{font-family:'GmarketSansBold';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');font-weight:normal;font-display:swap;}
+/* == 2026-07-11 design v3: POWER WAVE (full visual replacement of SUMMER BREAKTHROUGH) == */
 *{-webkit-tap-highlight-color:transparent;}
-body{letter-spacing:-0.011em;background:#ffffff;color:#2B2350;}
-.header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline,.site-title{font-family:'GmarketSansBold','Pretendard Variable',sans-serif;letter-spacing:0;}
-h1,h2,h3{letter-spacing:-0.02em;}
-.header-tag,.rp-badge,.dest-teams{background:#FFD43B !important;color:#2B2350 !important;box-shadow:2px 2px 0 rgba(43,35,80,.25);}
+body{letter-spacing:-0.011em;background:#ffffff;color:#123A5E;}
+.header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline,.site-title{font-family:'Jua','Pretendard Variable',sans-serif;letter-spacing:.2px;}
+h1,h2,h3{letter-spacing:-0.01em;}
+.header-tag,.rp-badge,.dest-teams{background:#FFD43B !important;color:#123A5E !important;box-shadow:2px 2px 0 rgba(18,58,94,.25);}
 button{transition:transform .12s ease,box-shadow .2s ease,opacity .2s ease,background .2s ease;}
 button:not(:disabled):active{transform:translate(1px,2px);}
-input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !important;box-shadow:0 0 0 3px rgba(103,65,217,.15);}
-.app-header,.site-header{position:relative;overflow:hidden;}
-.app-header::after,.site-header::after{content:'';position:absolute;top:-60%;right:-15%;width:75%;height:230%;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.10) 45%,rgba(255,220,120,.18) 50%,rgba(255,255,255,.10) 55%,transparent 70%);transform:rotate(8deg);pointer-events:none;}
-.app-header>*,.site-header>*{position:relative;z-index:1;}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !important;box-shadow:0 0 0 3px rgba(46,158,240,.18);}
+.app-header,.site-header{position:relative;overflow:hidden;padding-bottom:32px !important;border-radius:0 0 26px 26px;}
+.app-header::before,.site-header::before{content:'';position:absolute;left:0;right:0;bottom:0;height:22px;background:#fff;-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 22' preserveAspectRatio='none'%3E%3Cpath d='M0,11 C150,22 350,0 600,11 C850,22 1050,0 1200,11 L1200,22 L0,22 Z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 22' preserveAspectRatio='none'%3E%3Cpath d='M0,11 C150,22 350,0 600,11 C850,22 1050,0 1200,11 L1200,22 L0,22 Z'/%3E%3C/svg%3E");-webkit-mask-size:100% 100%;mask-size:100% 100%;z-index:1;}
+.app-header>*,.site-header>*{position:relative;z-index:2;}
+.submit-btn.primary,.unlock-btn,.t-btn,.reset-btn.confirm,.modal-btn.confirm{background:linear-gradient(135deg,#FF8A3D,#FF6B2C) !important;color:#fff !important;box-shadow:0 4px 14px rgba(255,107,44,.35) !important;}
 @media(prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
 </style>
 </head>

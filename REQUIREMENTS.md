@@ -1,7 +1,7 @@
 # 2026 파워웨이브 캠프 — 개발 요구사항
 
 > 마지막 업데이트: 2026-07-11  
-> 변경: REQ-42 신규·완료 — 조별 샘플 포즈를 실제 참고 사진으로 교체 + index.html Day1 미션 미리보기를 옛 "로드뷰/단톡방" 방식에서 GPS+포즈사진 방식으로 전면 재작성. REQ-43 신규·완료 — mission.html 제외 전 페이지 헤더에 홈 버튼 추가
+> 변경: REQ-44 신규·완료 — 디자인 전면 교체(SUMMER BREAKTHROUGH → POWER WAVE) + 4탭 앱 셸(미션/지도/소통방/교사) 도입, `map.html` 신규 추가
 
 > ⚠️ **결정 대기 중인 항목:** REQ-30(텀블러 증정 운영) — 기존 REQ-17 미션2 정탐 보고서를 교체할지 별도 미션3로 신설할지 확정 필요. 자세한 내용은 PART D 참고
 
@@ -12,7 +12,8 @@
 | 파일 | 용도 | 접근 대상 |
 |---|---|---|
 | `index.html` | 교사용 기획 대시보드 (읽기 전용) | 프로그램팀 교사 |
-| `mission.html` | 학생용 미션 페이지 | 학생 (조당 1명) |
+| `mission.html` | 학생용 미션 페이지 (4탭 앱 셸의 "미션" 탭) | 학생 (조당 1명) |
+| `map.html` | 우리 조 이동 경로 지도 (4탭 앱 셸의 "지도" 탭, REQ-44) | 학생 |
 | `admin.html` | 실시간 제출 현황 모니터링 | 관리자 (비밀번호: 코드에 SHA-256 해시로만 저장, 원본은 교사 공유방에서 별도 전달 — public 저장소라 문서에 기재 금지) |
 | `teacher.html` | 교사용 실행 매뉴얼 (REQ-20) | 전체 교사 |
 | `station.html` | Day2 관문 담당자용 진행 카드 (REQ-21) | 관문별 담당 교사 |
@@ -82,6 +83,7 @@
 - [x] `index.html` — Day1 미션 미리보기를 옛 "로드뷰+단톡방 제출" 방식에서 실제 GPS 도착 확인+샘플 포즈+웹 제출 4단계로 전면 재작성, mission2 미리보기의 잘못된 "인증샷 1장" 항목 삭제 (REQ-42)
 - [x] `teacher.html`/`station.html`/`checklist.html`/`emergency.html`/`news.html`/`admin.html`/`report.html`/`guide.html` — 헤더에 홈(대시보드) 버튼 추가 (REQ-43)
 - [x] 전체 11개 페이지 디자인 리프레시 — Pretendard 웹폰트 도입, 팔레트 현대화(딥네이비·일렉트릭블루), radius 12→16px, 부드러운 확산 그림자, 버튼 눌림 스케일·입력창 포커스 링·헤더 대각선 광택 등 마이크로 인터랙션. 기능(DOM ID/JS)은 무변경, prefers-reduced-motion 대응 포함 (REQ-40, v2에서 "SUMMER BREAKTHROUGH" 컨셉으로 전면 교체)
+- [x] 디자인 v2 "SUMMER BREAKTHROUGH"를 v3 "POWER WAVE"(하늘색·오렌지, Jua 폰트, 웨이브 헤더)로 전면 재교체 + mission.html/map.html/board.html/index.html에 4탭 하단 앱 셸(미션/지도/소통방/교사) 도입, `map.html` 신규 추가 (REQ-44)
 - [x] Day2 관문 게임 전면 교체 — 2관문(요단강 보급품 회수 작전)/3관문(광야 생수 보급 작전)/4관문(생수 보급로 릴레이)/Final(여리고 성벽 돌파 작전, 물풍선 버전)로 교체, 1·5·6관문은 원래대로 유지. "믿음의 잔 수호전"은 특정 관문이 아니라 물 게임 전체의 공용 우천/실내 대체로 별도 카드 분리. station.html/index.html/checklist.html/teacher.html 4곳 동기화 (REQ-41)
 
 ---
@@ -699,6 +701,27 @@
   - `admin.html`: 헤더가 flex 레이아웃(`.site-header`, header-left/header-right)이라 절대배치 대신 `header-right` 영역에 로그아웃 버튼과 같은 스타일의 `<a class="home-link">🏠 홈</a>` 추가
   - 기존 하단 `back-link`는 그대로 유지(중복이지만 긴 페이지에서는 여전히 유용)
 - **검증:** 9개 페이지 전부 `href="index.html"` 확인, 전체 11개 페이지 콘솔 에러 없음 확인
+
+#### REQ-44. 디자인 전면 교체(POWER WAVE) + 4탭 앱 셸 구조 도입 ✅ 완료
+- **요청:** AI 목업 스크린샷 2장(데스크톱 "Camp Operations System" 커맨드센터 컨셉 / 모바일 폰프레임 "Power Wave" 컨셉) 기반으로 사이트 전체 UI를 교체. 사용자 결정: "완전 대체(REQ-40 SUMMER BREAKTHROUGH 폐기)" + "비주얼 완전 교체 및 중요한 4개 탭으로 빼고 나머지는 교사탭에서 타고 들어갈 수 있게"
+- **설계 판단 (엔지니어링 위험 관리):** 처음 요청은 board.html(채팅)·index.html(지도) 로직을 mission.html 하나에 SPA처럼 통합하는 그림이었으나, 캠프 D-6 시점에 검증된 3개 페이지의 Firebase 실시간 리스너·인증 로직을 한 파일로 병합하는 건 회귀 위험이 큼. 대신 **각 페이지는 그대로 독립 유지**하고, 4개 페이지(mission.html·map.html·board.html·index.html)에 동일한 하단 고정 탭바를 붙여 겉보기엔 하나의 앱처럼 보이게 하는 방식으로 절충. index.html은 이미 "☰ 전체 도구" 드롭다운으로 나머지 8개 페이지(admin/teacher/station/checklist/emergency/news/report/guide)를 연결하고 있어 별도 신규 허브 페이지 없이 그대로 "교사" 탭 역할을 겸함
+- **디자인 시스템 교체 (SUMMER BREAKTHROUGH v2 → POWER WAVE v3):**
+  - 팔레트: 바이올렛·선셋(#2B2350/#6741D9/#E8481F~#5F3DC4) → 하늘색·블루(#123A5E/#2E9EF0/#155F9C~#4FC3F7) 계열로 전면 리틴트. `:root`의 `--navy`/`--navy-mid`/`--blue`/`--blue-light`/`--sky`/`--border`/`--gray`/`--gray-light` 등 색상 계열 변수와, 페이지 곳곳에 하드코딩돼 있던 동일 계열 hex 값까지 스크립트(`retint.py`)로 11개 파일 일괄 치환 — 색 이름(변수명)은 유지하고 값만 블루 계열로 교체해 기존 CSS 규칙(선택자)은 전혀 건드리지 않음
+  - 폰트: GmarketSansBold → **Jua**(Google Fonts, 둥글둥글한 코믹체) — 헤더/타이틀류 선택자(`.header-title` 등)는 REQ-40과 동일하게 유지, `font-family` 값만 교체
+  - 헤더에 웨이브 디바이더 추가 — `.app-header::before`/`.site-header::before`에 SVG data-uri를 `mask-image`로 적용해 헤더 하단이 흰 물결로 콘텐츠 영역과 이어지는 효과(신규 HTML 마크업 없이 CSS만으로 구현)
+  - 주요 CTA 버튼(`.submit-btn.primary`/`.unlock-btn`/`.t-btn`/`.reset-btn.confirm`/`.modal-btn.confirm`)은 오렌지 그라디언트로 강조, 승인/거절 등 관리자 화면의 의미색(초록=승인/빨강=반려)은 그대로 유지해 운영 혼선 방지
+- **4탭 앱 셸 (`.pw-tabbar`, 하단 고정 네비게이션):**
+  - 🎯 미션(mission.html) · 🗺 지도(map.html, 신규) · 💬 소통방(board.html) · 👥 교사(index.html) — 4개 페이지에 동일한 마크업/CSS로 삽입, 현재 페이지에 `.active` 클래스만 다르게 부여
+  - mission.html/index.html은 `position:fixed` 방식, board.html은 이미 `100dvh` flex 세로 레이아웃이라 `flex-shrink:0` 방식으로 자연스럽게 하단에 붙임
+  - 각 페이지 콘텐츠 영역에 탭바 높이만큼 하단 여백 추가(겹침 방지)
+- **`map.html` 신규 추가 — "지도" 탭:**
+  - index.html의 조별 동선 지도(REQ-29, `ROUTE_DATA`/Kakao Maps) 로직을 재사용하되, 관리자가 6개 조를 전부 보는 화면이 아니라 **학생이 자기 조 하나만** 보는 화면으로 축소
+  - `localStorage.pwcamp_team`(mission.html과 동일 키)을 읽어 조가 이미 선택돼 있으면 바로 해당 조 경로 표시, 없으면 mission.html과 동일한 조 선택 그리드 노출 → 선택 시 같은 키에 저장되므로 두 탭 간 조 정보가 자동 동기화됨
+  - 지도(Kakao) + 지점 리스트(카카오맵/네이버지도 링크) 동시 제공은 index.html과 동일 패턴
+- **검증:** 신규 파일 포함 전체 12개 페이지 Playwright 헤드리스 콘솔 에러 0건, mission.html 조 선택→퀴즈 잠금화면 플로우 정상, map.html 1조 선택 시 Kakao 지도·마커·정보창 정상 렌더링 확인
+- **한계:**
+  - map.html의 조별 좌표 데이터는 index.html `ROUTE_DATA`에서 복사한 것 — 장소/좌표 변경 시 두 파일 모두 수정 필요(CLAUDE.md에 명시)
+  - admin.html 로그인 화면 등 이번 스윕 대상 선택자에 없던 일부 버튼은 오렌지 강조 없이 기존 네이비 톤 유지(치명적이지 않음, 전체 팔레트 안에서 자연스럽게 어울림)
 
 #### REQ-04. 촬영 미션 방식 확정 ✅ 완료
 - **요청:** 1차 미션 촬영 방식 선택 필요

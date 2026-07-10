@@ -5,17 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>정탐대 소통방 — 파워웨이브 2026</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&display=swap">
 <style>
 :root {
-  --navy:#2B2350; --blue:#6741D9; --gold:#FFB01F;
+  --navy:#123A5E; --blue:#2E9EF0; --gold:#FFB01F;
   --green:#0CA678; --red:#F03E3E;
-  --gray:#8B84A3; --border:#E4E0F5; --radius:16px; --sky:#EFEAFB;
+  --gray:#6E86A8; --border:#DCEEFB; --radius:16px; --sky:#E7F5FF;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{height:100%;}
 body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#ffffff;color:#212529;height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;}
 
-.app-header{background:linear-gradient(120deg,#E8481F 0%,#D6336C 48%,#5F3DC4 100%);color:#fff;padding:18px 16px 20px;text-align:center;flex-shrink:0;position:relative;}
+.app-header{background:linear-gradient(120deg,#155F9C 0%,#2E9EF0 55%,#4FC3F7 100%);color:#fff;padding:18px 16px 20px;text-align:center;flex-shrink:0;position:relative;}
 .header-back{position:absolute;left:14px;top:16px;color:#fff;opacity:.8;text-decoration:none;font-size:12px;}
 .header-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:800;letter-spacing:1.5px;padding:3px 10px;border-radius:20px;margin-bottom:8px;}
 .header-title{font-size:18px;font-weight:800;}
@@ -73,23 +74,29 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .modal-err{font-size:12px;color:var(--red);text-align:center;min-height:16px;margin-bottom:6px;}
 .modal-btn{width:100%;padding:13px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px;}
 .modal-btn.confirm{background:var(--navy);color:#fff;}
-.modal-btn.cancel{background:#F0EDF9;color:var(--gray);margin-bottom:0;}
+.modal-btn.cancel{background:#E4EFF7;color:var(--gray);margin-bottom:0;}
 
 .back-link{display:block;text-align:center;padding:8px 0;font-size:11.5px;color:var(--gray);text-decoration:none;flex-shrink:0;}
 
-/* ══ 2026-07-10 디자인 컨셉 v2: SUMMER BREAKTHROUGH (여름 캠프 포스터) ══ */
-@font-face{font-family:'GmarketSansBold';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');font-weight:normal;font-display:swap;}
+/* ── 하단 탭바 (REQ-44, POWER WAVE 4탭 앱 셸) ── */
+.pw-tabbar{flex-shrink:0;display:flex;max-width:560px;width:100%;margin:0 auto;background:#fff;border-top:1.5px solid var(--border);padding-bottom:env(safe-area-inset-bottom);}
+.pw-tab-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 4px 8px;text-decoration:none;color:var(--gray);font-size:10.5px;font-weight:700;font-family:inherit;}
+.pw-tab-icon{font-size:20px;line-height:1;}
+.pw-tab-item.active{color:var(--blue);}
+
+/* == 2026-07-11 design v3: POWER WAVE (full visual replacement of SUMMER BREAKTHROUGH) == */
 *{-webkit-tap-highlight-color:transparent;}
-body{letter-spacing:-0.011em;background:#ffffff;color:#2B2350;}
-.header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline,.site-title{font-family:'GmarketSansBold','Pretendard Variable',sans-serif;letter-spacing:0;}
-h1,h2,h3{letter-spacing:-0.02em;}
-.header-tag,.rp-badge,.dest-teams{background:#FFD43B !important;color:#2B2350 !important;box-shadow:2px 2px 0 rgba(43,35,80,.25);}
+body{letter-spacing:-0.011em;background:#ffffff;color:#123A5E;}
+.header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline,.site-title{font-family:'Jua','Pretendard Variable',sans-serif;letter-spacing:.2px;}
+h1,h2,h3{letter-spacing:-0.01em;}
+.header-tag,.rp-badge,.dest-teams{background:#FFD43B !important;color:#123A5E !important;box-shadow:2px 2px 0 rgba(18,58,94,.25);}
 button{transition:transform .12s ease,box-shadow .2s ease,opacity .2s ease,background .2s ease;}
 button:not(:disabled):active{transform:translate(1px,2px);}
-input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !important;box-shadow:0 0 0 3px rgba(103,65,217,.15);}
-.app-header,.site-header{position:relative;overflow:hidden;}
-.app-header::after,.site-header::after{content:'';position:absolute;top:-60%;right:-15%;width:75%;height:230%;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,.10) 45%,rgba(255,220,120,.18) 50%,rgba(255,255,255,.10) 55%,transparent 70%);transform:rotate(8deg);pointer-events:none;}
-.app-header>*,.site-header>*{position:relative;z-index:1;}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !important;box-shadow:0 0 0 3px rgba(46,158,240,.18);}
+.app-header,.site-header{position:relative;overflow:hidden;padding-bottom:32px !important;border-radius:0 0 26px 26px;}
+.app-header::before,.site-header::before{content:'';position:absolute;left:0;right:0;bottom:0;height:22px;background:#fff;-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 22' preserveAspectRatio='none'%3E%3Cpath d='M0,11 C150,22 350,0 600,11 C850,22 1050,0 1200,11 L1200,22 L0,22 Z'/%3E%3C/svg%3E");mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 22' preserveAspectRatio='none'%3E%3Cpath d='M0,11 C150,22 350,0 600,11 C850,22 1050,0 1200,11 L1200,22 L0,22 Z'/%3E%3C/svg%3E");-webkit-mask-size:100% 100%;mask-size:100% 100%;z-index:1;}
+.app-header>*,.site-header>*{position:relative;z-index:2;}
+.submit-btn.primary,.unlock-btn,.t-btn,.reset-btn.confirm,.modal-btn.confirm{background:linear-gradient(135deg,#FF8A3D,#FF6B2C) !important;color:#fff !important;box-shadow:0 4px 14px rgba(255,107,44,.35) !important;}
 @media(prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important;}}
 </style>
 </head>
@@ -127,6 +134,13 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
     <div id="sendError" style="display:none;font-size:11.5px;color:var(--red);text-align:center;padding-top:6px;"></div>
   </div>
 </div>
+
+<nav class="pw-tabbar">
+  <a href="mission.html" class="pw-tab-item"><span class="pw-tab-icon">🎯</span><span>미션</span></a>
+  <a href="map.html" class="pw-tab-item"><span class="pw-tab-icon">🗺</span><span>지도</span></a>
+  <a href="board.html" class="pw-tab-item active"><span class="pw-tab-icon">💬</span><span>소통방</span></a>
+  <a href="index.html" class="pw-tab-item"><span class="pw-tab-icon">👥</span><span>교사</span></a>
+</nav>
 
 <!-- 조장 인증 모달 -->
 <div class="modal-overlay" id="leaderModal">
