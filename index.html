@@ -12,7 +12,7 @@
   --green:#0CA678; --green-light:#E3FAF3;
   --red:#F03E3E; --red-light:#fff5f5;
   --orange:#FF6B2C; --orange-light:#FFEEDB;
-  --gray:#8D8578; --gray-light:#F6F1E7; --border:#E8E0D0;
+  --gray:#8B84A3; --gray-light:#F5F3FB; --border:#E4E0F5;
   --text:#2B2350; --text-soft:#5D5680;
   --radius:14px; --shadow:0 2px 12px rgba(0,0,0,0.07);
   /* 지하철 라인 */
@@ -20,7 +20,7 @@
   --line6:#CD7C2F; --line7:#747F00; --line8:#E6186C;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#FBF7EE;color:var(--text);line-height:1.65;}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#ffffff;color:var(--text);line-height:1.65;}
 
 /* ── Header ── */
 .site-header{background:linear-gradient(135deg,var(--navy) 0%,#2d4a9e 100%);color:#fff;padding:22px 20px;}
@@ -55,7 +55,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 /* ── Tags ── */
 .tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;}
 .tag-done{background:var(--green-light);color:var(--green);}
-.tag-todo{background:#F1EBDF;color:var(--gray);}
+.tag-todo{background:#F0EDF9;color:var(--gray);}
 .tag-check{background:var(--orange-light);color:var(--orange);}
 .tag-key{background:var(--sky);color:var(--blue);}
 
@@ -67,7 +67,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 
 /* ── Item list ── */
 .item-list{list-style:none;}
-.item-list li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #F1EBDF;font-size:13px;}
+.item-list li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid #F0EDF9;font-size:13px;}
 .item-list li:last-child{border-bottom:none;}
 .item-label{flex:1;}
 .item-label b{color:var(--navy-mid);}
@@ -99,7 +99,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 
 .timetable-daysep{font-size:11.5px;font-weight:800;color:var(--navy);background:var(--sky);padding:7px 11px;border-radius:6px;margin:16px 0 4px;}
 .timetable-daysep:first-child{margin-top:0;}
-.timetable-row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #F1EBDF;font-size:13px;}
+.timetable-row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #F0EDF9;font-size:13px;}
 .timetable-row:last-child{border-bottom:none;}
 .timetable-time{flex-shrink:0;width:92px;font-weight:800;color:var(--blue);font-size:12px;}
 .timetable-day{display:inline-block;font-size:10px;font-weight:800;color:#fff;background:var(--gray);padding:1px 7px;border-radius:10px;margin-right:6px;}
@@ -194,7 +194,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .kmap-info .ki-links a.nvr{background:var(--green-light);color:var(--green);}
 
 .point-list{display:flex;flex-direction:column;gap:0;}
-.point-item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #F1EBDF;font-size:12.5px;}
+.point-item{display:flex;gap:10px;align-items:flex-start;padding:9px 0;border-bottom:1px solid #F0EDF9;font-size:12.5px;}
 .point-item:last-child{border-bottom:none;}
 .point-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;flex-shrink:0;margin-top:1px;}
 .point-num.start{background:var(--navy);} .point-num.mission{background:var(--gold);}
@@ -230,7 +230,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .roadview-box .rv-dot{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--gold);bottom:14px;right:14px;animation:pulse 2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.3);}}
 
-.mission-step{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #F1EBDF;font-size:13px;}
+.mission-step{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid #F0EDF9;font-size:13px;}
 .mission-step:last-child{border-bottom:none;}
 .step-num{width:22px;height:22px;border-radius:50%;background:var(--navy);color:#fff;font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
 .step-text{flex:1;}
@@ -296,7 +296,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 /* ══ 2026-07-10 디자인 컨셉 v2: SUMMER BREAKTHROUGH (여름 캠프 포스터) ══ */
 @font-face{font-family:'GmarketSansBold';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');font-weight:normal;font-display:swap;}
 *{-webkit-tap-highlight-color:transparent;}
-body{letter-spacing:-0.011em;background:#FBF7EE;color:#2B2350;}
+body{letter-spacing:-0.011em;background:#ffffff;color:#2B2350;}
 .header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline,.site-title{font-family:'GmarketSansBold','Pretendard Variable',sans-serif;letter-spacing:0;}
 h1,h2,h3{letter-spacing:-0.02em;}
 .header-tag,.rp-badge,.dest-teams{background:#FFD43B !important;color:#2B2350 !important;box-shadow:2px 2px 0 rgba(43,35,80,.25);}
@@ -587,7 +587,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
       </div>
 
       <!-- 공통: 식사 → 도봉숲속마을 이동 (3개 조 동일) -->
-      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;background:#F6F1E7;">
+      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;background:#F5F3FB;">
         <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">🚩 1·2·3조 공통 — 견학 이후</div>
         <div class="route-timeline">
           <div class="rt-step">
@@ -748,7 +748,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
       </div>
 
       <!-- 공통: 식사 → 도봉숲속마을 이동 (3개 조 동일) -->
-      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;background:#F6F1E7;">
+      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;background:#F5F3FB;">
         <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">🚩 4·5·6조 공통 — 견학 이후</div>
         <div class="route-timeline">
           <div class="rt-step">

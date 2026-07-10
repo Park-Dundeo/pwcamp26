@@ -9,11 +9,11 @@
 :root {
   --navy:#2B2350; --navy-mid:#3B2E7E; --blue:#6741D9;
   --gold:#FFB01F; --green:#0CA678; --orange:#FF6B2C;
-  --gray:#8D8578; --border:#E8E0D0; --radius:14px;
+  --gray:#8B84A3; --border:#E4E0F5; --radius:14px;
   --shadow:0 4px 20px rgba(20,29,56,.07);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#FBF7EE;color:#212529;}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#ffffff;color:#212529;}
 
 /* ── Password gate ── */
 .pw-gate{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
@@ -68,7 +68,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .team-pills{padding:0 12px 12px;display:flex;gap:6px;}
 .pill{flex:1;padding:5px 4px;border-radius:6px;font-size:11px;font-weight:700;text-align:center;}
 .pill.done{background:#E3FAF3;color:var(--green);}
-.pill.wait{background:#F1EBDF;color:var(--gray);}
+.pill.wait{background:#F0EDF9;color:var(--gray);}
 
 /* Detail panel */
 .detail-panel{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden;display:none;animation:fadeIn .25s ease;}
@@ -80,10 +80,10 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .detail-body{padding:18px;}
 .detail-section{font-size:12px;font-weight:700;color:var(--gray);letter-spacing:.5px;margin-bottom:10px;}
 .detail-photo{width:100%;border-radius:8px;max-height:340px;object-fit:cover;margin-bottom:8px;}
-.detail-empty{background:#F6F1E7;border-radius:8px;padding:20px;text-align:center;color:var(--gray);font-size:13px;}
+.detail-empty{background:#F5F3FB;border-radius:8px;padding:20px;text-align:center;color:var(--gray);font-size:13px;}
 .submit-time{font-size:11px;color:var(--gray);margin-bottom:14px;}
 .divider{border:none;border-top:1px solid var(--border);margin:16px 0;}
-.report-box{background:#F6F1E7;border-radius:8px;padding:14px;}
+.report-box{background:#F5F3FB;border-radius:8px;padding:14px;}
 .report-row{padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;}
 .report-row:last-child{border-bottom:none;}
 .report-row .lbl{font-size:11px;font-weight:700;color:var(--navy);margin-bottom:4px;}
@@ -136,7 +136,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .wipe-btn{width:100%;padding:14px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px;}
 .wipe-btn.confirm{background:var(--navy);color:#fff;}
 .wipe-btn.danger{background:#e03131;color:#fff;}
-.wipe-btn.cancel{background:#F1EBDF;color:var(--gray);margin-bottom:0;}
+.wipe-btn.cancel{background:#F0EDF9;color:var(--gray);margin-bottom:0;}
 
 /* ── 준비 소식 의견함 ── */
 .news-comment-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
@@ -144,7 +144,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .nc-item.resolved{opacity:.55;}
 .nc-top{display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap;}
 .nc-news{font-size:11px;font-weight:800;color:var(--blue);background:var(--sky, #EFEAFB);padding:2px 8px;border-radius:20px;}
-.nc-topic{font-size:11px;font-weight:700;color:#495057;background:#F1EBDF;padding:2px 8px;border-radius:20px;}
+.nc-topic{font-size:11px;font-weight:700;color:#495057;background:#F0EDF9;padding:2px 8px;border-radius:20px;}
 .nc-name{font-weight:700;color:var(--navy);}
 .nc-time{font-size:11px;color:var(--gray);margin-left:auto;}
 .nc-text{color:#495057;line-height:1.6;margin-bottom:8px;}
@@ -154,13 +154,13 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .nc-btn.new{background:#EFEAFB;color:var(--blue);}
 .nc-btn.checked{background:#FFF4D6;color:#8A6410;}
 .nc-btn.applied{background:#E3FAF3;color:var(--green);}
-.nc-btn.hold{background:#F1EBDF;color:var(--gray);}
+.nc-btn.hold{background:#F0EDF9;color:var(--gray);}
 .nc-btn.delete{background:#fff5f5;color:#e03131;opacity:1;}
 
 /* ══ 2026-07-10 디자인 컨셉 v2: SUMMER BREAKTHROUGH (여름 캠프 포스터) ══ */
 @font-face{font-family:'GmarketSansBold';src:url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');font-weight:normal;font-display:swap;}
 *{-webkit-tap-highlight-color:transparent;}
-body{letter-spacing:-0.011em;background:#FBF7EE;color:#2B2350;}
+body{letter-spacing:-0.011em;background:#ffffff;color:#2B2350;}
 .header-title,.card-name,.dest-name,.rp-team,.theme-title,.t-headline,.site-title{font-family:'GmarketSansBold','Pretendard Variable',sans-serif;letter-spacing:0;}
 h1,h2,h3{letter-spacing:-0.02em;}
 .header-tag,.rp-badge,.dest-teams{background:#FFD43B !important;color:#2B2350 !important;box-shadow:2px 2px 0 rgba(43,35,80,.25);}
