@@ -1,7 +1,7 @@
 # 2026 파워웨이브 캠프 — 개발 요구사항
 
 > 마지막 업데이트: 2026-07-11  
-> 변경: REQ-44 신규·완료 — 디자인 전면 교체(SUMMER BREAKTHROUGH → POWER WAVE) + 4탭 앱 셸(미션/지도/소통방/교사) 도입, `map.html` 신규 추가
+> 변경: REQ-45 신규·완료 — 조가 잠긴(선택 완료된) 학생 기기에서는 4탭 앱 셸의 "교사" 탭 접근 시 PIN 필요하도록 잠금
 
 > ⚠️ **결정 대기 중인 항목:** REQ-30(텀블러 증정 운영) — 기존 REQ-17 미션2 정탐 보고서를 교체할지 별도 미션3로 신설할지 확정 필요. 자세한 내용은 PART D 참고
 
@@ -84,6 +84,7 @@
 - [x] `teacher.html`/`station.html`/`checklist.html`/`emergency.html`/`news.html`/`admin.html`/`report.html`/`guide.html` — 헤더에 홈(대시보드) 버튼 추가 (REQ-43)
 - [x] 전체 11개 페이지 디자인 리프레시 — Pretendard 웹폰트 도입, 팔레트 현대화(딥네이비·일렉트릭블루), radius 12→16px, 부드러운 확산 그림자, 버튼 눌림 스케일·입력창 포커스 링·헤더 대각선 광택 등 마이크로 인터랙션. 기능(DOM ID/JS)은 무변경, prefers-reduced-motion 대응 포함 (REQ-40, v2에서 "SUMMER BREAKTHROUGH" 컨셉으로 전면 교체)
 - [x] 디자인 v2 "SUMMER BREAKTHROUGH"를 v3 "POWER WAVE"(하늘색·오렌지, Jua 폰트, 웨이브 헤더)로 전면 재교체 + mission.html/map.html/board.html/index.html에 4탭 하단 앱 셸(미션/지도/소통방/교사) 도입, `map.html` 신규 추가 (REQ-44)
+- [x] 조가 잠긴 학생 기기에서 "교사" 탭에 PIN 잠금 추가 — 미인증 상태에서는 클릭 시 이동 대신 비밀번호 모달, index.html은 URL 직접 접근도 차단 (REQ-45)
 - [x] Day2 관문 게임 전면 교체 — 2관문(요단강 보급품 회수 작전)/3관문(광야 생수 보급 작전)/4관문(생수 보급로 릴레이)/Final(여리고 성벽 돌파 작전, 물풍선 버전)로 교체, 1·5·6관문은 원래대로 유지. "믿음의 잔 수호전"은 특정 관문이 아니라 물 게임 전체의 공용 우천/실내 대체로 별도 카드 분리. station.html/index.html/checklist.html/teacher.html 4곳 동기화 (REQ-41)
 
 ---
@@ -722,6 +723,18 @@
 - **한계:**
   - map.html의 조별 좌표 데이터는 index.html `ROUTE_DATA`에서 복사한 것 — 장소/좌표 변경 시 두 파일 모두 수정 필요(CLAUDE.md에 명시)
   - admin.html 로그인 화면 등 이번 스윕 대상 선택자에 없던 일부 버튼은 오렌지 강조 없이 기존 네이비 톤 유지(치명적이지 않음, 전체 팔레트 안에서 자연스럽게 어울림)
+
+#### REQ-45. 조 잠긴 학생 기기에서 "교사" 탭 PIN 잠금 ✅ 완료
+- **요청:** REQ-44에서 도입한 4탭 앱 셸의 "교사" 탭(index.html)이 아무 제약 없이 열려서, 학생이 조를 선택하고 나면 그 탭으로 관리자/교사 도구까지 자유롭게 넘나들 수 있었음. 조가 선택된 기기에서는 "교사" 탭을 잠가야 함
+- **판단:** admin.html은 이미 자체 비밀번호 게이트가 있어 관리자 기능은 이중으로 보호되지만, index.html 자체(교사 기획 대시보드)와 거기서 바로 연결되는 teacher/station/checklist/emergency/news/report/guide 같은 비밀번호 없는 운영 페이지들은 무방비였음. 새 비밀번호를 만들지 않고 이미 "교사/개발자 전용"으로 안내되고 있던 mission.html의 **기기 초기화 비밀번호**(`RESET_MASTER_PW_HASH`)를 그대로 재사용 — 교사 입장에서 외울 비밀번호가 늘지 않음
+- **구현:**
+  - **잠금 판단 기준:** `localStorage.pwcamp_team`이 있고 해당 조의 `pwcamp_unlocked_{team}`이 `'1'`이면(= 퀴즈를 풀고 미션을 시작한 상태) "조 잠긴 기기"로 간주(`isStudentDeviceLocked()`)
+  - **mission.html / map.html / board.html:** 하단 탭바의 "교사" 링크에 `id="teacherTabLink"` + `onclick="return teacherTabClick(event)"` 추가. 조가 안 잠겨있거나 이미 세션 중 PIN을 통과했으면(`sessionStorage.pw_teacher_unlocked==='1'`) 평소처럼 바로 이동. 잠겨있으면 클릭을 막고 PIN 모달(`teacherGateOverlay`)을 띄움 — 정답 입력 시 `sessionStorage`에 통과 표시 후 index.html로 이동(같은 세션 안에서는 다시 안 물어봄, 탭/창을 새로 열면 초기화)
+  - 잠긴 상태에서는 탭 아이콘에 작은 🔒 배지가 붙음(`.pw-tab-item.locked`), `refreshTeacherTabLock()`을 페이지 로드 시 + `lockTeamSelection()` 직후(= 미션 시작 순간) 호출해 실시간 반영
+  - **index.html:** 탭 클릭 경로 말고도 주소창에 직접 URL을 쳐서 들어오는 우회로가 있으므로, 페이지 자체에도 동일한 잠금 판단 로직을 넣어 로드 시점에 조가 잠긴 기기면 전체 화면을 덮는 오버레이를 즉시 띄움(콘텐츠는 이미 DOM에 있지만 시각적으로 가려짐 — 정적 사이트라 완전한 서버 측 차단은 아니고 캐주얼한 접근을 막는 수준, 이 앱의 다른 비밀번호 게이트들과 동일한 위협 모델). "미션으로 돌아가기" 버튼으로 mission.html로 되돌아갈 수 있음
+  - `RESET_MASTER_PW_HASH`와 게이트 로직이 4개 파일(mission/map/board/index)에 중복 존재 — 비밀번호 변경 시 4곳 모두 수정 필요(CLAUDE.md에 명시)
+- **검증:** Playwright로 (1) 조 미잠금 상태에서 교사 탭 클릭 시 정상 이동 (2) 조 잠금 상태에서 클릭 시 이동 차단 + 모달 표시 (3) 오답 입력 시 에러 메시지 (4) `sessionStorage` 통과 표시 후 정상 이동 (5) index.html 직접 접근 시 오버레이 자동 표시 — 5가지 시나리오 모두 정상 확인. 전체 12페이지 콘솔 에러 0건 유지
+- **한계:** 클라이언트 사이드 검증이라 진짜 보안이 아님(개발자 도구로 우회 가능) — 이 앱의 다른 모든 비밀번호 게이트(admin.html 등)와 동일한 수준의 "캐주얼한 접근 방지" 목적. `pw_teacher_unlocked`가 `sessionStorage`라 브라우저/탭을 새로 열면 다시 PIN을 물어봄(의도된 동작)
 
 #### REQ-04. 촬영 미션 방식 확정 ✅ 완료
 - **요청:** 1차 미션 촬영 방식 선택 필요

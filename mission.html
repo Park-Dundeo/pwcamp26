@@ -29,6 +29,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .pw-tab-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:9px 4px 8px;text-decoration:none;color:var(--gray);font-size:10.5px;font-weight:700;font-family:inherit;}
 .pw-tab-icon{font-size:20px;line-height:1;}
 .pw-tab-item.active{color:var(--blue);}
+.pw-tab-item.locked{color:var(--gray);}
+.pw-tab-item.locked .pw-tab-icon{position:relative;}
+.pw-tab-item.locked .pw-tab-icon::after{content:'🔒';position:absolute;right:-6px;bottom:-4px;font-size:10px;}
 .card{background:#fff;border-radius:var(--radius);box-shadow:0 4px 20px rgba(20,29,56,.07);margin-bottom:16px;overflow:hidden;}
 .card-body{padding:18px;}
 
@@ -530,7 +533,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
   <a href="mission.html" class="pw-tab-item active"><span class="pw-tab-icon">🎯</span><span>미션</span></a>
   <a href="map.html" class="pw-tab-item"><span class="pw-tab-icon">🗺</span><span>지도</span></a>
   <a href="board.html" class="pw-tab-item"><span class="pw-tab-icon">💬</span><span>소통방</span></a>
-  <a href="index.html" class="pw-tab-item"><span class="pw-tab-icon">👥</span><span>교사</span></a>
+  <a href="index.html" class="pw-tab-item" id="teacherTabLink" onclick="return teacherTabClick(event)"><span class="pw-tab-icon">👥</span><span>교사</span></a>
 </nav>
 
 <div class="toast" id="toast"></div>
@@ -554,6 +557,19 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
       <button class="reset-btn full" onclick="resetFullData()">💥 전체 초기화<br><span style="font-weight:400;font-size:11px;">(진행상황 + 제출한 사진·보고서까지 삭제)</span></button>
       <button class="reset-btn cancel" onclick="closeResetModal()">취소</button>
     </div>
+  </div>
+</div>
+
+<!-- 교사 탭 잠금 모달 (REQ-45, 조 잠긴 기기에서 교사 화면 접근 시 PIN 필요) -->
+<div class="reset-overlay" id="teacherGateOverlay">
+  <div class="reset-modal">
+    <h3>🔒 교사 전용 잠금</h3>
+    <div class="reset-sub">조가 선택된 기기에서는 교사 화면 접근에<br>비밀번호가 필요해요</div>
+    <input class="reset-pw-input" type="tel" id="teacherGatePwInput" maxlength="4"
+      placeholder="••••" onkeydown="if(event.key==='Enter')checkTeacherGate()">
+    <div class="reset-err" id="teacherGateErr"></div>
+    <button class="reset-btn confirm" onclick="checkTeacherGate()">확인</button>
+    <button class="reset-btn cancel" onclick="closeTeacherGate()">취소</button>
   </div>
 </div>
 
@@ -819,6 +835,7 @@ function lockTeamSelection() {
   document.getElementById('teamSelectCard').style.display = 'none';
   document.getElementById('fixedTeamNum').textContent = currentTeam;
   document.getElementById('fixedTeamBadge').style.display = 'block';
+  refreshTeacherTabLock();
 }
 
 // ── 실시간 상태 구독 (관리자 승인/반려를 즉시 반영) ──
@@ -1170,6 +1187,43 @@ function showToast(msg) {
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
+
+// ── 교사 탭 잠금 (REQ-45) ──
+// ⚠️ 이 로직/해시는 map.html·board.html·index.html에도 동일하게 있음 — 비밀번호 변경 시 4곳 모두 수정할 것
+function isStudentDeviceLocked() {
+  const t = localStorage.getItem('pwcamp_team');
+  return !!(t && localStorage.getItem(`pwcamp_unlocked_${t}`) === '1');
+}
+function refreshTeacherTabLock() {
+  const link = document.getElementById('teacherTabLink');
+  if (!link) return;
+  const locked = isStudentDeviceLocked() && sessionStorage.getItem('pw_teacher_unlocked') !== '1';
+  link.classList.toggle('locked', locked);
+}
+function teacherTabClick(e) {
+  if (!isStudentDeviceLocked() || sessionStorage.getItem('pw_teacher_unlocked') === '1') return true;
+  e.preventDefault();
+  document.getElementById('teacherGateOverlay').classList.add('show');
+  document.getElementById('teacherGatePwInput').value = '';
+  document.getElementById('teacherGateErr').textContent = '';
+  return false;
+}
+function closeTeacherGate() {
+  document.getElementById('teacherGateOverlay').classList.remove('show');
+}
+async function checkTeacherGate() {
+  const input = document.getElementById('teacherGatePwInput').value.trim();
+  if (await sha256(input) === RESET_MASTER_PW_HASH) {
+    sessionStorage.setItem('pw_teacher_unlocked', '1');
+    location.href = 'index.html';
+  } else {
+    const el = document.getElementById('teacherGatePwInput');
+    el.classList.add('error');
+    document.getElementById('teacherGateErr').textContent = '비밀번호가 틀렸어요.';
+    setTimeout(() => el.classList.remove('error'), 500);
+  }
+}
+refreshTeacherTabLock();
 
 // ── 초기화 모달 (테스트용, 교사/개발자 전용) ──
 // 초기화 마스터 비밀번호 (SHA-256 해시 저장 — 원본은 REQUIREMENTS.md REQ-11 참고)
