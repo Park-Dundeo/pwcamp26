@@ -37,10 +37,11 @@
 
 **`REQUIREMENTS.md`가 단일 소스**. 새 요구사항, 미결 사항, 우선순위는 항상 이 파일에서 확인·갱신할 것. 코드를 보고 요구사항을 추측하지 말고 REQUIREMENTS.md를 먼저 읽는다.
 
-## 현재 구현 상태 (2026-07-10 기준, origin/main에 push 완료)
+## 현재 구현 상태 (2026-07-11 기준, origin/main에 push 완료)
 
-- 완료(REQ-01~38 중 대부분, REQUIREMENTS.md "완료된 기능" 참고): 조별 코드 잠금해제·고정, 미션1→미션2 순차 해금, 관리자 승인/반려 기반 진행, 목적지 배너 단계적 공개, 미션 전환 스토리텔링, Day1 목적문구·보고서 3항목(장벽/믿음/돌파기도), Day2 6관문+Final 구조, 개인정보 안내, 운영 페이지 5종(teacher/station/emergency/checklist/news) + 후속 고도화, Kakao Maps 조별 동선 지도(REQ-29, 실사용 확인 완료), 견학지 담당 선생님 자료 반영·견학 코스 안내 웹페이지(guide.html), 치팅 방지 해시화(REQ-33), 정탐대 소통방(board.html), 정탐 보고서 발표용 모음(report.html), 견학지 2곳 재편 + GPS 기반 미션1(REQ-04/37/38)
+- 완료(REQ-01~41 중 대부분, REQUIREMENTS.md "완료된 기능" 참고): 조별 코드 잠금해제·고정, 미션1→미션2 순차 해금, 관리자 승인/반려 기반 진행, 목적지 배너 단계적 공개, 미션 전환 스토리텔링, Day1 목적문구·보고서 3항목(장벽/믿음/돌파기도), Day2 6관문+Final 구조, 개인정보 안내, 운영 페이지 5종(teacher/station/emergency/checklist/news) + 후속 고도화, Kakao Maps 조별 동선 지도(REQ-29), 견학지 담당 선생님 자료 반영·견학 코스 안내 웹페이지(guide.html), 치팅 방지 해시화(REQ-33), 정탐대 소통방(board.html), 정탐 보고서 발표용 모음(report.html), 견학지 2곳 재편 + GPS 기반 미션1(REQ-04/37/38), index.html 메인 개편(REQ-39, Day1·Day2 미리보기+3일 전체 시간표), 전체 11페이지 디자인 리프레시 "SUMMER BREAKTHROUGH"(REQ-40, 헤더 일관성 수정 포함), Day2 관문 게임 물 보급 테마 전면 교체(REQ-41)
 - **미완료 — 결정 대기:** REQ-30(Day1 정탐 보고 후 텀블러 증정 운영) — 기존 REQ-17 미션2 정탐 보고서를 교체할지, 별도 미션3로 신설할지 확정 필요. 그 외 REQ-02(모바일 반응형 전면 개선), REQ-06(Firebase 규칙 세분화/관리자 인증 전환), REQ-15(Day2 물놀이 업그레이드 초안), REQ-19 일부(진짜 관리자 전용 DB 접근 제한)는 백로그에 남아있음
 - 페이지 수가 3개→11개로 늘어남(teacher/station/emergency/checklist/news/board/report/guide 추가). 새 페이지를 또 추가하면 파일 구성 표(이 문서 상단)와 REQUIREMENTS.md 페이지 구성 표를 함께 갱신할 것
+- **디자인 시스템 v2 "SUMMER BREAKTHROUGH" 적용 중 — 새 색상은 항상 CSS 변수(`var(--navy)` 등)로 작성할 것.** 하드코딩 hex를 쓰면 다음 팔레트 스윕 때 자동으로 안 잡혀서 나만 옛 색으로 남는다 (실제로 2026-07-11에 index.html 헤더 + 제가 REQ-29/39에서 넣은 하드코딩 색상 6곳이 이렇게 빠져있다가 뒤늦게 발견·수정됨)
 
 ⚠️ **작업 시작 전 항상 `git fetch && git status`로 origin 대비 뒤처지지 않았는지 먼저 확인할 것.** 이 프로젝트는 다른 세션/사람이 병행으로 직접 push하는 경우가 있어, 로컬이 stale한 상태로 요구사항을 재작성하면 이미 구현된 것을 다시 요청하거나 REQ 번호가 충돌한다.

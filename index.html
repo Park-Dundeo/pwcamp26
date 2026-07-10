@@ -23,7 +23,7 @@
 body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;background:#ffffff;color:var(--text);line-height:1.65;}
 
 /* ── Header ── */
-.site-header{background:linear-gradient(135deg,var(--navy) 0%,#2d4a9e 100%);color:#fff;padding:22px 20px;}
+.site-header{background:linear-gradient(120deg,#E8481F 0%,#D6336C 48%,#5F3DC4 100%);color:#fff;padding:22px 20px;}
 .header-inner{max-width:960px;margin:0 auto;}
 .header-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:10px;font-weight:800;letter-spacing:1.5px;padding:3px 9px;border-radius:20px;margin-bottom:8px;}
 .header-title{font-size:22px;font-weight:800;letter-spacing:-0.03em;}
@@ -181,13 +181,13 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .kmap-overlay.dest{background:var(--green);}
 .kmap-overlay.food{background:var(--orange);}
 .kmap-overlay.bus{background:var(--blue);}
-.kmap-overlay.unverified{outline:2px dashed #e03131;outline-offset:2px;}
+.kmap-overlay.unverified{outline:2px dashed var(--red);outline-offset:2px;}
 .kmap-info{background:#fff;border-radius:10px;box-shadow:0 4px 16px rgba(0,0,0,.18);padding:12px 14px;font-size:12px;min-width:200px;max-width:240px;}
 .kmap-info .ki-type{font-size:10px;font-weight:800;color:var(--blue);letter-spacing:.5px;text-transform:uppercase;}
 .kmap-info .ki-name{font-size:14px;font-weight:800;color:var(--navy);margin:2px 0 4px;}
 .kmap-info .ki-desc{color:var(--text-soft);line-height:1.55;margin-bottom:4px;}
 .kmap-info .ki-mission{color:var(--navy-mid);font-style:italic;line-height:1.5;margin-bottom:8px;}
-.kmap-info .ki-warn{color:#e03131;font-size:10.5px;font-weight:700;margin-bottom:6px;}
+.kmap-info .ki-warn{color:var(--red);font-size:10.5px;font-weight:700;margin-bottom:6px;}
 .kmap-info .ki-links{display:flex;gap:6px;}
 .kmap-info .ki-links a{flex:1;text-align:center;font-size:11px;font-weight:700;padding:6px 4px;border-radius:6px;text-decoration:none;}
 .kmap-info .ki-links a.kko{background:#FFF4D6;color:#8A6410;}
@@ -202,7 +202,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .point-body{flex:1;}
 .point-body b{display:block;color:var(--navy-mid);}
 .point-body .pv{color:var(--gray);font-size:11px;margin-top:1px;}
-.point-warn{font-size:10px;color:#e03131;font-weight:700;}
+.point-warn{font-size:10px;color:var(--red);font-weight:700;}
 .point-links{display:flex;gap:6px;flex-shrink:0;}
 .point-links a{font-size:10.5px;font-weight:700;padding:4px 8px;border-radius:6px;text-decoration:none;white-space:nowrap;}
 .point-links a.kko{background:#FFF4D6;color:#8A6410;}
@@ -804,7 +804,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
 
   <div class="section-title">🏆 Final — 전체 여리고 성벽 미션</div>
   <div class="gate-grid">
-    <div class="gate-card" style="grid-column:1/-1;"><div class="gate-card-top"><div class="gate-num-badge" style="background:var(--gold, #f59f00);">Final</div><div class="gate-name">여리고 성벽 돌파 작전</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 여호수아 6장 — 여리고성</div><div class="gate-row"><b>게임:</b> 물풍선으로 장벽 단어(두려움·비교·망설임 등)가 붙은 여리고 성벽 맞히기 → 조별 결단문 완성 → 다 함께 외침</div><div class="gate-row"><b>결단문 형식:</b> "우리는 ______을 돌파하겠습니다!"</div><div class="gate-msg">여리고성은 힘으로 무너진 것이 아니라, 순종과 함성으로 무너졌다 — 우리의 돌파도 그렇게 시작된다.</div><div class="gate-supplies">준비물: 박스/종이벽, 물풍선, 장벽 단어 라벨, 우비·보안경</div></div></div>
+    <div class="gate-card" style="grid-column:1/-1;"><div class="gate-card-top"><div class="gate-num-badge" style="background:var(--gold);">Final</div><div class="gate-name">여리고 성벽 돌파 작전</div><span class="tag tag-todo">담당자 미정</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 여호수아 6장 — 여리고성</div><div class="gate-row"><b>게임:</b> 물풍선으로 장벽 단어(두려움·비교·망설임 등)가 붙은 여리고 성벽 맞히기 → 조별 결단문 완성 → 다 함께 외침</div><div class="gate-row"><b>결단문 형식:</b> "우리는 ______을 돌파하겠습니다!"</div><div class="gate-msg">여리고성은 힘으로 무너진 것이 아니라, 순종과 함성으로 무너졌다 — 우리의 돌파도 그렇게 시작된다.</div><div class="gate-supplies">준비물: 박스/종이벽, 물풍선, 장벽 단어 라벨, 우비·보안경</div></div></div>
     <div class="gate-card" style="grid-column:1/-1;"><div class="gate-card-top"><div class="gate-num-badge" style="background:var(--green, #0CA678);">우천 대체</div><div class="gate-name">믿음의 잔 수호전</div><span class="tag tag-done">전체 공용</span></div><div class="gate-body"><div class="gate-row"><b>본문:</b> 수 1:7 — "좌로나 우로나 치우치지 말라"</div><div class="gate-row"><b>게임:</b> 2인 1조 물컵 대결 — 상대 조의 컵을 흔들거나 떨어뜨리기 (물 버전/무물 버전 둘 다 가능)</div><div class="gate-msg">⚠️ 특정 관문 전용이 아니라, 2·3·4·Final 등 물 게임이 우천·실내·물 사용 불가 상황일 때 공통으로 투입하는 대체 게임입니다.</div><div class="gate-supplies">준비물: 종이컵, 스티로폼 스틱, 표시 테이프, 타이머, 수건 (물 버전은 물 추가)</div></div></div>
   </div>
 </div>
@@ -1087,7 +1087,7 @@ function initRouteMap(key) {
 
   if (typeof kakao === 'undefined' || !kakao.maps) {
     document.getElementById('kmap-' + key).innerHTML =
-      '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#868e96;font-size:12px;padding:12px;text-align:center;">지도를 불러올 수 없습니다.<br>(Kakao Maps API 키/도메인 설정을 확인해주세요)</div>';
+      '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gray);font-size:12px;padding:12px;text-align:center;">지도를 불러올 수 없습니다.<br>(Kakao Maps API 키/도메인 설정을 확인해주세요)</div>';
     return;
   }
 
@@ -1099,7 +1099,7 @@ function initRouteMap(key) {
   // 지점 간 안내선 (실제 경로 아님 — 순서만 표시)
   const path = route.points.map(p => new kakao.maps.LatLng(p.lat, p.lng));
   new kakao.maps.Polyline({
-    map, path, strokeWeight: 3, strokeColor: '#3b5bdb', strokeOpacity: 0.55, strokeStyle: 'shortdash',
+    map, path, strokeWeight: 3, strokeColor: '#6741D9', strokeOpacity: 0.55, strokeStyle: 'shortdash',
   });
 
   const bounds = new kakao.maps.LatLngBounds();
