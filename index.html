@@ -29,16 +29,22 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .header-sub{font-size:13px;opacity:0.75;margin-top:3px;}
 .header-meta{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;}
 .header-meta span{font-size:12px;opacity:0.85;background:rgba(255,255,255,0.12);padding:3px 10px;border-radius:20px;}
-.page-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-.page-links a{font-size:12px;font-weight:700;color:#fff;background:rgba(255,255,255,0.14);padding:6px 12px;border-radius:20px;text-decoration:none;transition:background .15s;}
-.page-links a:hover{background:rgba(255,255,255,0.26);}
 
-/* ── Tabs ── */
+/* ── Tabs + 전체 도구 메뉴 (통합 네비게이션) ── */
 .tab-nav{background:#fff;border-bottom:2px solid var(--border);position:sticky;top:0;z-index:90;}
-.tab-nav-inner{max-width:960px;margin:0 auto;display:flex;overflow-x:auto;}
+.tab-nav-inner{max-width:960px;margin:0 auto;display:flex;align-items:center;}
+.tab-scroll{display:flex;overflow-x:auto;flex:1;min-width:0;}
 .tab-btn{padding:13px 18px;font-size:13px;font-weight:600;color:var(--gray);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap;transition:all .2s;font-family:inherit;}
 .tab-btn:hover{color:var(--blue);background:var(--sky);}
 .tab-btn.active{color:var(--blue);border-bottom-color:var(--blue);}
+.menu-wrap{position:relative;flex-shrink:0;padding:0 14px;}
+.menu-btn{padding:9px 14px;font-size:12.5px;font-weight:700;color:var(--navy);background:var(--sky);border:none;border-radius:20px;cursor:pointer;font-family:inherit;white-space:nowrap;display:flex;align-items:center;gap:4px;}
+.menu-btn:hover{background:#d8e4ff;}
+.menu-dropdown{display:none;position:absolute;top:calc(100% + 8px);right:14px;background:#fff;border-radius:10px;box-shadow:0 10px 32px rgba(0,0,0,.2);padding:8px;min-width:230px;z-index:100;}
+.menu-dropdown.open{display:block;}
+.menu-group-label{font-size:10px;font-weight:800;color:var(--gray);letter-spacing:.5px;text-transform:uppercase;padding:9px 10px 4px;}
+.menu-dropdown a{display:block;padding:9px 10px;font-size:13px;font-weight:600;color:var(--text);text-decoration:none;border-radius:6px;}
+.menu-dropdown a:hover{background:var(--sky);color:var(--blue);}
 
 /* ── Main ── */
 .main{max-width:960px;margin:0 auto;padding:22px 16px 60px;}
@@ -66,21 +72,39 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .item-label b{color:var(--navy-mid);}
 .item-label .sub{font-size:12px;color:var(--text-soft);margin-top:2px;}
 
-/* ── Summary ── */
-.summary-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin-bottom:18px;}
-.summary-box{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);padding:14px 16px;border-top:4px solid var(--blue);}
-.summary-box.green{border-top-color:var(--green);}
-.summary-box.gold{border-top-color:var(--gold);}
-.summary-box.red{border-top-color:var(--red);}
-.summary-box .num{font-size:24px;font-weight:800;color:var(--navy);line-height:1.1;}
-.summary-box .lbl{font-size:11px;color:var(--gray);margin-top:3px;}
-
 /* ── Highlight ── */
 .highlight{background:var(--sky);border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:11px 14px;font-size:13px;color:var(--navy-mid);font-style:italic;margin-bottom:16px;}
 
 /* ── Section title ── */
 .section-title{font-size:11px;font-weight:700;color:var(--gray);letter-spacing:1px;text-transform:uppercase;margin:20px 0 10px;display:flex;align-items:center;gap:8px;}
 .section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ══════════════════════════════
+   전체 개요 — Day1·Day2 미리보기 + 시간 계획표
+══════════════════════════════ */
+.day-preview-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px;}
+@media(max-width:600px){.day-preview-grid{grid-template-columns:1fr;}}
+.day-preview-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;cursor:pointer;transition:transform .15s,box-shadow .15s;border:none;text-align:left;font-family:inherit;width:100%;}
+.day-preview-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.12);}
+.day-preview-top{padding:16px 18px;color:#fff;}
+.day-preview-top.d1{background:linear-gradient(135deg,#1a2744,#3b5bdb);}
+.day-preview-top.d2{background:linear-gradient(135deg,#4a1a00,#e8590c);}
+.day-preview-tag{font-size:10px;font-weight:800;letter-spacing:1.5px;opacity:.75;text-transform:uppercase;}
+.day-preview-title{font-size:17px;font-weight:800;margin:4px 0 8px;}
+.day-preview-keyword{font-size:11.5px;font-weight:700;background:rgba(255,255,255,.2);display:inline-block;padding:3px 11px;border-radius:20px;}
+.day-preview-body{padding:14px 18px;}
+.day-preview-desc{font-size:12.5px;color:var(--text-soft);line-height:1.65;margin-bottom:10px;}
+.day-preview-link{font-size:12.5px;font-weight:700;color:var(--blue);}
+
+.timetable-row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #f1f3f5;font-size:13px;}
+.timetable-row:last-child{border-bottom:none;}
+.timetable-time{flex-shrink:0;width:92px;font-weight:800;color:var(--blue);font-size:12px;}
+.timetable-day{display:inline-block;font-size:10px;font-weight:800;color:#fff;background:var(--gray);padding:1px 7px;border-radius:10px;margin-right:6px;}
+.timetable-day.d1{background:var(--gold);}
+.timetable-day.d2{background:var(--green);}
+.timetable-day.close{background:var(--red);}
+.timetable-txt b{color:var(--navy);}
+.timetable-txt span{color:var(--gray);font-size:12px;}
 
 /* ══════════════════════════════
    DAY 1 — DESTINATION SELECTOR
@@ -264,7 +288,6 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 
 @media(max-width:600px){
   .loc-grid,.gate-grid{grid-template-columns:1fr;}
-  .summary-row{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
@@ -277,31 +300,37 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     <div class="header-sub">주제: 돌파 / Breakthrough — 프로그램 기획 자료</div>
     <div class="header-meta">
       <span>📍 도봉숲속마을</span>
-      <span>📅 2026.07.17~</span>
+      <span>📅 2026.07.17~ <b id="dday-num"></b></span>
       <span>📖 여호수아 24:15</span>
-      <span>👥 학생 50명 · 6조</span>
-    </div>
-    <div class="page-links">
-      <a href="mission.html">🗺 학생 미션</a>
-      <a href="report.html">📜 정탐 보고서 모음</a>
-      <a href="board.html">🕊 정탐대 소통방</a>
-      <a href="guide.html">📖 견학 코스 안내</a>
-      <a href="admin.html">🔐 관리자</a>
-      <a href="teacher.html">📘 교사 매뉴얼</a>
-      <a href="station.html">🎮 관문 카드</a>
-      <a href="emergency.html">🚨 비상 대응표</a>
-      <a href="checklist.html">🧰 준비물 체크</a>
-      <a href="news.html">💬 준비 소식</a>
     </div>
   </div>
 </header>
 
 <nav class="tab-nav">
   <div class="tab-nav-inner">
-    <button class="tab-btn active" onclick="switchTab('overview',this)">📋 전체 개요</button>
-    <button class="tab-btn" onclick="switchTab('day1',this)">🗺 Day1 가나안 정탐</button>
-    <button class="tab-btn" onclick="switchTab('day2',this)">🏰 Day2 돌파 순례길</button>
-    <button class="tab-btn" onclick="switchTab('prep',this)">✅ 준비 현황</button>
+    <div class="tab-scroll">
+      <button class="tab-btn active" id="tabBtn-overview" onclick="switchTab('overview',this)">📋 전체 개요</button>
+      <button class="tab-btn" id="tabBtn-day1" onclick="switchTab('day1',this)">🗺 Day1 가나안 정탐</button>
+      <button class="tab-btn" id="tabBtn-day2" onclick="switchTab('day2',this)">🏰 Day2 돌파 순례길</button>
+      <button class="tab-btn" id="tabBtn-prep" onclick="switchTab('prep',this)">✅ 준비 현황</button>
+    </div>
+    <div class="menu-wrap">
+      <button class="menu-btn" onclick="toggleMenu(event)">☰ 전체 도구</button>
+      <div class="menu-dropdown" id="menuDropdown">
+        <div class="menu-group-label">학생 · 발표용</div>
+        <a href="mission.html">🗺 학생 미션</a>
+        <a href="report.html">📜 정탐 보고서 모음</a>
+        <a href="board.html">🕊 정탐대 소통방</a>
+        <a href="guide.html">📖 견학 코스 안내</a>
+        <div class="menu-group-label">운영진용</div>
+        <a href="admin.html">🔐 관리자</a>
+        <a href="teacher.html">📘 교사 매뉴얼</a>
+        <a href="station.html">🎮 관문 카드</a>
+        <a href="emergency.html">🚨 비상 대응표</a>
+        <a href="checklist.html">🧰 준비물 체크</a>
+        <a href="news.html">💬 준비 소식</a>
+      </div>
+    </div>
   </div>
 </nav>
 
@@ -309,32 +338,45 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 
 <!-- ═══ 전체 개요 ═══ -->
 <div class="tab-panel active" id="panel-overview">
-  <div class="summary-row">
-    <div class="summary-box"><div class="num">50명</div><div class="lbl">신청 학생 (목표)</div></div>
-    <div class="summary-box green"><div class="num">6조</div><div class="lbl">조 편성</div></div>
-    <div class="summary-box gold"><div class="num">3곳</div><div class="lbl">2차 견학 장소</div></div>
-    <div class="summary-box red"><div class="num" id="dday-num">-</div><div class="lbl">D-Day까지</div></div>
-  </div>
   <div class="highlight">"정탐은 세상을 보는 시간이고, 정복은 내 안의 장벽을 믿음으로 돌파하는 시간."</div>
-  <div class="card">
-    <div class="card-header"><h2>🗓 전체 흐름</h2></div>
-    <div class="card-body">
-      <ul class="item-list">
-        <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day 1 오전·오후 — 가나안 정탐</b><div class="sub">3페이즈 이동 미션 · 키워드: 두려움 돌파</div></div></li>
-        <li><span class="tag tag-done">확정</span><div class="item-label"><b>Day 2 오전 — 가나안 정복: 돌파의 순례길</b><div class="sub">6관문 + Final 여리고 성벽 90분 · 키워드: 불가능 돌파</div></div></li>
-        <li><span class="tag tag-done">확정</span><div class="item-label"><b>폐회예배</b><div class="sub">여호수아 24:15 · 망설임 → 결단</div></div></li>
-      </ul>
-    </div>
+
+  <div class="section-title" style="margin-top:4px;">Day1 · Day2 한눈에 보기</div>
+  <div class="day-preview-grid">
+    <button class="day-preview-card" onclick="goToTab('day1')">
+      <div class="day-preview-top d1">
+        <div class="day-preview-tag">Day 1 · 오전~오후</div>
+        <div class="day-preview-title">가나안 정탐</div>
+        <span class="day-preview-keyword">키워드: 두려움 돌파</span>
+      </div>
+      <div class="day-preview-body">
+        <div class="day-preview-desc">3페이즈 이동 미션으로 조별 경유지·견학지를 다니며, 세상 속 장벽과 믿음의 흔적을 정탐하고 보고서를 씁니다.</div>
+        <div class="day-preview-link">Day1 자세히 보기 →</div>
+      </div>
+    </button>
+    <button class="day-preview-card" onclick="goToTab('day2')">
+      <div class="day-preview-top d2">
+        <div class="day-preview-tag">Day 2 · 오전 90분</div>
+        <div class="day-preview-title">돌파의 순례길</div>
+        <span class="day-preview-keyword">키워드: 불가능 돌파</span>
+      </div>
+      <div class="day-preview-body">
+        <div class="day-preview-desc">천로역정 × 여호수아 가나안 정복. 6관문을 순환하며 돌파를 체험하고, 마지막엔 전체가 모여 여리고 성벽 미션으로 마무리합니다.</div>
+        <div class="day-preview-link">Day2 자세히 보기 →</div>
+      </div>
+    </button>
   </div>
+
+  <div class="section-title">⏱ 전체 시간 계획표</div>
   <div class="card">
-    <div class="card-header"><h2>👥 조 편성 기준</h2></div>
     <div class="card-body">
-      <ul class="item-list">
-        <li><span class="tag tag-done">확정</span><div class="item-label"><b>6조 편성</b><div class="sub">조당 약 8~9명</div></div></li>
-        <li><span class="tag tag-done">확정</span><div class="item-label"><b>조별 인솔 교사 1명</b><div class="sub">Day1 이동 전담 · 총 6명</div></div></li>
-        <li><span class="tag tag-done">확정</span><div class="item-label"><b>2차 견학 장소 설명 교사 3명</b><div class="sub">각 장소에 1명 대기 · 2조씩 담당</div></div></li>
-        <li><span class="tag tag-todo">미정</span><div class="item-label"><b>조 명단 및 구성</b><div class="sub">성별·학년 균형 필요</div></div></li>
-      </ul>
+      <div class="timetable-row"><div class="timetable-time">Day1 오전</div><div class="timetable-txt"><span class="timetable-day d1">D1</span><b>페이즈 1 — 이동 미션</b><br><span>집결 → 경유지 GPS 인증샷(미션1) → 견학지 이동</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">Day1 오전~오후</div><div class="timetable-txt"><span class="timetable-day d1">D1</span><b>페이즈 2 — 견학</b><br><span>전쟁기념관(1·2·3조) / 서대문형무소(4·5·6조) + 정탐 보고서(미션2)</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">Day1 오후</div><div class="timetable-txt"><span class="timetable-day d1">D1</span><b>페이즈 3 — 식사·이동</b><br><span>조별 자유 식사 후 도봉숲속마을로 이동</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">Day2 0–10분</div><div class="timetable-txt"><span class="timetable-day d2">D2</span><b>① 오프닝</b><br><span>전체 집합 · 프로그램 설명 · 조별 출발 안내</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">Day2 10–70분</div><div class="timetable-txt"><span class="timetable-day d2">D2</span><b>② 6관문 순환</b><br><span>관문당 약 8–10분</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">Day2 70–80분</div><div class="timetable-txt"><span class="timetable-day d2">D2</span><b>③ Final — 전체 여리고 성벽 미션</b><br><span>전 조 재집합, 결단문 완성 → 외침 → 성벽 무너뜨리기</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">Day2 80–90분</div><div class="timetable-txt"><span class="timetable-day d2">D2</span><b>④ 결단 나눔 및 마무리</b><br><span>조별 결단문 한 문장 공유 · 짧은 기도</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">폐회예배</div><div class="timetable-txt"><span class="timetable-day close">CLOSE</span><b>폐회예배</b><br><span>여호수아 24:15 · 망설임 → 결단</span></div></div>
     </div>
   </div>
 </div>
@@ -787,12 +829,25 @@ function switchTab(name, btn) {
   btn.classList.add('active');
 }
 
+// 개요 탭의 Day1/Day2 미리보기 카드 클릭 시 해당 탭으로 이동 (탭 버튼 클릭과 동일 동작)
+function goToTab(name) {
+  switchTab(name, document.getElementById('tabBtn-' + name));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
 // ── D-Day ──
 const ddEl = document.getElementById('dday-num');
 if (ddEl) {
   const diff = Math.ceil((new Date('2026-07-17') - new Date()) / 86400000);
-  ddEl.textContent = diff > 0 ? diff + '일' : 'D-Day';
+  ddEl.textContent = diff > 0 ? `(D-${diff})` : '(D-Day)';
 }
+
+// ── 전체 도구 메뉴 (탭+페이지링크 통합 드롭다운) ──
+function toggleMenu(e) {
+  e.stopPropagation();
+  document.getElementById('menuDropdown').classList.toggle('open');
+}
+document.addEventListener('click', () => document.getElementById('menuDropdown').classList.remove('open'));
 
 // ── 미션 카드 HTML ──
 function missionHTML(destName, spotName, spot예시) {
