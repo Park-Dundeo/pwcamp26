@@ -541,74 +541,156 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     <div class="route-card">
       <div class="route-card-header">
         <h3>🗺 4조 · 5조 · 6조 동선</h3>
-        <span class="route-teams-badge">서대문형무소</span>
+        <span class="route-teams-badge">서대문형무소 (3개 경유지 루트)</span>
       </div>
-      <div style="font-size:12px;color:var(--gray);line-height:1.7;margin-bottom:16px;">⚠️ 3개 조 공통 경유지로 임시 표시되어 있습니다. 전쟁기념관처럼 조별로 다른 경유지·인증샷 스팟이 확정되면 갱신 예정입니다.</div>
-      <div class="route-timeline">
-        <div class="rt-step">
-          <div class="rt-icon start">🏫</div>
-          <div class="rt-content">
-            <div class="rt-title">출발 — 나비쇼핑몰 (강동구)</div>
-            <div class="rt-sub">조별 출발 · 인솔 교사 동행</div>
-            <div class="rt-transit">
-              <span class="line-badge line-5">5호선</span>
-              <span class="transfer-arrow">강동역 승차 →</span>
-              <span class="line-badge line-2">2호선</span>
-              <span class="transfer-arrow">왕십리역 환승</span>
+      <div style="font-size:12px;color:var(--gray);line-height:1.7;margin-bottom:16px;">조별로 서로 다른 도심 명소에서 출발해, 모두 <b>독립문역 → 서대문형무소</b>로 모입니다. 최종 집결지는 3개 조 동일 — <b>서대문형무소 정문</b> (독립문역 5번 출구 도보 5분).</div>
+
+      <!-- 4조: 청계천 -->
+      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">🚩 4조 — 청계천 경유</div>
+        <div class="route-timeline">
+          <div class="rt-step">
+            <div class="rt-icon start">🏫</div>
+            <div class="rt-content">
+              <div class="rt-title">출발 — 나비쇼핑몰 (강동구)</div>
+              <div class="rt-sub">조별 출발 · 인솔 교사 동행</div>
+              <div class="rt-transit"><span class="line-badge line-5">5호선</span><span class="transfer-arrow">강동역 승차</span></div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon mission">📍</div>
+            <div class="rt-content">
+              <div class="rt-title">1차 미션 — 청계천(청계광장)</div>
+              <div class="rt-sub">종로3가역 하차 · 청계광장까지 도보 5분</div>
+              <div class="rt-transit"><span class="time-chip">인증샷: 청계광장 소라탑 · 청계천 폭포 · 다리 위 전망</span></div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon start">🚇</div>
+            <div class="rt-content">
+              <div class="rt-title">이동 — 5호선 종로3가역 → 독립문역</div>
+              <div class="rt-sub">환승 없이 5호선 그대로 이동 (가장 단순)</div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon dest">🏛</div>
+            <div class="rt-content">
+              <div class="rt-title">2차 견학 — 서대문형무소</div>
+              <div class="rt-sub">독립문역 5번 출구 도보 5분</div>
             </div>
           </div>
         </div>
-        <div class="rt-step">
-          <div class="rt-icon mission">📍</div>
-          <div class="rt-content">
-            <div class="rt-title">1차 미션 — 성수역 (성수동)</div>
-            <div class="rt-sub">2호선 하차 · 성수동 거리 (조별 경유지 확정 전 임시)</div>
-            <div class="rt-transit"><span class="time-chip">⏱ 약 20분 소요</span></div>
-          </div>
+        <div class="map-wrap">
+          <div class="kmap" id="kmap-seo1"></div>
+          <div class="point-list" id="points-seo1"></div>
         </div>
-        <div class="rt-step">
-          <div class="rt-icon start">🚇</div>
-          <div class="rt-content">
-            <div class="rt-title">재탑승 — 2호선 → 5호선 환승</div>
-            <div class="rt-transit">
-              <span class="line-badge line-2">2호선</span>
-              <span class="transfer-arrow">시청역 →</span>
-              <span class="line-badge line-5">5호선</span>
-              <span class="transfer-arrow">광화문 →</span>
-              <span class="line-badge line-3">3호선</span>
-              <span class="transfer-arrow">독립문역 하차</span>
+      </div>
+
+      <!-- 5조: 광화문광장 -->
+      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">🚩 5조 — 광화문광장 경유</div>
+        <div class="route-timeline">
+          <div class="rt-step">
+            <div class="rt-icon start">🏫</div>
+            <div class="rt-content">
+              <div class="rt-title">출발 — 나비쇼핑몰 (강동구)</div>
+              <div class="rt-sub">조별 출발 · 인솔 교사 동행</div>
+              <div class="rt-transit"><span class="line-badge line-5">5호선</span><span class="transfer-arrow">강동역 승차</span></div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon mission">📍</div>
+            <div class="rt-content">
+              <div class="rt-title">1차 미션 — 광화문광장</div>
+              <div class="rt-sub">광화문역 하차 · 광장까지 도보 3분</div>
+              <div class="rt-transit"><span class="time-chip">인증샷: 이순신장군 동상 · 세종대왕 동상 · 육조거리 전망</span></div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon start">🚇</div>
+            <div class="rt-content">
+              <div class="rt-title">이동 — 5호선 광화문역 → 독립문역</div>
+              <div class="rt-sub">✅ 3개 루트 중 가장 안정적 — 환승 없이 1정거장대</div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon dest">🏛</div>
+            <div class="rt-content">
+              <div class="rt-title">2차 견학 — 서대문형무소</div>
+              <div class="rt-sub">독립문역 5번 출구 도보 5분</div>
             </div>
           </div>
         </div>
-        <div class="rt-step">
-          <div class="rt-icon dest">🏛</div>
-          <div class="rt-content">
-            <div class="rt-title">2차 견학 — 서대문형무소</div>
-            <div class="rt-sub">설명 교사 현장 대기 · 입장료 확인 필요</div>
-            <div class="rt-transit"><span class="time-chip">⏱ 견학 약 60분</span></div>
+        <div class="map-wrap">
+          <div class="kmap" id="kmap-seo2"></div>
+          <div class="point-list" id="points-seo2"></div>
+        </div>
+      </div>
+
+      <!-- 6조: 덕수궁 돌담길 -->
+      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;">
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">🚩 6조 — 덕수궁 돌담길 경유</div>
+        <div class="route-timeline">
+          <div class="rt-step">
+            <div class="rt-icon start">🏫</div>
+            <div class="rt-content">
+              <div class="rt-title">출발 — 나비쇼핑몰 (강동구)</div>
+              <div class="rt-sub">조별 출발 · 인솔 교사 동행</div>
+              <div class="rt-transit"><span class="line-badge line-5">5호선</span><span class="transfer-arrow">강동역 승차</span></div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon mission">📍</div>
+            <div class="rt-content">
+              <div class="rt-title">1차 미션 — 덕수궁 돌담길</div>
+              <div class="rt-sub">시청역 하차(1·2호선 환승 필요) · 정동길 도보</div>
+              <div class="rt-transit"><span class="time-chip">인증샷: 돌담길 벤치 · 정동길 가로수 · 서울광장 전망</span></div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon start">🚇</div>
+            <div class="rt-content">
+              <div class="rt-title">이동 — 시청역 → 독립문역</div>
+              <div class="rt-sub">⚠️ 3개 루트 중 환승이 있어 이동 난이도 가장 높음</div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon dest">🏛</div>
+            <div class="rt-content">
+              <div class="rt-title">2차 견학 — 서대문형무소</div>
+              <div class="rt-sub">독립문역 5번 출구 도보 5분</div>
+            </div>
           </div>
         </div>
-        <div class="rt-step">
-          <div class="rt-icon food">🍽</div>
-          <div class="rt-content">
-            <div class="rt-title">식사 — 신촌·연희동 인근</div>
-            <div class="rt-sub">조별 자유 식사 (방식 미정)</div>
-          </div>
+        <div class="map-wrap">
+          <div class="kmap" id="kmap-seo3"></div>
+          <div class="point-list" id="points-seo3"></div>
         </div>
-        <div class="rt-step">
-          <div class="rt-icon bus">🚌</div>
-          <div class="rt-content">
-            <div class="rt-title">도봉숲속마을 이동</div>
-            <div class="rt-sub">집결 시간·장소 추후 확정</div>
+      </div>
+
+      <!-- 공통: 식사 → 도봉숲속마을 이동 (3개 조 동일) -->
+      <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:16px;background:#f8f9fa;">
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">🚩 4·5·6조 공통 — 견학 이후</div>
+        <div class="route-timeline">
+          <div class="rt-step">
+            <div class="rt-icon food">🍽</div>
+            <div class="rt-content">
+              <div class="rt-title">식사 — 신촌·연희동 인근</div>
+              <div class="rt-sub">조별 자유 식사 (방식 미정)</div>
+            </div>
+          </div>
+          <div class="rt-step">
+            <div class="rt-icon bus">🚌</div>
+            <div class="rt-content">
+              <div class="rt-title">도봉숲속마을 이동</div>
+              <div class="rt-sub">집결 시간·장소 추후 확정</div>
+            </div>
           </div>
         </div>
       </div>
-      <div class="map-wrap">
-        <div class="kmap" id="kmap-b"></div>
-        <div class="map-caption">지도 위 선은 실제 이동 경로가 아니라, 장소 간 이동 순서를 보여주는 안내선입니다. 정확한 대중교통 경로와 소요 시간은 카카오맵 또는 네이버지도에서 확인해주세요.</div>
-        <div class="point-list" id="points-b"></div>
-      </div>
-      <a class="map-btn" href="https://map.naver.com/v5/search/서대문형무소" target="_blank">🗺 네이버 지도로 보기 →</a>
+
+      <div class="map-caption" style="margin-bottom:12px;">지도 위 선은 실제 이동 경로가 아니라, 장소 간 이동 순서를 보여주는 안내선입니다. 정확한 대중교통 경로와 소요 시간은 카카오맵 또는 네이버지도에서 확인해주세요. 식사·도봉숲속마을 이동은 3개 조 공통(위 참고).</div>
+      <a class="map-btn" href="https://map.naver.com/v5/search/서대문형무소" target="_blank">🗺 서대문형무소 네이버 지도로 보기 →</a>
       <a class="guide-btn" href="guide.html?course=b">📖 견학 코스 안내 보기 →</a>
     </div>
     <div id="missions-b"></div>
@@ -791,7 +873,7 @@ function selectDest(key) {
   if (!mBox.innerHTML.trim()) {
     const data = {
       war: { dest:'전쟁기념관', spot:'노들섬 · 이촌한강공원 · 서울로7017 (조별 상이)' },
-      b: { dest:'서대문형무소', spot:'성수역' },
+      b: { dest:'서대문형무소', spot:'청계천 · 광화문광장 · 덕수궁 돌담길 (조별 상이)' },
     }[key];
     mBox.innerHTML = missionHTML(data.dest, data.spot);
   }
@@ -799,6 +881,8 @@ function selectDest(key) {
   // 조별 동선 지도 (한 번만 초기화, 패널이 보이는 상태에서 생성해야 정상 렌더링됨)
   if (key === 'war') {
     initRouteMap('war1'); initRouteMap('war2'); initRouteMap('war3');
+  } else if (key === 'b') {
+    initRouteMap('seo1'); initRouteMap('seo2'); initRouteMap('seo3');
   } else {
     initRouteMap(key);
   }
@@ -846,11 +930,31 @@ const ROUTE_DATA = {
       { order:5, type:'최종 이동', name:'도봉숲속마을', lat:37.669700, lng:127.045900, description:'집결 시간·장소 추후 확정', stay:null, mission:null, verified:false },
     ],
   },
-  b: {
-    group: '4조 · 5조 · 6조', destination: '서대문형무소', routeTitle: '서대문형무소 정탐 루트',
+  seo1: {
+    group: '4조', destination: '서대문형무소', routeTitle: '서대문형무소 정탐 루트 (청계천 경유)',
     points: [
       { order:1, type:'출발', name:'나비쇼핑몰 / 강동역', lat:37.535000, lng:127.132000, description:'조별 출발 · 인솔 교사 동행', stay:null, mission:null, verified:false },
-      { order:2, type:'1차 미션', name:'성수역', lat:37.544700, lng:127.055700, description:'2호선 하차 · 성수동 거리 (조별 경유지 확정 전 임시)', stay:'약 20분', mission:'로드뷰 재현샷 또는 성수동 거리 정탐 인증샷', verified:false },
+      { order:2, type:'1차 미션', name:'청계천(청계광장)', lat:37.569500, lng:126.978400, description:'종로3가역 하차 · 도보 5분', stay:null, mission:'인증샷: 청계광장 소라탑 · 청계천 폭포 · 다리 위 전망', verified:false },
+      { order:3, type:'2차 견학', name:'서대문형무소', lat:37.574400, lng:126.956000, description:'자유 · 독립 · 순국선열', stay:'약 60분', mission:'우리가 본 장벽 / 발견한 믿음 / 돌파기도 보고서 작성', verified:false },
+      { order:4, type:'식사 권역', name:'신촌 · 연희동 인근', lat:37.559700, lng:126.942500, description:'조별 자유 식사 (방식 미정)', stay:null, mission:null, verified:false },
+      { order:5, type:'최종 이동', name:'도봉숲속마을', lat:37.669700, lng:127.045900, description:'집결 시간·장소 추후 확정', stay:null, mission:null, verified:false },
+    ],
+  },
+  seo2: {
+    group: '5조', destination: '서대문형무소', routeTitle: '서대문형무소 정탐 루트 (광화문광장 경유)',
+    points: [
+      { order:1, type:'출발', name:'나비쇼핑몰 / 강동역', lat:37.535000, lng:127.132000, description:'조별 출발 · 인솔 교사 동행', stay:null, mission:null, verified:false },
+      { order:2, type:'1차 미션', name:'광화문광장', lat:37.572000, lng:126.976900, description:'광화문역 하차 · 도보 3분', stay:null, mission:'인증샷: 이순신장군 동상 · 세종대왕 동상 · 육조거리 전망', verified:false },
+      { order:3, type:'2차 견학', name:'서대문형무소', lat:37.574400, lng:126.956000, description:'자유 · 독립 · 순국선열', stay:'약 60분', mission:'우리가 본 장벽 / 발견한 믿음 / 돌파기도 보고서 작성', verified:false },
+      { order:4, type:'식사 권역', name:'신촌 · 연희동 인근', lat:37.559700, lng:126.942500, description:'조별 자유 식사 (방식 미정)', stay:null, mission:null, verified:false },
+      { order:5, type:'최종 이동', name:'도봉숲속마을', lat:37.669700, lng:127.045900, description:'집결 시간·장소 추후 확정', stay:null, mission:null, verified:false },
+    ],
+  },
+  seo3: {
+    group: '6조', destination: '서대문형무소', routeTitle: '서대문형무소 정탐 루트 (덕수궁 돌담길 경유)',
+    points: [
+      { order:1, type:'출발', name:'나비쇼핑몰 / 강동역', lat:37.535000, lng:127.132000, description:'조별 출발 · 인솔 교사 동행', stay:null, mission:null, verified:false },
+      { order:2, type:'1차 미션', name:'덕수궁 돌담길', lat:37.565800, lng:126.975200, description:'시청역 하차(환승 필요) · 정동길 도보', stay:null, mission:'인증샷: 돌담길 벤치 · 정동길 가로수 · 서울광장 전망', verified:false },
       { order:3, type:'2차 견학', name:'서대문형무소', lat:37.574400, lng:126.956000, description:'자유 · 독립 · 순국선열', stay:'약 60분', mission:'우리가 본 장벽 / 발견한 믿음 / 돌파기도 보고서 작성', verified:false },
       { order:4, type:'식사 권역', name:'신촌 · 연희동 인근', lat:37.559700, lng:126.942500, description:'조별 자유 식사 (방식 미정)', stay:null, mission:null, verified:false },
       { order:5, type:'최종 이동', name:'도봉숲속마을', lat:37.669700, lng:127.045900, description:'집결 시간·장소 추후 확정', stay:null, mission:null, verified:false },

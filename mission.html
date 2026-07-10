@@ -475,16 +475,17 @@ firebase.initializeApp({
 const db = firebase.database();
 
 // ── 조별 설정 ──
-// ⚠️ 이 TEAM_MAP은 admin.html·index.html(ROUTE_DATA)에도 복사본이 있음 — 목적지/경유지 변경 시 반드시 모두 함께 수정할 것
+// ⚠️ 이 TEAM_MAP은 admin.html·report.html·index.html(ROUTE_DATA)에도 복사본이 있음 — 목적지/경유지 변경 시 반드시 모두 함께 수정할 것
 // 2026-07-09 결정: 견학지 3곳→2곳으로 축소 (연세대 언더우드가 기념관 코스 보류), 6개 조를 3명씩 배정
-// 전쟁기념관행 3개 조는 서로 다른 경유지(노들섬/이촌한강공원/서울로7017)에서 출발해 삼각지역에서 만남
+// 전쟁기념관행 3개 조: 노들섬/이촌한강공원/서울로7017 → 삼각지역에서 합류
+// 서대문형무소행 3개 조: 청계천/광화문광장/덕수궁 돌담길 → 독립문역에서 합류 (2026-07-09 적용)
 const TEAM_MAP = {
   1:{dest:'전쟁기념관',waypoint:'노들섬',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
   2:{dest:'전쟁기념관',waypoint:'이촌한강공원',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
   3:{dest:'전쟁기념관',waypoint:'서울로7017',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
-  4:{dest:'서대문형무소',waypoint:'성수역',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
-  5:{dest:'서대문형무소',waypoint:'성수역',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
-  6:{dest:'서대문형무소',waypoint:'성수역',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
+  4:{dest:'서대문형무소',waypoint:'청계천(청계광장)',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
+  5:{dest:'서대문형무소',waypoint:'광화문광장',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
+  6:{dest:'서대문형무소',waypoint:'덕수궁 돌담길',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
 };
 
 // ── 조별 비밀번호 퀴즈 (REQ-07 확정) ──
