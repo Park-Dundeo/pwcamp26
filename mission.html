@@ -139,6 +139,10 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 @keyframes geoSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .geo-text{font-size:13px;font-weight:600;color:#343a40;line-height:1.6;}
 .geo-skip{background:none;border:none;color:var(--gray);font-size:11.5px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:4px;}
+.geo-map-links{display:flex;gap:8px;width:100%;}
+.geo-map-links a{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:11px 8px;border-radius:8px;font-size:12.5px;font-weight:700;text-decoration:none;}
+.geo-map-links a.kko{background:#fff9db;color:#997404;}
+.geo-map-links a.nvr{background:#ebfbee;color:var(--green);}
 
 /* ── Steps ── */
 .steps{margin-bottom:14px;}
@@ -332,6 +336,10 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
           <div id="geoIdle" class="geo-box">
             <div class="geo-icon">📍</div>
             <div class="geo-text">이 위치에 도착하면 인증샷을 찍을 수 있어요</div>
+            <div class="geo-map-links" id="geoMapLinks1">
+              <a class="kko" id="geoKakaoLink1" href="#" target="_blank">🗺 카카오맵 길찾기</a>
+              <a class="nvr" id="geoNaverLink1" href="#" target="_blank">🗺 네이버지도</a>
+            </div>
             <button class="submit-btn primary" onclick="checkLocation()">📡 내 위치 확인하기</button>
           </div>
           <div id="geoChecking" class="geo-box" style="display:none">
@@ -341,6 +349,10 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
           <div id="geoFar" class="geo-box" style="display:none">
             <div class="geo-icon">🚶</div>
             <div class="geo-text">아직 도착 전이에요! 목적지까지 약 <b id="geoDist">-</b> 남았어요</div>
+            <div class="geo-map-links" id="geoMapLinks2">
+              <a class="kko" id="geoKakaoLink2" href="#" target="_blank">🗺 카카오맵 길찾기</a>
+              <a class="nvr" id="geoNaverLink2" href="#" target="_blank">🗺 네이버지도</a>
+            </div>
             <button class="submit-btn primary" onclick="checkLocation()">📡 다시 확인하기</button>
           </div>
           <div id="geoError" class="geo-box" style="display:none">
@@ -657,6 +669,13 @@ function fillMissionDestChips(num) {
   document.getElementById('m1DestName').textContent = info.waypoint;
   document.getElementById('m2DestName').textContent = info.dest;
   document.getElementById('m2DestNameInline').textContent = info.dest;
+  // 경유지 길찾기 링크 (GPS 미션에서 어디로 가야 할지 알 수 있도록)
+  if (info.lat && info.lng) {
+    const kakaoTo = `https://map.kakao.com/link/to/${encodeURIComponent(info.waypoint)},${info.lat},${info.lng}`;
+    const naverSearch = `https://map.naver.com/v5/search/${encodeURIComponent(info.waypoint)}`;
+    ['geoKakaoLink1', 'geoKakaoLink2'].forEach(id => document.getElementById(id).href = kakaoTo);
+    ['geoNaverLink1', 'geoNaverLink2'].forEach(id => document.getElementById(id).href = naverSearch);
+  }
   // 조별 견학 코스 안내 링크 (1·2·3조=전쟁기념관 c / 4·5·6조=서대문형무소 b)
   const course = num <= 3 ? 'c' : 'b';
   document.getElementById('m2GuideLink').href = `guide.html?course=${course}`;
