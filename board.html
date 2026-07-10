@@ -22,7 +22,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .header-title{font-size:18px;font-weight:800;}
 .header-sub{font-size:11.5px;opacity:.75;margin-top:4px;}
 
-.who-badge{position:fixed;top:10px;right:10px;z-index:50;font-size:11px;font-weight:800;padding:6px 12px;border-radius:20px;background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.15);display:none;cursor:pointer;border:none;font-family:inherit;}
+.who-badge{position:fixed;top:10px;right:10px;z-index:50;font-size:11px;font-weight:800;padding:6px 12px;border-radius:20px;background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.15);display:none;cursor:pointer;border:none;font-family:inherit;max-width:56vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .who-badge.show{display:block;}
 
 .content{max-width:560px;width:100%;margin:0 auto;padding:14px 12px 0;flex:1;display:flex;flex-direction:column;min-height:0;}
@@ -102,6 +102,9 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .tt-btn{width:100%;padding:13px;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px;}
 .tt-btn.confirm{background:var(--navy);color:#fff;}
 .tt-btn.cancel{background:#E4EFF7;color:var(--gray);margin-bottom:0;}
+.gate-name-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.gate-name-pick button{padding:11px 4px;border:2px solid var(--border);border-radius:8px;background:#fff;font-size:13px;font-weight:800;color:var(--navy);cursor:pointer;font-family:inherit;}
+.gate-name-pick button.sel{border-color:var(--blue);background:var(--blue);color:#fff;}
 
 /* == 2026-07-11 design v3: POWER WAVE (full visual replacement of SUMMER BREAKTHROUGH) == */
 *{-webkit-tap-highlight-color:transparent;}
@@ -143,7 +146,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
   <div class="compose-wrap">
     <div class="auth-gate" id="authGate">
       <button class="auth-btn leader" onclick="openLeaderModal()">🙋 조장으로 글쓰기</button>
-      <button class="auth-btn teacher" onclick="openTeacherModal()">📘 선생님으로 글쓰기</button>
+      <button class="auth-btn teacher" onclick="startTeacherLogin(null)">📘 선생님으로 글쓰기</button>
       <button class="auth-btn admin" onclick="openAdminModal()">🔑 관리자로 글쓰기</button>
     </div>
     <div class="compose-row" id="composeRow" style="display:none;">
@@ -156,20 +159,21 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
 
 <nav class="pw-tabbar">
   <a href="mission.html" class="pw-tab-item"><span class="pw-tab-icon">🎯</span><span>미션</span></a>
-  <a href="map.html" class="pw-tab-item"><span class="pw-tab-icon">🗺</span><span>지도</span></a>
+  <a href="map.html" class="pw-tab-item" id="mapTabLink" onclick="return teacherGatedClick(event,'map.html')"><span class="pw-tab-icon">🗺</span><span>지도</span></a>
   <a href="board.html" class="pw-tab-item active"><span class="pw-tab-icon">💬</span><span>소통방</span></a>
-  <a href="index.html" class="pw-tab-item" id="teacherTabLink" onclick="return teacherTabClick(event)"><span class="pw-tab-icon">👥</span><span>교사</span></a>
+  <a href="index.html" class="pw-tab-item" id="teacherTabLink" onclick="return teacherGatedClick(event,'index.html')"><span class="pw-tab-icon">👥</span><span>교사</span></a>
 </nav>
 
-<!-- 교사 탭 잠금 모달 (REQ-45, 조 잠긴 기기에서 교사 화면 접근 시 PIN 필요) -->
+<!-- 교사 로그인 모달 (REQ-47) — 지도/교사 탭 클릭, "선생님으로 글쓰기" 버튼이 모두 이 모달을 공유 -->
 <div class="tt-overlay" id="teacherGateOverlay">
   <div class="tt-modal">
-    <h3>🔒 교사 전용 잠금</h3>
-    <div class="tt-sub">조가 선택된 기기에서는 교사 화면 접근에<br>비밀번호가 필요해요</div>
+    <h3>🔒 교사 로그인</h3>
+    <div class="tt-sub">성함을 선택하고 PIN을 입력해주세요</div>
+    <div class="gate-name-pick" id="teacherNamePick"></div>
     <input class="tt-input" type="tel" id="teacherGatePwInput" maxlength="4"
       placeholder="••••" onkeydown="if(event.key==='Enter')checkTeacherGate()">
     <div class="tt-err" id="teacherGateErr"></div>
-    <button class="tt-btn confirm" onclick="checkTeacherGate()">확인</button>
+    <button class="tt-btn confirm" onclick="checkTeacherGate()">로그인</button>
     <button class="tt-btn cancel" onclick="closeTeacherGate()">취소</button>
   </div>
 </div>
@@ -182,18 +186,6 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
     <input class="modal-input" type="text" id="leaderCodeInput" placeholder="우리 조 정탐 코드(정답)">
     <div class="modal-err" id="leaderErr"></div>
     <button class="modal-btn confirm" onclick="checkLeaderAuth()">확인</button>
-    <button class="modal-btn cancel" onclick="closeModals()">취소</button>
-  </div>
-</div>
-
-<!-- 선생님 인증 모달 (REQ-46) -->
-<div class="modal-overlay" id="teacherModal">
-  <div class="modal-box">
-    <h3>📘 선생님 인증</h3>
-    <input class="modal-input" type="text" id="teacherNameInput" placeholder="성함 (소통방에 이 이름으로 표시돼요)">
-    <input class="modal-input" type="password" id="teacherPwInput" placeholder="교사 비밀번호">
-    <div class="modal-err" id="teacherErr"></div>
-    <button class="modal-btn confirm" onclick="checkTeacherAuth()">확인</button>
     <button class="modal-btn cancel" onclick="closeModals()">취소</button>
   </div>
 </div>
@@ -244,37 +236,80 @@ async function sha256(s){
 }
 function esc(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-// ── 교사 탭 잠금 (REQ-45) — mission.html·map.html·index.html에도 동일 로직/해시 있음, 비밀번호 변경 시 4곳 모두 수정할 것
-const RESET_MASTER_PW_HASH = '8e6d48d590537629b874fa8c72f468e87bf53a44ed7a730281763dc8f4b6f249';
-function isStudentDeviceLocked(){
-  const t = localStorage.getItem('pwcamp_team');
-  return !!(t && localStorage.getItem(`pwcamp_unlocked_${t}`) === '1');
+// ── 교사 로그인 — 지도/교사 탭 기본 잠금 + "선생님으로 글쓰기" 신원 공용 (REQ-47) ──
+// ⚠️ TEACHERS 명단/PIN 해시·로그인 로직이 mission.html·map.html·index.html에도 동일하게 있음 — 교사 추가/PIN 변경 시 4곳 모두 수정할 것
+// 실제 명단은 추후 전달 예정 — 현재는 예시 3명만 등록
+const TEACHERS = {
+  '박준서': '0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c',
+  '김한솔': 'edee29f882543b956620b26d0ee0e7e950399b1c4222f5de05e06425b4c995e9',
+  '유성규': '318aee3fed8c9d040d35a7fc1fa776fb31303833aa2de885354ddf3d44d8fb69',
+};
+let pickedTeacherName = null;
+let teacherGateTarget = null;
+function isTeacherUnlocked(){
+  return sessionStorage.getItem('pw_teacher_unlocked') === '1';
 }
 function refreshTeacherTabLock(){
-  const link = document.getElementById('teacherTabLink');
-  if (!link) return;
-  link.classList.toggle('locked', isStudentDeviceLocked() && sessionStorage.getItem('pw_teacher_unlocked') !== '1');
+  const unlocked = isTeacherUnlocked();
+  ['mapTabLink','teacherTabLink'].forEach(id => {
+    const link = document.getElementById(id);
+    if (link) link.classList.toggle('locked', !unlocked);
+  });
 }
-function teacherTabClick(e){
-  if (!isStudentDeviceLocked() || sessionStorage.getItem('pw_teacher_unlocked') === '1') return true;
-  e.preventDefault();
-  document.getElementById('teacherGateOverlay').classList.add('show');
+function renderTeacherNamePick(){
+  const wrap = document.getElementById('teacherNamePick');
+  if (!wrap) return;
+  wrap.innerHTML = Object.keys(TEACHERS).map(name =>
+    `<button type="button" id="ttn-${name}" onclick="pickTeacherName('${name}')">${name}</button>`).join('');
+}
+function pickTeacherName(name){
+  pickedTeacherName = name;
+  Object.keys(TEACHERS).forEach(n => {
+    const b = document.getElementById(`ttn-${n}`);
+    if (b) b.classList.toggle('sel', n === name);
+  });
+}
+function teacherGatedClick(e, target){
+  if (isTeacherUnlocked()) return true;
+  if (e) e.preventDefault();
+  startTeacherLogin(target);
+  return false;
+}
+function startTeacherLogin(target){
+  teacherGateTarget = target;
+  pickedTeacherName = null;
+  renderTeacherNamePick();
   document.getElementById('teacherGatePwInput').value = '';
   document.getElementById('teacherGateErr').textContent = '';
-  return false;
+  document.getElementById('teacherGateOverlay').classList.add('show');
 }
 function closeTeacherGate(){
   document.getElementById('teacherGateOverlay').classList.remove('show');
 }
 async function checkTeacherGate(){
+  if (!pickedTeacherName) {
+    document.getElementById('teacherGateErr').textContent = '성함을 먼저 선택해주세요.';
+    return;
+  }
   const input = document.getElementById('teacherGatePwInput').value.trim();
-  if (await sha256(input) === RESET_MASTER_PW_HASH) {
+  const hash = await sha256(input);
+  if (TEACHERS[pickedTeacherName] === hash) {
     sessionStorage.setItem('pw_teacher_unlocked', '1');
-    location.href = 'index.html';
+    sessionStorage.setItem('pw_teacher_name', pickedTeacherName);
+    closeTeacherGate();
+    refreshTeacherTabLock();
+    if (teacherGateTarget) {
+      location.href = teacherGateTarget;
+    } else {
+      // "선생님으로 글쓰기" 버튼으로 진입한 경우 — 이 페이지에 남아 교사 신원으로 전환
+      myRole = 'teacher'; myTeacherName = pickedTeacherName;
+      updateComposeUI();
+      renderFeed();
+    }
   } else {
     const el = document.getElementById('teacherGatePwInput');
     el.classList.add('error');
-    document.getElementById('teacherGateErr').textContent = '비밀번호가 틀렸어요.';
+    document.getElementById('teacherGateErr').textContent = 'PIN이 틀렸어요.';
     setTimeout(() => el.classList.remove('error'), 500);
   }
 }
@@ -295,7 +330,7 @@ function renderWhoBadge(){
   if (myRole === 'admin') { el.textContent = '🔑 관리자로 접속 중 (탭하여 로그아웃)'; el.classList.add('show'); }
   else if (myRole === 'leader') { el.textContent = `🙋 ${myTeam}조 조장으로 접속 중 (탭하여 로그아웃)`; el.classList.add('show'); }
   else if (myRole === 'teacher') { el.textContent = `📘 ${myTeacherName} 선생님으로 접속 중 (탭하여 로그아웃)`; el.classList.add('show'); }
-  else { el.classList.remove('show'); }
+  else { el.textContent = '🎓 학생 화면 (읽기 전용)'; el.classList.add('show'); }
 }
 
 function logoutRole(){
@@ -339,16 +374,9 @@ function openAdminModal(){
   document.getElementById('adminErr').textContent = '';
   document.getElementById('adminModal').classList.add('show');
 }
-function openTeacherModal(){
-  document.getElementById('teacherNameInput').value = sessionStorage.getItem('pw_teacher_name') || '';
-  document.getElementById('teacherPwInput').value = '';
-  document.getElementById('teacherErr').textContent = '';
-  document.getElementById('teacherModal').classList.add('show');
-}
 function closeModals(){
   document.getElementById('leaderModal').classList.remove('show');
   document.getElementById('adminModal').classList.remove('show');
-  document.getElementById('teacherModal').classList.remove('show');
 }
 
 async function checkLeaderAuth(){
@@ -378,22 +406,6 @@ async function checkAdminAuth(){
   } else {
     document.getElementById('adminErr').textContent = '비밀번호가 틀렸어요.';
   }
-}
-
-// 선생님 인증 (REQ-46) — 비밀번호는 mission.html 기기 초기화 비밀번호와 동일(RESET_MASTER_PW_HASH),
-// 여기서 인증하면 sessionStorage에 pw_teacher_unlocked/pw_teacher_name이 저장되어 "교사" 탭 잠금도 함께 해제됨
-async function checkTeacherAuth(){
-  const name = document.getElementById('teacherNameInput').value.trim();
-  const pw = document.getElementById('teacherPwInput').value;
-  if (!name) { document.getElementById('teacherErr').textContent = '성함을 입력해주세요.'; return; }
-  if (await sha256(pw) !== RESET_MASTER_PW_HASH) { document.getElementById('teacherErr').textContent = '비밀번호가 틀렸어요.'; return; }
-  myRole = 'teacher'; myTeacherName = name;
-  sessionStorage.setItem('pw_teacher_unlocked', '1');
-  sessionStorage.setItem('pw_teacher_name', name);
-  closeModals();
-  updateComposeUI();
-  renderFeed();
-  if (typeof refreshTeacherTabLock === 'function') refreshTeacherTabLock();
 }
 
 // ── 메시지 전송 ──
