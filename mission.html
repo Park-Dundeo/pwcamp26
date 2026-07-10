@@ -152,6 +152,13 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .step-text b{display:block;color:#1a2744;}
 .step-text span{color:#868e96;font-size:12px;}
 
+/* ── 미션 규칙 안내 (위치 확인 전에도 항상 노출) ── */
+.mission-rules{background:#f8f9fa;border-radius:10px;padding:14px 16px 6px;margin-bottom:16px;}
+.mission-rules-title{font-size:12px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.mission-rules .steps{margin-bottom:8px;}
+.mission-rules .step-row{border-bottom-color:#e9ecef;}
+.mission-rules-note{font-size:11.5px;color:#c92a2a;background:#fff5f5;border-radius:8px;padding:9px 11px;margin-bottom:12px;line-height:1.6;}
+
 /* ── Upload zone ── */
 .upload-zone{border:2px dashed var(--border);border-radius:10px;padding:28px 16px;text-align:center;cursor:pointer;background:#fafafa;margin-bottom:12px;transition:all .2s;}
 .upload-zone.has-preview{border-style:solid;border-color:var(--green);padding:8px;}
@@ -326,6 +333,18 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
       <div class="card-body">
         <div class="mission-dest-chip m1">📍 경유지: <span id="m1DestName">—</span></div>
 
+        <!-- 미션 규칙 안내 (위치 확인 전에도 항상 보여야 함 — 어디로, 무엇을, 언제 제출이 열리는지) -->
+        <div class="mission-rules">
+          <div class="mission-rules-title">📌 미션 규칙</div>
+          <div class="steps">
+            <div class="step-row"><div class="step-n">1</div><div class="step-text"><b>경유지로 이동하기</b><span>아래 지도 버튼으로 길찾기 — <span id="m1DestNameInline">경유지</span>까지 가주세요</span></div></div>
+            <div class="step-row"><div class="step-n">2</div><div class="step-text"><b>도착하면 위치 확인하기</b><span>"내 위치 확인하기"를 눌러야 해요. 반경 안에 들어와야 다음 단계가 열려요</span></div></div>
+            <div class="step-row"><div class="step-n">3</div><div class="step-text"><b>샘플 포즈로 사진 찍기</b><span>아래 샘플 포즈와 똑같이, 조원 전체가 나오게 촬영</span></div></div>
+            <div class="step-row"><div class="step-n">4</div><div class="step-text"><b>사진 올리고 제출하기</b><span>위치 확인이 끝나야 사진 업로드 버튼이 열려요</span></div></div>
+          </div>
+          <div class="mission-rules-note">⚠️ 위치 확인 전에는 사진 제출 버튼이 보이지 않아요 — 먼저 경유지에 도착해서 "내 위치 확인하기"부터 눌러주세요</div>
+        </div>
+
         <!-- GPS 도착 확인 게이트 -->
         <div id="geoGate">
           <div class="pose-sample">
@@ -367,10 +386,6 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
           </div>
         </div>
 
-        <div class="steps" id="missionSteps" style="display:none">
-          <div class="step-row"><div class="step-n">1</div><div class="step-text"><b>조원 전체가 나오게 샘플 포즈로 인증샷 촬영</b></div></div>
-          <div class="step-row"><div class="step-n">2</div><div class="step-text"><b>아래 버튼으로 사진 업로드</b></div></div>
-        </div>
         <div id="m1UploadArea" style="display:none">
           <div class="upload-zone" id="uploadZone" onclick="triggerFileInput()">
             <div class="upload-icon" id="uploadIcon">📷</div>
@@ -589,7 +604,6 @@ function resetMissionUI() {
   document.getElementById('m1Done').style.display = 'none';
   document.getElementById('m1Pending').style.display = 'none';
   document.getElementById('m1Rejected').style.display = 'none';
-  document.getElementById('missionSteps').style.display = 'none';
   document.getElementById('geoGate').style.display = 'block';
   showGeoIdle();
   document.getElementById('progressWrap').style.display = 'none';
@@ -667,6 +681,7 @@ function fillMissionDestChips(num) {
   const info = TEAM_MAP[num];
   if (!info) return;
   document.getElementById('m1DestName').textContent = info.waypoint;
+  document.getElementById('m1DestNameInline').textContent = info.waypoint;
   document.getElementById('m2DestName').textContent = info.dest;
   document.getElementById('m2DestNameInline').textContent = info.dest;
   // 경유지 길찾기 링크 (GPS 미션에서 어디로 가야 할지 알 수 있도록)
@@ -878,7 +893,6 @@ function handleMission1Status(m1) {
   document.getElementById('m1Pending').style.display = 'none';
   document.getElementById('m1Rejected').style.display = 'none';
   document.getElementById('geoGate').style.display = 'none';
-  document.getElementById('missionSteps').style.display = 'none';
 
   if (!status) {
     document.getElementById('geoGate').style.display = 'block';
@@ -968,7 +982,6 @@ function hideAllGeoBoxes() {
 function showGeoIdle() {
   hideAllGeoBoxes();
   document.getElementById('geoIdle').style.display = 'flex';
-  document.getElementById('missionSteps').style.display = 'none';
   document.getElementById('m1UploadArea').style.display = 'none';
 }
 function showGeoChecking() {
@@ -979,20 +992,17 @@ function showGeoFar(distM) {
   hideAllGeoBoxes();
   document.getElementById('geoFar').style.display = 'flex';
   document.getElementById('geoDist').textContent = fmtDistance(distM);
-  document.getElementById('missionSteps').style.display = 'none';
   document.getElementById('m1UploadArea').style.display = 'none';
 }
 function showGeoError(msg) {
   hideAllGeoBoxes();
   document.getElementById('geoError').style.display = 'flex';
   document.getElementById('geoErrorText').textContent = msg;
-  document.getElementById('missionSteps').style.display = 'none';
   document.getElementById('m1UploadArea').style.display = 'none';
 }
 function showGeoOk() {
   hideAllGeoBoxes();
   document.getElementById('geoOk').style.display = 'flex';
-  document.getElementById('missionSteps').style.display = 'block';
   document.getElementById('m1UploadArea').style.display = 'block';
   locationConfirmed = true;
 }

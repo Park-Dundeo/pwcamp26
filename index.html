@@ -96,6 +96,8 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .day-preview-desc{font-size:12.5px;color:var(--text-soft);line-height:1.65;margin-bottom:10px;}
 .day-preview-link{font-size:12.5px;font-weight:700;color:var(--blue);}
 
+.timetable-daysep{font-size:11.5px;font-weight:800;color:var(--navy);background:var(--sky);padding:7px 11px;border-radius:6px;margin:16px 0 4px;}
+.timetable-daysep:first-child{margin-top:0;}
 .timetable-row{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid #f1f3f5;font-size:13px;}
 .timetable-row:last-child{border-bottom:none;}
 .timetable-time{flex-shrink:0;width:92px;font-weight:800;color:var(--blue);font-size:12px;}
@@ -366,17 +368,36 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
     </button>
   </div>
 
-  <div class="section-title">⏱ 전체 시간 계획표</div>
+  <div class="section-title">⏱ 전체 시간 계획표 (3박 일정)</div>
   <div class="card">
     <div class="card-body">
-      <div class="timetable-row"><div class="timetable-time">Day1 오전</div><div class="timetable-txt"><span class="timetable-day d1">D1</span><b>페이즈 1 — 이동 미션</b><br><span>집결 → 경유지 GPS 인증샷(미션1) → 견학지 이동</span></div></div>
-      <div class="timetable-row"><div class="timetable-time">Day1 오전~오후</div><div class="timetable-txt"><span class="timetable-day d1">D1</span><b>페이즈 2 — 견학</b><br><span>전쟁기념관(1·2·3조) / 서대문형무소(4·5·6조) + 정탐 보고서(미션2)</span></div></div>
-      <div class="timetable-row"><div class="timetable-time">Day1 오후</div><div class="timetable-txt"><span class="timetable-day d1">D1</span><b>페이즈 3 — 식사·이동</b><br><span>조별 자유 식사 후 도봉숲속마을로 이동</span></div></div>
-      <div class="timetable-row"><div class="timetable-time">Day2 0–10분</div><div class="timetable-txt"><span class="timetable-day d2">D2</span><b>① 오프닝</b><br><span>전체 집합 · 프로그램 설명 · 조별 출발 안내</span></div></div>
-      <div class="timetable-row"><div class="timetable-time">Day2 10–70분</div><div class="timetable-txt"><span class="timetable-day d2">D2</span><b>② 6관문 순환</b><br><span>관문당 약 8–10분</span></div></div>
-      <div class="timetable-row"><div class="timetable-time">Day2 70–80분</div><div class="timetable-txt"><span class="timetable-day d2">D2</span><b>③ Final — 전체 여리고 성벽 미션</b><br><span>전 조 재집합, 결단문 완성 → 외침 → 성벽 무너뜨리기</span></div></div>
-      <div class="timetable-row"><div class="timetable-time">Day2 80–90분</div><div class="timetable-txt"><span class="timetable-day d2">D2</span><b>④ 결단 나눔 및 마무리</b><br><span>조별 결단문 한 문장 공유 · 짧은 기도</span></div></div>
-      <div class="timetable-row"><div class="timetable-time">폐회예배</div><div class="timetable-txt"><span class="timetable-day close">CLOSE</span><b>폐회예배</b><br><span>여호수아 24:15 · 망설임 → 결단</span></div></div>
+      <div class="timetable-daysep">7/17 (금) · 입소일</div>
+      <div class="timetable-row"><div class="timetable-time">07:00–09:00</div><div class="timetable-txt"><b>교사모임 · 접수 및 등록</b></div></div>
+      <div class="timetable-row"><div class="timetable-time">09:00–10:00</div><div class="timetable-txt"><span class="timetable-day close">예배</span><b>개회예배</b><br><span>Break-through · 수 1:1-4</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">10:00–12:00</div><div class="timetable-txt"><span class="timetable-day d1">D1</span><b>조별 이동미션 — 가나안 정탐</b><br><span>집결 → 경유지 GPS 인증샷(미션1) → 견학지 이동 → 정탐 보고서(미션2)</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">12:00–13:00</div><div class="timetable-txt"><b>점심식사</b> <span>(조별)</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">13:00–16:00</div><div class="timetable-txt"><b>캠프장소 도착 → OT·짐정리 → 대그룹(미션 나눔)</b></div></div>
+      <div class="timetable-row"><div class="timetable-time">16:00–17:00</div><div class="timetable-txt"><b>소그룹1</b> <span>(공과)</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">17:00–19:00</div><div class="timetable-txt"><b>휴식 · 저녁식사</b></div></div>
+      <div class="timetable-row"><div class="timetable-time">19:00–23:00</div><div class="timetable-txt"><span class="timetable-day close">집회</span><b>저녁집회1</b><br><span>Fear · 수 1:1-9 — 찬양·설교·기도·셀렘·애찬</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">23:00–24:00</div><div class="timetable-txt"><b>세면 및 취침</b></div></div>
+
+      <div class="timetable-daysep">7/18 (토) · 본 일정</div>
+      <div class="timetable-row"><div class="timetable-time">07:00–09:00</div><div class="timetable-txt"><b>기상·세면 · 아침식사 및 큐티</b></div></div>
+      <div class="timetable-row"><div class="timetable-time">09:00–10:00</div><div class="timetable-txt"><b>소그룹2</b> <span>(공과)</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">10:00–12:00</div><div class="timetable-txt"><span class="timetable-day d2">D2</span><b>센터학습 — 가나안 정복: 돌파의 순례길</b><br><span>오프닝 → 6관문 순환 → Final 여리고 성벽 미션 → 결단 나눔</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">12:00–13:00</div><div class="timetable-txt"><b>점심식사</b></div></div>
+      <div class="timetable-row"><div class="timetable-time">13:00–16:00</div><div class="timetable-txt"><b>환복·준비운동 → 물놀이</b> <span>(무수골계곡)</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">16:00–17:00</div><div class="timetable-txt"><b>세면 및 환복 & 복귀</b></div></div>
+      <div class="timetable-row"><div class="timetable-time">17:00–19:00</div><div class="timetable-txt"><b>저녁식사</b> <span>(명륜진사) · 휴식</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">19:00–23:00</div><div class="timetable-txt"><span class="timetable-day close">집회</span><b>저녁집회2</b><br><span>Impossible · 수 6:1-20 — 찬양·설교·기도·셀렘·애찬</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">23:00–24:00</div><div class="timetable-txt"><b>세면 및 취침</b></div></div>
+
+      <div class="timetable-daysep">7/19 (일) · 귀가일</div>
+      <div class="timetable-row"><div class="timetable-time">07:00–09:00</div><div class="timetable-txt"><b>기상·세면 · 아침식사 및 큐티</b></div></div>
+      <div class="timetable-row"><div class="timetable-time">09:00–10:00</div><div class="timetable-txt"><span class="timetable-day close">예배</span><b>폐회예배</b><br><span>Hesitate · 수 24:14-24 · 망설임 → 결단</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">10:00–12:00</div><div class="timetable-txt"><b>뒷정리 및 귀가준비 → 교회로 이동</b> <span>(버스/간식)</span></div></div>
+      <div class="timetable-row"><div class="timetable-time">12:00~</div><div class="timetable-txt"><b>교회 도착 및 귀가</b></div></div>
     </div>
   </div>
 </div>
