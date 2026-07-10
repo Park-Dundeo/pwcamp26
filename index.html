@@ -70,6 +70,8 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .tt-btn.confirm{background:var(--navy);color:#fff;}
 .tt-btn.cancel{background:var(--sky);color:var(--gray);margin-bottom:0;}
 
+.teacher-session-badge{position:fixed;top:10px;right:10px;z-index:200;font-size:11px;font-weight:800;padding:6px 12px;border-radius:20px;background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.15);cursor:pointer;}
+
 .tab-panel{display:none;}
 .tab-panel.active{display:block;}
 
@@ -331,6 +333,8 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
 </style>
 </head>
 <body>
+
+<div class="teacher-session-badge" id="teacherSessionBadge" onclick="teacherLogout()" style="display:none;"></div>
 
 <header class="site-header">
   <div class="header-inner">
@@ -1188,11 +1192,18 @@ function isStudentDeviceLocked(){
   const t = localStorage.getItem('pwcamp_team');
   return !!(t && localStorage.getItem(`pwcamp_unlocked_${t}`) === '1');
 }
+function captureTeacherName(){
+  if (sessionStorage.getItem('pw_teacher_name')) return;
+  const name = prompt('선생님 성함을 입력해주세요 (소통방 등에서 이 이름으로 표시돼요)');
+  sessionStorage.setItem('pw_teacher_name', (name && name.trim()) || '이름미상');
+}
 async function checkTeacherGate(){
   const input = document.getElementById('teacherGatePwInput').value.trim();
   if (await sha256(input) === RESET_MASTER_PW_HASH) {
     sessionStorage.setItem('pw_teacher_unlocked', '1');
+    captureTeacherName();
     document.getElementById('teacherGateOverlay').classList.remove('show');
+    refreshTeacherSessionBadge();
   } else {
     const el = document.getElementById('teacherGatePwInput');
     el.classList.add('error');
@@ -1200,9 +1211,28 @@ async function checkTeacherGate(){
     setTimeout(() => el.classList.remove('error'), 500);
   }
 }
+// ── 교사 세션 로그아웃 (REQ-46) ──
+function refreshTeacherSessionBadge(){
+  const badge = document.getElementById('teacherSessionBadge');
+  if (!badge) return;
+  if (sessionStorage.getItem('pw_teacher_unlocked') === '1') {
+    const name = sessionStorage.getItem('pw_teacher_name') || '교사';
+    badge.textContent = `📘 ${name} 선생님으로 접속 중 (탭하여 로그아웃)`;
+    badge.style.display = 'block';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+function teacherLogout(){
+  if (!confirm('교사 로그아웃할까요? "교사" 탭 접근에 다시 비밀번호가 필요해져요.')) return;
+  sessionStorage.removeItem('pw_teacher_unlocked');
+  sessionStorage.removeItem('pw_teacher_name');
+  location.reload();
+}
 if (isStudentDeviceLocked() && sessionStorage.getItem('pw_teacher_unlocked') !== '1') {
   document.getElementById('teacherGateOverlay').classList.add('show');
 }
+refreshTeacherSessionBadge();
 </script>
 </body>
 </html>

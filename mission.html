@@ -1211,10 +1211,16 @@ function teacherTabClick(e) {
 function closeTeacherGate() {
   document.getElementById('teacherGateOverlay').classList.remove('show');
 }
+function captureTeacherName() {
+  if (sessionStorage.getItem('pw_teacher_name')) return;
+  const name = prompt('선생님 성함을 입력해주세요 (소통방 등에서 이 이름으로 표시돼요)');
+  sessionStorage.setItem('pw_teacher_name', (name && name.trim()) || '이름미상');
+}
 async function checkTeacherGate() {
   const input = document.getElementById('teacherGatePwInput').value.trim();
   if (await sha256(input) === RESET_MASTER_PW_HASH) {
     sessionStorage.setItem('pw_teacher_unlocked', '1');
+    captureTeacherName();
     location.href = 'index.html';
   } else {
     const el = document.getElementById('teacherGatePwInput');

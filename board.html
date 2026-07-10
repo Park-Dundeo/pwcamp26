@@ -40,10 +40,12 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .msg-row.theirs{align-self:flex-start;align-items:flex-start;}
 .msg-author{font-size:11px;font-weight:800;color:var(--navy);margin-bottom:3px;padding:0 4px;}
 .msg-author.admin{color:#c92a2a;}
+.msg-author.teacher{color:#8A6410;}
 .msg-bubble{padding:10px 14px;border-radius:16px;font-size:13.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word;box-shadow:0 2px 8px rgba(20,29,56,.06);}
 .msg-row.theirs .msg-bubble{background:#fff;color:#212529;border-bottom-left-radius:4px;}
 .msg-row.mine .msg-bubble{background:var(--blue);color:#fff;border-bottom-right-radius:4px;}
 .msg-row.admin-msg .msg-bubble{background:#fff5f5;border:1.5px solid #ffc9c9;color:#c92a2a;font-weight:700;}
+.msg-row.teacher-msg .msg-bubble{background:#FFF9E8;border:1.5px solid #FFD43B;color:#8A6410;font-weight:700;}
 .msg-time{font-size:10px;color:var(--gray);margin-top:3px;padding:0 4px;display:flex;align-items:center;gap:6px;}
 .msg-del{background:none;border:none;color:var(--red);font-size:10px;font-weight:700;cursor:pointer;font-family:inherit;padding:0;}
 .feed-empty{text-align:center;color:var(--gray);font-size:12.5px;padding:40px 0;}
@@ -57,9 +59,10 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .compose-send:disabled{background:var(--border);}
 
 /* 인증 전 상태 */
-.auth-gate{display:flex;gap:8px;}
-.auth-btn{flex:1;padding:13px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;}
+.auth-gate{display:flex;flex-wrap:wrap;gap:8px;}
+.auth-btn{flex:1;min-width:100px;padding:13px 6px;border:none;border-radius:10px;font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;}
 .auth-btn.leader{background:var(--sky);color:var(--blue);}
+.auth-btn.teacher{background:#FFF9E8;color:#8A6410;}
 .auth-btn.admin{background:#fff5f5;color:var(--red);}
 
 /* ── 인증 모달 ── */
@@ -121,7 +124,6 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
 <div class="who-badge" id="whoBadge" onclick="logoutRole()"></div>
 
 <header class="app-header">
-  <a class="header-back" href="index.html">← 대시보드</a>
   <div class="header-tag">전체 조 · 실시간</div>
   <div class="header-title">🕊 정탐대 소통방</div>
   <div class="header-sub">조장 공지 · 질문 · 관리자 안내를 한 곳에서</div>
@@ -141,6 +143,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
   <div class="compose-wrap">
     <div class="auth-gate" id="authGate">
       <button class="auth-btn leader" onclick="openLeaderModal()">🙋 조장으로 글쓰기</button>
+      <button class="auth-btn teacher" onclick="openTeacherModal()">📘 선생님으로 글쓰기</button>
       <button class="auth-btn admin" onclick="openAdminModal()">🔑 관리자로 글쓰기</button>
     </div>
     <div class="compose-row" id="composeRow" style="display:none;">
@@ -179,6 +182,18 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
     <input class="modal-input" type="text" id="leaderCodeInput" placeholder="우리 조 정탐 코드(정답)">
     <div class="modal-err" id="leaderErr"></div>
     <button class="modal-btn confirm" onclick="checkLeaderAuth()">확인</button>
+    <button class="modal-btn cancel" onclick="closeModals()">취소</button>
+  </div>
+</div>
+
+<!-- 선생님 인증 모달 (REQ-46) -->
+<div class="modal-overlay" id="teacherModal">
+  <div class="modal-box">
+    <h3>📘 선생님 인증</h3>
+    <input class="modal-input" type="text" id="teacherNameInput" placeholder="성함 (소통방에 이 이름으로 표시돼요)">
+    <input class="modal-input" type="password" id="teacherPwInput" placeholder="교사 비밀번호">
+    <div class="modal-err" id="teacherErr"></div>
+    <button class="modal-btn confirm" onclick="checkTeacherAuth()">확인</button>
     <button class="modal-btn cancel" onclick="closeModals()">취소</button>
   </div>
 </div>
@@ -268,14 +283,18 @@ refreshTeacherTabLock();
 // 세션 인증 상태 (기기당 유지, 새 세션에서는 다시 인증)
 // 조장 인증은 localStorage로 영구 저장 (3일짜리 캠프 동안 매번 재인증 안 해도 되게 — mission.html 기기 잠금과 동일 패턴)
 // 관리자 인증은 admin.html과 동일하게 세션에서만 유지 (분실 기기 등 보안 고려)
-let myRole = sessionStorage.getItem('board_role') === 'admin' ? 'admin' : (localStorage.getItem('board_role') === 'leader' ? 'leader' : null);
+let myRole = sessionStorage.getItem('board_role') === 'admin' ? 'admin'
+  : (localStorage.getItem('board_role') === 'leader' ? 'leader'
+  : (sessionStorage.getItem('pw_teacher_unlocked') === '1' ? 'teacher' : null));
 let myTeam = myRole === 'leader' ? localStorage.getItem('board_team') : null;
+let myTeacherName = myRole === 'teacher' ? (sessionStorage.getItem('pw_teacher_name') || '이름미상') : null;
 let pickedTeam = null;
 
 function renderWhoBadge(){
   const el = document.getElementById('whoBadge');
   if (myRole === 'admin') { el.textContent = '🔑 관리자로 접속 중 (탭하여 로그아웃)'; el.classList.add('show'); }
   else if (myRole === 'leader') { el.textContent = `🙋 ${myTeam}조 조장으로 접속 중 (탭하여 로그아웃)`; el.classList.add('show'); }
+  else if (myRole === 'teacher') { el.textContent = `📘 ${myTeacherName} 선생님으로 접속 중 (탭하여 로그아웃)`; el.classList.add('show'); }
   else { el.classList.remove('show'); }
 }
 
@@ -283,10 +302,12 @@ function logoutRole(){
   if (!myRole) return;
   if (!confirm('로그아웃할까요? 다시 인증해야 글을 쓸 수 있어요.')) return;
   if (myRole === 'leader') { localStorage.removeItem('board_role'); localStorage.removeItem('board_team'); }
+  if (myRole === 'teacher') { sessionStorage.removeItem('pw_teacher_unlocked'); sessionStorage.removeItem('pw_teacher_name'); }
   sessionStorage.removeItem('board_role');
-  myRole = null; myTeam = null;
+  myRole = null; myTeam = null; myTeacherName = null;
   updateComposeUI();
   renderFeed();
+  if (typeof refreshTeacherTabLock === 'function') refreshTeacherTabLock();
 }
 
 function updateComposeUI(){
@@ -318,9 +339,16 @@ function openAdminModal(){
   document.getElementById('adminErr').textContent = '';
   document.getElementById('adminModal').classList.add('show');
 }
+function openTeacherModal(){
+  document.getElementById('teacherNameInput').value = sessionStorage.getItem('pw_teacher_name') || '';
+  document.getElementById('teacherPwInput').value = '';
+  document.getElementById('teacherErr').textContent = '';
+  document.getElementById('teacherModal').classList.add('show');
+}
 function closeModals(){
   document.getElementById('leaderModal').classList.remove('show');
   document.getElementById('adminModal').classList.remove('show');
+  document.getElementById('teacherModal').classList.remove('show');
 }
 
 async function checkLeaderAuth(){
@@ -352,6 +380,22 @@ async function checkAdminAuth(){
   }
 }
 
+// 선생님 인증 (REQ-46) — 비밀번호는 mission.html 기기 초기화 비밀번호와 동일(RESET_MASTER_PW_HASH),
+// 여기서 인증하면 sessionStorage에 pw_teacher_unlocked/pw_teacher_name이 저장되어 "교사" 탭 잠금도 함께 해제됨
+async function checkTeacherAuth(){
+  const name = document.getElementById('teacherNameInput').value.trim();
+  const pw = document.getElementById('teacherPwInput').value;
+  if (!name) { document.getElementById('teacherErr').textContent = '성함을 입력해주세요.'; return; }
+  if (await sha256(pw) !== RESET_MASTER_PW_HASH) { document.getElementById('teacherErr').textContent = '비밀번호가 틀렸어요.'; return; }
+  myRole = 'teacher'; myTeacherName = name;
+  sessionStorage.setItem('pw_teacher_unlocked', '1');
+  sessionStorage.setItem('pw_teacher_name', name);
+  closeModals();
+  updateComposeUI();
+  renderFeed();
+  if (typeof refreshTeacherTabLock === 'function') refreshTeacherTabLock();
+}
+
 // ── 메시지 전송 ──
 async function sendMessage(){
   const input = document.getElementById('composeInput');
@@ -365,6 +409,7 @@ async function sendMessage(){
     await db.ref('board_messages').push({
       role: myRole,
       team: myRole === 'leader' ? Number(myTeam) : null,
+      teacherName: myRole === 'teacher' ? myTeacherName : null,
       text,
       postedAt: firebase.database.ServerValue.TIMESTAMP,
     });
@@ -414,15 +459,18 @@ function renderFeed(){
     feed.innerHTML = `<div class="feed-empty">아직 등록된 메시지가 없습니다.<br>첫 메시지를 남겨보세요!</div>`;
     return;
   }
-  const isMine = m => (myRole === 'admin' && m.role === 'admin') || (myRole === 'leader' && m.role === 'leader' && String(m.team) === String(myTeam));
+  const isMine = m => (myRole === 'admin' && m.role === 'admin')
+    || (myRole === 'leader' && m.role === 'leader' && String(m.team) === String(myTeam))
+    || (myRole === 'teacher' && m.role === 'teacher' && m.teacherName === myTeacherName);
   feed.innerHTML = ids.map(id => {
     const m = allMessages[id];
     const mine = isMine(m);
     const isAdmin = m.role === 'admin';
-    const authorLabel = isAdmin ? '📢 관리자' : `${m.team}조 조장`;
+    const isTeacher = m.role === 'teacher';
+    const authorLabel = isAdmin ? '📢 관리자' : isTeacher ? `📘 ${m.teacherName || '이름미상'} 선생님` : `${m.team}조 조장`;
     const delBtn = myRole === 'admin' ? `<button class="msg-del" onclick="deleteMessage('${id}')">삭제</button>` : '';
-    return `<div class="msg-row ${mine ? 'mine' : 'theirs'} ${isAdmin ? 'admin-msg' : ''}">
-      <div class="msg-author ${isAdmin ? 'admin' : ''}">${authorLabel}</div>
+    return `<div class="msg-row ${mine ? 'mine' : 'theirs'} ${isAdmin ? 'admin-msg' : ''} ${isTeacher ? 'teacher-msg' : ''}">
+      <div class="msg-author ${isAdmin ? 'admin' : ''} ${isTeacher ? 'teacher' : ''}">${authorLabel}</div>
       <div class="msg-bubble">${esc(m.text)}</div>
       <div class="msg-time">${fmtTime(m.postedAt)}${delBtn}</div>
     </div>`;
