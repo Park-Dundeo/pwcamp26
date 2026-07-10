@@ -37,6 +37,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .live-dot{width:7px;height:7px;background:#f03e3e;border-radius:50%;animation:blink 1.2s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 .logout-btn{background:rgba(255,255,255,.15);border:none;color:#fff;padding:6px 13px;border-radius:20px;font-size:12px;cursor:pointer;font-family:inherit;}
+.home-link{background:rgba(255,255,255,.15);color:#fff;padding:6px 13px;border-radius:20px;font-size:12px;font-family:inherit;text-decoration:none;}
 
 .main{max-width:960px;margin:0 auto;padding:20px 16px 60px;}
 
@@ -197,6 +198,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
     </div>
     <div class="header-right">
       <div class="live-badge"><span class="live-dot"></span>실시간</div>
+      <a class="home-link" href="index.html">🏠 홈</a>
       <button class="logout-btn" onclick="logout()">로그아웃</button>
     </div>
   </header>
