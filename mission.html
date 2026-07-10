@@ -118,11 +118,27 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
 .t-btn{background:var(--gold);color:var(--navy);border:none;border-radius:10px;padding:14px 24px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;width:100%;transition:opacity .2s;}
 .t-btn:active{opacity:.85;}
 
-/* ── Roadview placeholder ── */
+/* ── Roadview placeholder (미사용, REQ-04에서 GPS 게이트로 교체됨 — 잔존 스타일) ── */
 .rv-placeholder{width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#2d3a5e,#1a2744);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;margin-bottom:14px;}
 .rv-icon{font-size:32px;margin-bottom:8px;opacity:.8;}
 .rv-text{font-size:13px;font-weight:600;}
 .rv-sub{font-size:11px;opacity:.6;margin-top:4px;}
+
+/* ── 샘플 포즈 일러스트 ── */
+.pose-sample{width:100%;background:linear-gradient(135deg,#2d3a5e,#1a2744);border-radius:10px;padding:16px 0 12px;margin-bottom:14px;text-align:center;}
+.pose-svg{width:70%;max-width:220px;height:auto;}
+.pose-caption{color:#fff;font-size:12px;font-weight:600;margin-top:8px;opacity:.9;}
+
+/* ── GPS 도착 확인 게이트 ── */
+.geo-box{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:22px 16px;border-radius:10px;margin-bottom:14px;}
+#geoIdle, #geoChecking, #geoFar{background:#eef2ff;}
+#geoError{background:#fff5f5;}
+#geoOk.ok{background:#ebfbee;}
+.geo-icon{font-size:30px;}
+.geo-icon.spin{animation:geoSpin 1.2s linear infinite;}
+@keyframes geoSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.geo-text{font-size:13px;font-weight:600;color:#343a40;line-height:1.6;}
+.geo-skip{background:none;border:none;color:var(--gray);font-size:11.5px;text-decoration:underline;cursor:pointer;font-family:inherit;padding:4px;}
 
 /* ── Steps ── */
 .steps{margin-bottom:14px;}
@@ -305,17 +321,55 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
       </div>
       <div class="card-body">
         <div class="mission-dest-chip m1">📍 경유지: <span id="m1DestName">—</span></div>
-        <div class="rv-placeholder">
-          <div class="rv-icon">📸</div>
-          <div class="rv-text">로드뷰 힌트 사진</div>
-          <div class="rv-sub">이 위치를 찾아서 같은 앵글로 찍어요</div>
+
+        <!-- GPS 도착 확인 게이트 -->
+        <div id="geoGate">
+          <div class="pose-sample">
+            <svg viewBox="0 0 260 130" class="pose-svg">
+              <circle cx="60" cy="38" r="12" fill="#fff"/><line x1="60" y1="50" x2="60" y2="82" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+              <line x1="60" y1="58" x2="40" y2="38" stroke="#fff" stroke-width="5" stroke-linecap="round"/><line x1="60" y1="58" x2="80" y2="38" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+              <line x1="60" y1="82" x2="46" y2="112" stroke="#fff" stroke-width="5" stroke-linecap="round"/><line x1="60" y1="82" x2="74" y2="112" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="130" cy="30" r="13" fill="#ffd43b"/><line x1="130" y1="43" x2="130" y2="80" stroke="#ffd43b" stroke-width="5" stroke-linecap="round"/>
+              <line x1="130" y1="52" x2="106" y2="28" stroke="#ffd43b" stroke-width="5" stroke-linecap="round"/><line x1="130" y1="52" x2="154" y2="28" stroke="#ffd43b" stroke-width="5" stroke-linecap="round"/>
+              <line x1="130" y1="80" x2="114" y2="112" stroke="#ffd43b" stroke-width="5" stroke-linecap="round"/><line x1="130" y1="80" x2="146" y2="112" stroke="#ffd43b" stroke-width="5" stroke-linecap="round"/>
+              <circle cx="200" cy="38" r="12" fill="#fff"/><line x1="200" y1="50" x2="200" y2="82" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+              <line x1="200" y1="58" x2="180" y2="38" stroke="#fff" stroke-width="5" stroke-linecap="round"/><line x1="200" y1="58" x2="220" y2="38" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+              <line x1="200" y1="82" x2="186" y2="112" stroke="#fff" stroke-width="5" stroke-linecap="round"/><line x1="200" y1="82" x2="214" y2="112" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+            </svg>
+            <div class="pose-caption">📸 샘플 포즈 — 다 함께 팔 벌려 "돌파!" 점프컷</div>
+          </div>
+
+          <div id="geoIdle" class="geo-box">
+            <div class="geo-icon">📍</div>
+            <div class="geo-text">이 위치에 도착하면 인증샷을 찍을 수 있어요</div>
+            <button class="submit-btn primary" onclick="checkLocation()">📡 내 위치 확인하기</button>
+          </div>
+          <div id="geoChecking" class="geo-box" style="display:none">
+            <div class="geo-icon spin">📡</div>
+            <div class="geo-text">위치 확인 중...</div>
+          </div>
+          <div id="geoFar" class="geo-box" style="display:none">
+            <div class="geo-icon">🚶</div>
+            <div class="geo-text">아직 도착 전이에요! 목적지까지 약 <b id="geoDist">-</b> 남았어요</div>
+            <button class="submit-btn primary" onclick="checkLocation()">📡 다시 확인하기</button>
+          </div>
+          <div id="geoError" class="geo-box" style="display:none">
+            <div class="geo-icon">⚠️</div>
+            <div class="geo-text" id="geoErrorText">위치 확인에 실패했어요.</div>
+            <button class="submit-btn primary" onclick="checkLocation()">📡 다시 시도하기</button>
+            <button class="geo-skip" onclick="skipLocationCheck()">위치 확인 없이 계속하기</button>
+          </div>
+          <div id="geoOk" class="geo-box ok" style="display:none">
+            <div class="geo-icon">✅</div>
+            <div class="geo-text">도착 확인! 이제 사진을 찍어 올려주세요</div>
+          </div>
         </div>
-        <div class="steps">
-          <div class="step-row"><div class="step-n">1</div><div class="step-text"><b>위 로드뷰와 같은 장소를 찾는다</b></div></div>
-          <div class="step-row"><div class="step-n">2</div><div class="step-text"><b>조원 전체가 나오게 인증샷 촬영</b><span>같은 앵글·배경으로!</span></div></div>
-          <div class="step-row"><div class="step-n">3</div><div class="step-text"><b>아래 버튼으로 사진 업로드</b></div></div>
+
+        <div class="steps" id="missionSteps" style="display:none">
+          <div class="step-row"><div class="step-n">1</div><div class="step-text"><b>조원 전체가 나오게 샘플 포즈로 인증샷 촬영</b></div></div>
+          <div class="step-row"><div class="step-n">2</div><div class="step-text"><b>아래 버튼으로 사진 업로드</b></div></div>
         </div>
-        <div id="m1UploadArea">
+        <div id="m1UploadArea" style="display:none">
           <div class="upload-zone" id="uploadZone" onclick="triggerFileInput()">
             <div class="upload-icon" id="uploadIcon">📷</div>
             <div class="upload-text" id="uploadText">사진 선택 또는 여기 탭</div>
@@ -479,13 +533,14 @@ const db = firebase.database();
 // 2026-07-09 결정: 견학지 3곳→2곳으로 축소 (연세대 언더우드가 기념관 코스 보류), 6개 조를 3명씩 배정
 // 전쟁기념관행 3개 조: 노들섬/이촌한강공원/서울로7017 → 삼각지역에서 합류
 // 서대문형무소행 3개 조: 청계천/광화문광장/덕수궁 돌담길 → 독립문역에서 합류 (2026-07-09 적용)
+// lat/lng/radius: 미션1 GPS 도착 확인용 (REQ-04, 좌표는 추정치 — 실제 운영 전 재확인 권장)
 const TEAM_MAP = {
-  1:{dest:'전쟁기념관',waypoint:'노들섬',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
-  2:{dest:'전쟁기념관',waypoint:'이촌한강공원',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
-  3:{dest:'전쟁기념관',waypoint:'서울로7017',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)'},
-  4:{dest:'서대문형무소',waypoint:'청계천(청계광장)',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
-  5:{dest:'서대문형무소',waypoint:'광화문광장',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
-  6:{dest:'서대문형무소',waypoint:'덕수궁 돌담길',bg:'linear-gradient(135deg,#1a4429,#2f9e44)'},
+  1:{dest:'전쟁기념관',waypoint:'노들섬',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)',lat:37.517700,lng:126.956300,radius:450},
+  2:{dest:'전쟁기념관',waypoint:'이촌한강공원',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)',lat:37.522200,lng:126.970100,radius:450},
+  3:{dest:'전쟁기념관',waypoint:'서울로7017',bg:'linear-gradient(135deg,#1a2744,#3b5bdb)',lat:37.554700,lng:126.970800,radius:350},
+  4:{dest:'서대문형무소',waypoint:'청계천(청계광장)',bg:'linear-gradient(135deg,#1a4429,#2f9e44)',lat:37.569500,lng:126.978400,radius:300},
+  5:{dest:'서대문형무소',waypoint:'광화문광장',bg:'linear-gradient(135deg,#1a4429,#2f9e44)',lat:37.572000,lng:126.976900,radius:300},
+  6:{dest:'서대문형무소',waypoint:'덕수궁 돌담길',bg:'linear-gradient(135deg,#1a4429,#2f9e44)',lat:37.565800,lng:126.975200,radius:400},
 };
 
 // ── 조별 비밀번호 퀴즈 (REQ-07 확정) ──
@@ -518,6 +573,9 @@ let statusListener = null;
 let m1PrevStatus = null;
 let m2PrevStatus = null;
 let curDestStage = null;
+let locationConfirmed = false;
+let locationVerifiedFlag = null; // 제출 시 함께 저장 (true=GPS확인, false=건너뜀)
+let lastDistanceM = null;
 
 // ── 미션 UI 전체 초기화 (팀 전환 시 호출) ──
 function resetMissionUI() {
@@ -525,10 +583,13 @@ function resetMissionUI() {
   document.getElementById('introTransition').style.display = 'none';
 
   // 미션1 초기화
-  document.getElementById('m1UploadArea').style.display = 'block';
+  document.getElementById('m1UploadArea').style.display = 'none';
   document.getElementById('m1Done').style.display = 'none';
   document.getElementById('m1Pending').style.display = 'none';
   document.getElementById('m1Rejected').style.display = 'none';
+  document.getElementById('missionSteps').style.display = 'none';
+  document.getElementById('geoGate').style.display = 'block';
+  showGeoIdle();
   document.getElementById('progressWrap').style.display = 'none';
   document.getElementById('progressBar').style.width = '0%';
   document.getElementById('uploadBtn').disabled = true;
@@ -560,6 +621,9 @@ function resetMissionUI() {
   m1PrevStatus = null;
   m2PrevStatus = null;
   curDestStage = null;
+  locationConfirmed = false;
+  locationVerifiedFlag = null;
+  lastDistanceM = null;
 }
 
 // ── 목적지 배너: 미션 진행 단계에 맞는 "다음 장소"만 표시 ──
@@ -716,9 +780,12 @@ function handleMission1Status(m1) {
   document.getElementById('m1Done').style.display = 'none';
   document.getElementById('m1Pending').style.display = 'none';
   document.getElementById('m1Rejected').style.display = 'none';
+  document.getElementById('geoGate').style.display = 'none';
+  document.getElementById('missionSteps').style.display = 'none';
 
   if (!status) {
-    document.getElementById('m1UploadArea').style.display = 'block';
+    document.getElementById('geoGate').style.display = 'block';
+    if (locationConfirmed) { showGeoOk(); } else { showGeoIdle(); }
     document.getElementById('mission2Locked').style.display = 'block';
     document.getElementById('mission2Card').style.display = 'none';
     document.getElementById('missionTransition').style.display = 'none';
@@ -785,6 +852,93 @@ function handleMission2Status(m2) {
 }
 
 // ── 파일 선택 ──
+// ── GPS 도착 확인 (REQ-04) ──
+// 하버사인 공식으로 두 좌표 사이 거리(m) 계산
+function haversineM(lat1, lng1, lat2, lng2) {
+  const R = 6371000;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) * Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+function fmtDistance(m) {
+  return m >= 1000 ? `${(m/1000).toFixed(1)}km` : `${Math.round(m)}m`;
+}
+
+function hideAllGeoBoxes() {
+  ['geoIdle','geoChecking','geoFar','geoError','geoOk'].forEach(id => document.getElementById(id).style.display = 'none');
+}
+function showGeoIdle() {
+  hideAllGeoBoxes();
+  document.getElementById('geoIdle').style.display = 'flex';
+  document.getElementById('missionSteps').style.display = 'none';
+  document.getElementById('m1UploadArea').style.display = 'none';
+}
+function showGeoChecking() {
+  hideAllGeoBoxes();
+  document.getElementById('geoChecking').style.display = 'flex';
+}
+function showGeoFar(distM) {
+  hideAllGeoBoxes();
+  document.getElementById('geoFar').style.display = 'flex';
+  document.getElementById('geoDist').textContent = fmtDistance(distM);
+  document.getElementById('missionSteps').style.display = 'none';
+  document.getElementById('m1UploadArea').style.display = 'none';
+}
+function showGeoError(msg) {
+  hideAllGeoBoxes();
+  document.getElementById('geoError').style.display = 'flex';
+  document.getElementById('geoErrorText').textContent = msg;
+  document.getElementById('missionSteps').style.display = 'none';
+  document.getElementById('m1UploadArea').style.display = 'none';
+}
+function showGeoOk() {
+  hideAllGeoBoxes();
+  document.getElementById('geoOk').style.display = 'flex';
+  document.getElementById('missionSteps').style.display = 'block';
+  document.getElementById('m1UploadArea').style.display = 'block';
+  locationConfirmed = true;
+}
+
+function checkLocation() {
+  const info = TEAM_MAP[currentTeam];
+  if (!info || !navigator.geolocation) {
+    showGeoError('이 기기/브라우저에서는 위치 확인을 지원하지 않아요.');
+    return;
+  }
+  showGeoChecking();
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const dist = haversineM(pos.coords.latitude, pos.coords.longitude, info.lat, info.lng);
+      lastDistanceM = Math.round(dist);
+      if (dist <= (info.radius || 400)) {
+        locationVerifiedFlag = true;
+        showGeoOk();
+        showToast('✅ 도착 확인!');
+      } else {
+        showGeoFar(dist);
+      }
+    },
+    err => {
+      const msgs = {
+        1: '위치 권한이 거부됐어요. 브라우저 설정에서 위치 접근을 허용해주세요.',
+        2: '위치를 확인할 수 없어요. GPS 신호가 약한 곳일 수 있어요.',
+        3: '위치 확인이 시간 초과됐어요. 다시 시도해주세요.',
+      };
+      showGeoError(msgs[err.code] || '위치 확인 중 오류가 발생했어요.');
+    },
+    { enableHighAccuracy:true, timeout:10000, maximumAge:0 }
+  );
+}
+
+// 위치 확인이 계속 실패할 때의 예외 처리(실내/기기 문제 등) — 건너뛰어도 제출은 가능하되 관리자 화면에 미확인으로 표시됨
+function skipLocationCheck() {
+  locationVerifiedFlag = false;
+  lastDistanceM = null;
+  showGeoOk();
+  showToast('⚠️ 위치 확인 없이 진행합니다');
+}
+
 function triggerFileInput() {
   document.getElementById('photoInput').click();
 }
@@ -848,6 +1002,8 @@ async function uploadMission1() {
       status: 'pending',
       reviewedAt: null,
       reviewNote: null,
+      locationVerified: locationVerifiedFlag,
+      distanceAtSubmit: lastDistanceM,
     });
     pb.style.width = '100%';
     showToast('📤 제출 완료! 관리자 확인을 기다려주세요');
@@ -865,7 +1021,14 @@ async function uploadMission1() {
 function retryMission1() {
   resetUploadUI();
   document.getElementById('m1Rejected').style.display = 'none';
-  document.getElementById('m1UploadArea').style.display = 'block';
+  if (locationConfirmed) {
+    // 이미 위치 확인됨(같은 세션) → 바로 촬영 단계로
+    document.getElementById('geoGate').style.display = 'block';
+    showGeoOk();
+  } else {
+    document.getElementById('geoGate').style.display = 'block';
+    showGeoIdle();
+  }
 }
 
 function resetUploadUI() {

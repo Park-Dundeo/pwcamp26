@@ -471,7 +471,12 @@ function renderDetail(t) {
 
   html+=`<div class="detail-section">📷 미션 1 — 경유지 인증샷</div>`;
   if(m1?.photoData){
-    html+=`${badge(m1.status)}
+    const geoTag = m1.locationVerified === true
+      ? `<span class="review-badge approved" style="margin-left:6px;">📍 GPS 확인됨${m1.distanceAtSubmit!=null ? ` (${m1.distanceAtSubmit}m)` : ''}</span>`
+      : m1.locationVerified === false
+        ? `<span class="review-badge rejected" style="margin-left:6px;">📍 GPS 미확인(건너뜀)</span>`
+        : '';
+    html+=`${badge(m1.status)}${geoTag}
            <img class="detail-photo" src="${m1.photoData}" loading="lazy">
            <div class="submit-time">제출: ${fmt(m1.uploadedAt)}</div>
            ${actions(t,1,m1.status)}`;
