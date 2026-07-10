@@ -325,18 +325,8 @@ body{font-family:-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif;b
         <!-- GPS 도착 확인 게이트 -->
         <div id="geoGate">
           <div class="pose-sample">
-            <svg viewBox="0 0 260 130" class="pose-svg">
-              <circle cx="60" cy="38" r="12" fill="#fff"/><line x1="60" y1="50" x2="60" y2="82" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-              <line x1="60" y1="58" x2="40" y2="38" stroke="#fff" stroke-width="5" stroke-linecap="round"/><line x1="60" y1="58" x2="80" y2="38" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-              <line x1="60" y1="82" x2="46" y2="112" stroke="#fff" stroke-width="5" stroke-linecap="round"/><line x1="60" y1="82" x2="74" y2="112" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-              <circle cx="130" cy="30" r="13" fill="#ffd43b"/><line x1="130" y1="43" x2="130" y2="80" stroke="#ffd43b" stroke-width="5" stroke-linecap="round"/>
-              <line x1="130" y1="52" x2="106" y2="28" stroke="#ffd43b" stroke-width="5" stroke-linecap="round"/><line x1="130" y1="52" x2="154" y2="28" stroke="#ffd43b" stroke-width="5" stroke-linecap="round"/>
-              <line x1="130" y1="80" x2="114" y2="112" stroke="#ffd43b" stroke-width="5" stroke-linecap="round"/><line x1="130" y1="80" x2="146" y2="112" stroke="#ffd43b" stroke-width="5" stroke-linecap="round"/>
-              <circle cx="200" cy="38" r="12" fill="#fff"/><line x1="200" y1="50" x2="200" y2="82" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-              <line x1="200" y1="58" x2="180" y2="38" stroke="#fff" stroke-width="5" stroke-linecap="round"/><line x1="200" y1="58" x2="220" y2="38" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-              <line x1="200" y1="82" x2="186" y2="112" stroke="#fff" stroke-width="5" stroke-linecap="round"/><line x1="200" y1="82" x2="214" y2="112" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
-            </svg>
-            <div class="pose-caption">📸 샘플 포즈 — 다 함께 팔 벌려 "돌파!" 점프컷</div>
+            <svg viewBox="0 0 260 140" class="pose-svg" id="poseSvg"></svg>
+            <div class="pose-caption" id="poseCaption">📸 샘플 포즈</div>
           </div>
 
           <div id="geoIdle" class="geo-box">
@@ -670,6 +660,94 @@ function fillMissionDestChips(num) {
   // 조별 견학 코스 안내 링크 (1·2·3조=전쟁기념관 c / 4·5·6조=서대문형무소 b)
   const course = num <= 3 ? 'c' : 'b';
   document.getElementById('m2GuideLink').href = `guide.html?course=${course}`;
+  renderPoseSample(num);
+}
+
+// ── 조별 샘플 포즈 (REQ-04, 심플한 아이콘 스타일) ──
+// 사람 아이콘 1개 그리기: (x,y)는 목 위치 기준, arm 좌표는 어깨(0,-8) 기준 상대좌표
+function person(x, y, color, leftArm, rightArm, rot) {
+  rot = rot || 0;
+  return `<g transform="translate(${x},${y}) rotate(${rot})">
+    <line x1="-3" y1="13" x2="-7" y2="31" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+    <line x1="3" y1="13" x2="7" y2="31" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+    <line x1="0" y1="-8" x2="${leftArm[0]}" y2="${leftArm[1]}" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+    <line x1="0" y1="-8" x2="${rightArm[0]}" y2="${rightArm[1]}" stroke="${color}" stroke-width="5" stroke-linecap="round"/>
+    <rect x="-8" y="-13" width="16" height="26" rx="7" fill="${color}"/>
+    <circle cx="0" cy="-21" r="9" fill="${color}"/>
+  </g>`;
+}
+
+const POSES = {
+  // 1조 — 피라미드 대형
+  1: {
+    caption: '📸 샘플 포즈 — 다 함께 만드는 피라미드 대형',
+    svg: `
+      ${person(55,112,'#ffd43b',[-22,-18],[18,-4])}
+      ${person(130,112,'#ff8787',[-20,-6],[20,-6])}
+      ${person(205,112,'#69db7c',[-18,-4],[22,-18])}
+      ${person(92,58,'#4dabf7',[-22,-30],[6,-24])}
+      ${person(168,58,'#e599f7',[-6,-24],[22,-30])}
+    `,
+  },
+  // 2조 — 한 명 뒤에 옹기종기 (얼굴 모아 찍기)
+  2: {
+    caption: '📸 샘플 포즈 — 한 명 뒤에 옹기종기 얼굴 모으기',
+    svg: `
+      <circle cx="70" cy="66" r="12" fill="#4dabf7" opacity=".85"/>
+      <circle cx="105" cy="52" r="13" fill="#e599f7" opacity=".9"/>
+      <circle cx="190" cy="52" r="13" fill="#69db7c" opacity=".9"/>
+      <circle cx="222" cy="68" r="12" fill="#ffd43b" opacity=".85"/>
+      ${person(147,100,'#ff8787',[-24,-4],[24,-4])}
+    `,
+  },
+  // 3조 — 도미노 실신 포즈
+  3: {
+    caption: '📸 샘플 포즈 — 한 줄로 서서 도미노처럼 살짝 기울기',
+    svg: `
+      ${person(45,105,'#ffd43b',[8,-30],[24,4],-4)}
+      ${person(100,100,'#ff8787',[8,-30],[24,4],4)}
+      ${person(155,95,'#4dabf7',[8,-30],[24,4],12)}
+      ${person(210,90,'#69db7c',[8,-30],[24,4],20)}
+    `,
+  },
+  // 4조 — 나란히 행진 포즈
+  4: {
+    caption: '📸 샘플 포즈 — 팔 쭉 뻗고 나란히 행진!',
+    svg: `
+      ${person(45,105,'#4dabf7',[26,-14],[-14,4],-6)}
+      ${person(100,100,'#e599f7',[26,-14],[-14,4],-6)}
+      ${person(155,105,'#ffd43b',[26,-14],[-14,4],-6)}
+      ${person(210,100,'#ff8787',[26,-14],[-14,4],-6)}
+    `,
+  },
+  // 5조 — 기차놀이(옷자락 잡기)
+  5: {
+    caption: '📸 샘플 포즈 — 앞사람 어깨 잡고 기차놀이',
+    svg: `
+      ${person(45,102,'#69db7c',[-20,-10],[20,-6])}
+      ${person(100,102,'#ffd43b',[-20,-6],[20,-6])}
+      ${person(155,102,'#4dabf7',[-20,-6],[20,-6])}
+      ${person(210,102,'#ff8787',[-20,-6],[20,-6])}
+      <line x1="68" y1="88" x2="82" y2="88" stroke="#ffd43b" stroke-width="5" stroke-linecap="round"/>
+      <line x1="123" y1="88" x2="137" y2="88" stroke="#4dabf7" stroke-width="5" stroke-linecap="round"/>
+      <line x1="178" y1="88" x2="192" y2="88" stroke="#ff8787" stroke-width="5" stroke-linecap="round"/>
+    `,
+  },
+  // 6조 — 다 함께 점프컷
+  6: {
+    caption: '📸 샘플 포즈 — 다 함께 팔 벌려 "돌파!" 점프컷',
+    svg: `
+      ${person(65,72,'#ff8787',[-24,-6],[24,-6])}
+      ${person(130,60,'#ffd43b',[-26,-30],[26,-30])}
+      ${person(195,72,'#4dabf7',[-24,-6],[24,-6])}
+    `,
+  },
+};
+
+function renderPoseSample(num) {
+  const pose = POSES[num] || POSES[1];
+  document.getElementById('poseSvg').innerHTML = pose.svg;
+  document.getElementById('poseCaption').textContent = pose.caption;
 }
 
 // ── 조 선택 ──
