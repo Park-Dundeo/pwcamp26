@@ -295,15 +295,14 @@ firebase.initializeApp({
 const db = firebase.database();
 
 // ⚠️ 이 TEAM_MAP은 mission.html·report.html·index.html(ROUTE_DATA)에도 복사본이 있음 — 목적지/경유지 변경 시 반드시 모두 함께 수정할 것
-// 2026-07-09 결정: 견학지 3곳→2곳으로 축소 (연세대 언더우드가 기념관 코스 보류), 6개 조를 3명씩 배정
-// 서대문형무소행 3개 조: 청계천/경희궁/덕수궁 돌담길 → 독립문역에서 합류 (2026-07-09 적용, 2026-07-11 5조 광화문광장→경희궁 교체: 7/17 광화문 인근 시위 예상)
+// 2026-07-12 결정(REQ-53/55): 1차 경유지를 나비쇼핑몰(강동) 인근 도보 이동 가능한 지역 명소 6곳으로 전면 교체, 정확한 지명으로 재수정. GPS 자동 확인은 제거 — 담당 교사가 직접 확인
 const TEAM_MAP = {
-  1:{dest:'전쟁기념관',waypoint:'노들섬'},
-  2:{dest:'전쟁기념관',waypoint:'이촌한강공원'},
-  3:{dest:'전쟁기념관',waypoint:'서울로7017'},
-  4:{dest:'서대문형무소',waypoint:'청계천(청계광장)'},
-  5:{dest:'서대문형무소',waypoint:'경희궁'},
-  6:{dest:'서대문형무소',waypoint:'덕수궁 돌담길'},
+  1:{dest:'전쟁기념관',waypoint:'천호공원'},
+  2:{dest:'전쟁기념관',waypoint:'광나루한강공원'},
+  3:{dest:'전쟁기념관',waypoint:'강풀만화거리'},
+  4:{dest:'서대문형무소',waypoint:'천호문구거리'},
+  5:{dest:'서대문형무소',waypoint:'풍납토성'},
+  6:{dest:'서대문형무소',waypoint:'천호장미마을'},
 };
 
 // 관리자 비밀번호 (SHA-256 해시 저장 — 학생이 소스 보기로 비번을 알아내 셀프 승인하는 것 방지. 원본은 교사 공유방 참고)
@@ -490,12 +489,7 @@ function renderDetail(t) {
 
   html+=`<div class="detail-section">📷 미션 1 — 경유지 인증샷</div>`;
   if(m1?.photoData){
-    const geoTag = m1.locationVerified === true
-      ? `<span class="review-badge approved" style="margin-left:6px;">📍 GPS 확인됨${m1.distanceAtSubmit!=null ? ` (${m1.distanceAtSubmit}m)` : ''}</span>`
-      : m1.locationVerified === false
-        ? `<span class="review-badge rejected" style="margin-left:6px;">📍 GPS 미확인(건너뜀)</span>`
-        : '';
-    html+=`${badge(m1.status)}${geoTag}
+    html+=`${badge(m1.status)}
            <img class="detail-photo" src="${m1.photoData}" loading="lazy">
            <div class="submit-time">제출: ${fmt(m1.uploadedAt)}</div>
            ${actions(t,1,m1.status)}`;
