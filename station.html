@@ -289,7 +289,10 @@ function stepStation(delta) {
 }
 
 buildGrid();
-selectStation(0);
+// URL의 ?station=N 파라미터로 특정 게임 카드로 바로 이동 (index.html 게임 카드 클릭 시 사용, REQ-57)
+const wantStation = Number(new URLSearchParams(location.search).get('station'));
+const wantIdx = STATIONS.findIndex(s => s.id === wantStation);
+selectStation(wantIdx >= 0 ? wantIdx : 0);
 
 db.ref('teacherDoc/roles').on('value', snap => {
   roles = snap.val() || {};
