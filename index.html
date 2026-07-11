@@ -691,9 +691,9 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
         </div>
       </div>
 
-      <!-- 5조: 광화문광장 -->
+      <!-- 5조: 경희궁 (2026-07-11: 광화문광장→경희궁 교체, 7/17 광화문 인근 시위 예상) -->
       <div class="route-subcard" style="border:1.5px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;">
-        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">🚩 5조 — 광화문광장 경유</div>
+        <div style="font-size:13px;font-weight:800;color:var(--navy);margin-bottom:10px;">🚩 5조 — 경희궁 경유</div>
         <div class="route-timeline">
           <div class="rt-step">
             <div class="rt-icon start">🏫</div>
@@ -706,16 +706,16 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
           <div class="rt-step">
             <div class="rt-icon mission">📍</div>
             <div class="rt-content">
-              <div class="rt-title">1차 미션 — 광화문광장</div>
-              <div class="rt-sub">광화문역 하차 · 광장까지 도보 3분</div>
-              <div class="rt-transit"><span class="time-chip">인증샷: 이순신장군 동상 · 세종대왕 동상 · 육조거리 전망</span></div>
+              <div class="rt-title">1차 미션 — 경희궁</div>
+              <div class="rt-sub">서대문역 4번 출구 · 도보 5분</div>
+              <div class="rt-transit"><span class="time-chip">인증샷: 숭정전 앞뜰 · 서암 바위 · 궁궐 담장 전망</span></div>
             </div>
           </div>
           <div class="rt-step">
             <div class="rt-icon start">🚇</div>
             <div class="rt-content">
-              <div class="rt-title">이동 — 5호선 광화문역 → 독립문역</div>
-              <div class="rt-sub">✅ 3개 루트 중 가장 안정적 — 환승 없이 1정거장대</div>
+              <div class="rt-title">이동 — 5호선 서대문역 → 독립문역</div>
+              <div class="rt-sub">✅ 환승 없이 1정거장대 (7/17 광화문 인근 시위 예상으로 경유지 변경)</div>
             </div>
           </div>
           <div class="rt-step">
@@ -992,7 +992,7 @@ function selectDest(key) {
   if (!mBox.innerHTML.trim()) {
     const data = {
       war: { dest:'전쟁기념관', spot:'노들섬 · 이촌한강공원 · 서울로7017 (조별 상이)' },
-      b: { dest:'서대문형무소', spot:'청계천 · 광화문광장 · 덕수궁 돌담길 (조별 상이)' },
+      b: { dest:'서대문형무소', spot:'청계천 · 경희궁 · 덕수궁 돌담길 (조별 상이)' },
     }[key];
     mBox.innerHTML = missionHTML(data.dest, data.spot);
   }
@@ -1060,10 +1060,10 @@ const ROUTE_DATA = {
     ],
   },
   seo2: {
-    group: '5조', destination: '서대문형무소', routeTitle: '서대문형무소 정탐 루트 (광화문광장 경유)',
+    group: '5조', destination: '서대문형무소', routeTitle: '서대문형무소 정탐 루트 (경희궁 경유)',
     points: [
       { order:1, type:'출발', name:'나비쇼핑몰 / 강동역', lat:37.535000, lng:127.132000, description:'조별 출발 · 인솔 교사 동행', stay:null, mission:null, verified:false },
-      { order:2, type:'1차 미션', name:'광화문광장', lat:37.572000, lng:126.976900, description:'광화문역 하차 · 도보 3분', stay:null, mission:'인증샷: 이순신장군 동상 · 세종대왕 동상 · 육조거리 전망', verified:false },
+      { order:2, type:'1차 미션', name:'경희궁', lat:37.571200, lng:126.968200, description:'서대문역 4번 출구 · 도보 5분', stay:null, mission:'인증샷: 숭정전 앞뜰 · 서암 바위 · 궁궐 담장 전망', verified:false },
       { order:3, type:'2차 견학', name:'서대문형무소', lat:37.574400, lng:126.956000, description:'자유 · 독립 · 순국선열', stay:'약 60분', mission:'우리가 본 장벽 / 발견한 믿음 / 돌파기도 보고서 작성', verified:false },
       { order:4, type:'식사 권역', name:'신촌 · 연희동 인근', lat:37.559700, lng:126.942500, description:'조별 자유 식사 (방식 미정)', stay:null, mission:null, verified:false },
       { order:5, type:'최종 이동', name:'도봉숲속마을', lat:37.669700, lng:127.045900, description:'집결 시간·장소 추후 확정', stay:null, mission:null, verified:false },

@@ -600,14 +600,14 @@ const db = firebase.database();
 // ⚠️ 이 TEAM_MAP은 admin.html·report.html·index.html(ROUTE_DATA)에도 복사본이 있음 — 목적지/경유지 변경 시 반드시 모두 함께 수정할 것
 // 2026-07-09 결정: 견학지 3곳→2곳으로 축소 (연세대 언더우드가 기념관 코스 보류), 6개 조를 3명씩 배정
 // 전쟁기념관행 3개 조: 노들섬/이촌한강공원/서울로7017 → 삼각지역에서 합류
-// 서대문형무소행 3개 조: 청계천/광화문광장/덕수궁 돌담길 → 독립문역에서 합류 (2026-07-09 적용)
+// 서대문형무소행 3개 조: 청계천/경희궁/덕수궁 돌담길 → 독립문역에서 합류 (2026-07-09 적용, 2026-07-11 5조 광화문광장→경희궁 교체: 7/17 광화문 인근 시위 예상)
 // lat/lng/radius: 미션1 GPS 도착 확인용 (REQ-04, 좌표는 추정치 — 실제 운영 전 재확인 권장)
 const TEAM_MAP = {
   1:{dest:'전쟁기념관',waypoint:'노들섬',bg:'linear-gradient(135deg,#1C63A8,#38B6FF)',lat:37.517700,lng:126.956300,radius:450},
   2:{dest:'전쟁기념관',waypoint:'이촌한강공원',bg:'linear-gradient(135deg,#1C63A8,#38B6FF)',lat:37.522200,lng:126.970100,radius:450},
   3:{dest:'전쟁기념관',waypoint:'서울로7017',bg:'linear-gradient(135deg,#1C63A8,#38B6FF)',lat:37.554700,lng:126.970800,radius:350},
   4:{dest:'서대문형무소',waypoint:'청계천(청계광장)',bg:'linear-gradient(135deg,#0B4F43,#0CA678)',lat:37.569500,lng:126.978400,radius:300},
-  5:{dest:'서대문형무소',waypoint:'광화문광장',bg:'linear-gradient(135deg,#0B4F43,#0CA678)',lat:37.572000,lng:126.976900,radius:300},
+  5:{dest:'서대문형무소',waypoint:'경희궁',bg:'linear-gradient(135deg,#0B4F43,#0CA678)',lat:37.571200,lng:126.968200,radius:300},
   6:{dest:'서대문형무소',waypoint:'덕수궁 돌담길',bg:'linear-gradient(135deg,#0B4F43,#0CA678)',lat:37.565800,lng:126.975200,radius:400},
 };
 
