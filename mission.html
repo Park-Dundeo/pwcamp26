@@ -33,9 +33,7 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .pw-tab-item.locked .pw-tab-icon{position:relative;}
 .pw-tab-item.locked .pw-tab-icon::after{content:'🔒';position:absolute;right:-6px;bottom:-4px;font-size:10px;}
 
-.gate-name-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
-.gate-name-pick button{padding:11px 4px;border:2px solid var(--border);border-radius:8px;background:#fff;font-size:13px;font-weight:800;color:var(--navy);cursor:pointer;font-family:inherit;}
-.gate-name-pick button.sel{border-color:var(--blue);background:var(--blue);color:#fff;}
+.gate-text-input{width:100%;padding:14px;border:1.5px solid var(--border);border-radius:8px;font-size:16px;font-weight:700;text-align:center;font-family:inherit;margin-bottom:8px;}
 
 .status-badge{position:fixed;top:10px;right:10px;z-index:250;font-size:11px;font-weight:800;padding:6px 12px;border-radius:20px;background:#fff;color:var(--navy);box-shadow:0 2px 8px rgba(0,0,0,.15);cursor:pointer;max-width:56vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .card{background:#fff;border-radius:var(--radius);box-shadow:0 4px 20px rgba(20,29,56,.07);margin-bottom:16px;overflow:hidden;}
@@ -568,14 +566,15 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
   </div>
 </div>
 
-<!-- 교사 로그인 모달 (REQ-47, 지도/교사 탭은 기본 잠금 — 교사 로그인 시에만 해금) -->
+<!-- 교사 로그인 모달 (REQ-47/48, 지도/교사 탭은 기본 잠금 — 이름+핸드폰 뒷자리 4자리로 로그인) -->
 <div class="reset-overlay" id="teacherGateOverlay">
   <div class="reset-modal">
     <h3>🔒 교사 로그인</h3>
-    <div class="reset-sub">지도·교사 화면은 선생님만 볼 수 있어요<br>성함을 선택하고 PIN을 입력해주세요</div>
-    <div class="gate-name-pick" id="teacherNamePick"></div>
+    <div class="reset-sub">지도·교사 화면은 선생님만 볼 수 있어요<br>이름과 핸드폰 뒷자리 4자리를 입력해주세요</div>
+    <input class="gate-text-input" type="text" id="teacherNameInput" list="teacherNameList" autocomplete="off" placeholder="이름">
+    <datalist id="teacherNameList"></datalist>
     <input class="reset-pw-input" type="tel" id="teacherGatePwInput" maxlength="4"
-      placeholder="••••" onkeydown="if(event.key==='Enter')checkTeacherGate()">
+      placeholder="핸드폰 뒷자리 4자리" onkeydown="if(event.key==='Enter')checkTeacherGate()">
     <div class="reset-err" id="teacherGateErr"></div>
     <button class="reset-btn confirm" onclick="checkTeacherGate()">로그인</button>
     <button class="reset-btn cancel" onclick="closeTeacherGate()">취소</button>
@@ -1197,15 +1196,35 @@ function showToast(msg) {
   toastTimer = setTimeout(() => el.classList.remove('show'), 2800);
 }
 
-// ── 교사 로그인 — 지도/교사 탭 기본 잠금 (REQ-47) ──
-// ⚠️ TEACHERS 명단/PIN 해시·로그인 로직이 map.html·board.html·index.html에도 동일하게 있음 — 교사 추가/PIN 변경 시 4곳 모두 수정할 것
-// 실제 명단은 추후 전달 예정 — 현재는 예시 3명만 등록
+// ── 교사 로그인 — 지도/교사 탭 기본 잠금 (REQ-47, REQ-48: 이름+핸드폰 뒷자리 로그인) ──
+// ⚠️ TEACHERS 명단/로그인 로직이 map.html·board.html·index.html에도 동일하게 있음 — 명단/번호 변경 시 4곳 모두 수정할 것
 const TEACHERS = {
-  '박준서': '0ffe1abd1a08215353c233d6e009613e95eec4253832a761af28ff37ac5a150c',
-  '김한솔': 'edee29f882543b956620b26d0ee0e7e950399b1c4222f5de05e06425b4c995e9',
-  '유성규': '318aee3fed8c9d040d35a7fc1fa776fb31303833aa2de885354ddf3d44d8fb69',
+  '김한솔': '031299c8c3ea59d8054ea245fcf08a88617f4bd1391122040c086e3833d1bb5d',
+  '박상현': '45df51e4ea78519b4123b5b652497fddd25169c2752c8efff237dbe475ae6b8c',
+  '유종규': '0175a63483d6f94f13ad4a9dcbc364d27e494cf4421f2c76e3a5b96c312965ad',
+  '이정민': '40e485376e18da6155ec4830fe17aed6d527b3e7fc0d4bb69f7f70c9c9b52f9e',
+  '이창민': 'bcddf07cbefb6d79e144759392edeb28519a4fc2acb48bcaa8b35f721e4e955d',
+  '박준서': 'f4c93868660b399edc5eef3fe0a67e989eebb90d07f5bdf57dda124c5093a3e3',
+  '황선영': 'd886fdf01d637d8b4d486b817eb964987a681703e6754064c4ec344a2ba7832a',
+  '전원': '767d398ef6feec96829380caf379b27ccfe82a6a942d47a5c9a2bafb11d37ee9',
+  '조동흠': 'b69313a258e85ac7560303276a0ef84c639ab0c71139e51a8bb731cf39121ffa',
+  '유성규': '3b47492744946d5a188be73c702fb2e3cd1b635433f841381ae8d2e0ed67b45f',
+  '김상민': '18bf488290cdb42cc9c6a6228661dcc2882e2cff3b983c0daa4cf42c8556ba8f',
+  '장예린': 'b0c5d24fdb7a3a0a9828757ef2f12c9f9205a754c10e312b30da29ca4a21a912',
+  '정우진': '57c03210be824f7a26151a1000ae617d5f31a8bdee6001fc05284de407d93e7b',
+  '정하원': '6cd721cd8bed1dc8757d34d913a40504385cc5dbeb267267f891d79db96cd9ff',
+  '김신원': 'a898a8776c1b93c5718bf0d1c5f4e90fc60d7bc54c8699bc676cf9f60ce2aec9',
+  '조수현': '93617fe8e8b35100a931faa3299d2301458a42aa6f9c137271ef191f20860c8b',
+  '김재일': '899b9a314067a23557b5db9b87d3e599e2f3200bd69b6cdc6dcf08f8b8e40e2e',
+  '이강산': '8b75ec30ea0d0fedcfce5224ef7733db7dbc574a1806aa664014eb6350f5a00c',
+  '최하림': 'b96cb18015f6896c4fc74454c578571dc84ef3c45e929f70f21773e09e972b50',
+  '박다은': '03f654824d01403c7ff82904c7d8c6c4fb22ba0cf0a35348ecb25af7f884f5f0',
+  '이예서': 'dfc04c940f3b91d8a8316579ecd027fb98be2ead43b0a0bacf78a12babae4d05',
+  '황귀상': '6cd721cd8bed1dc8757d34d913a40504385cc5dbeb267267f891d79db96cd9ff',
+  '이가현': '173deaaf2f52bf79f028106fdbb995142cd7d77fc8b15cfa2a82d93c13f76f3c',
+  '박정일': 'b2bf50ecada62994533dcc3197242102a5f1e20bc8acc45f904eb0a2004dfb1f',
+  '김현': '99d344d4dba211c90671a24e7e9c78997852d0e1ded16c250539142881f254e1',
 };
-let pickedTeacherName = null;
 let teacherGateTarget = null;
 
 function isTeacherUnlocked() {
@@ -1219,25 +1238,11 @@ function refreshTeacherTabLock() {
   });
   refreshStatusBadge();
 }
-function renderTeacherNamePick() {
-  const wrap = document.getElementById('teacherNamePick');
-  if (!wrap) return;
-  wrap.innerHTML = Object.keys(TEACHERS).map(name =>
-    `<button type="button" id="ttn-${name}" onclick="pickTeacherName('${name}')">${name}</button>`).join('');
-}
-function pickTeacherName(name) {
-  pickedTeacherName = name;
-  Object.keys(TEACHERS).forEach(n => {
-    const b = document.getElementById(`ttn-${n}`);
-    if (b) b.classList.toggle('sel', n === name);
-  });
-}
 function teacherGatedClick(e, target) {
   if (isTeacherUnlocked()) return true;
   e.preventDefault();
   teacherGateTarget = target;
-  pickedTeacherName = null;
-  renderTeacherNamePick();
+  document.getElementById('teacherNameInput').value = '';
   document.getElementById('teacherGatePwInput').value = '';
   document.getElementById('teacherGateErr').textContent = '';
   document.getElementById('teacherGateOverlay').classList.add('show');
@@ -1247,22 +1252,23 @@ function closeTeacherGate() {
   document.getElementById('teacherGateOverlay').classList.remove('show');
 }
 async function checkTeacherGate() {
-  if (!pickedTeacherName) {
-    document.getElementById('teacherGateErr').textContent = '성함을 먼저 선택해주세요.';
+  const name = document.getElementById('teacherNameInput').value.trim();
+  const phone4 = document.getElementById('teacherGatePwInput').value.trim();
+  if (!name || !phone4) {
+    document.getElementById('teacherGateErr').textContent = '이름과 핸드폰 뒷자리를 모두 입력해주세요.';
     return;
   }
-  const input = document.getElementById('teacherGatePwInput').value.trim();
-  const hash = await sha256(input);
-  if (TEACHERS[pickedTeacherName] === hash) {
+  const hash = await sha256(phone4);
+  if (TEACHERS[name] === hash) {
     sessionStorage.setItem('pw_teacher_unlocked', '1');
-    sessionStorage.setItem('pw_teacher_name', pickedTeacherName);
+    sessionStorage.setItem('pw_teacher_name', name);
     closeTeacherGate();
     refreshTeacherTabLock();
     if (teacherGateTarget) location.href = teacherGateTarget;
   } else {
     const el = document.getElementById('teacherGatePwInput');
     el.classList.add('error');
-    document.getElementById('teacherGateErr').textContent = 'PIN이 틀렸어요.';
+    document.getElementById('teacherGateErr').textContent = '이름 또는 핸드폰 뒷자리가 맞지 않아요.';
     setTimeout(() => el.classList.remove('error'), 500);
   }
 }
@@ -1283,6 +1289,11 @@ function teacherLogout() {
   sessionStorage.removeItem('pw_teacher_name');
   refreshTeacherTabLock();
 }
+(function populateTeacherNameList(){
+  const list = document.getElementById('teacherNameList');
+  if (!list) return;
+  list.innerHTML = Object.keys(TEACHERS).map(name => `<option value="${name}">`).join('');
+})();
 refreshTeacherTabLock();
 
 // ── 초기화 모달 (테스트용, 교사/개발자 전용) ──
