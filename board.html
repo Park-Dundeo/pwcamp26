@@ -167,8 +167,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
   <div class="tt-modal">
     <h3>🔒 교사 로그인</h3>
     <div class="tt-sub">이름과 핸드폰 뒷자리 4자리를 입력해주세요</div>
-    <input class="gate-text-input" type="text" id="teacherNameInput" list="teacherNameList" autocomplete="off" placeholder="이름">
-    <datalist id="teacherNameList"></datalist>
+    <input class="gate-text-input" type="text" id="teacherNameInput" autocomplete="off" placeholder="이름">
     <input class="tt-input" type="tel" id="teacherGatePwInput" maxlength="4"
       placeholder="핸드폰 뒷자리 4자리" onkeydown="if(event.key==='Enter')checkTeacherGate()">
     <div class="tt-err" id="teacherGateErr"></div>
@@ -319,11 +318,6 @@ async function checkTeacherGate(){
     setTimeout(() => el.classList.remove('error'), 500);
   }
 }
-(function populateTeacherNameList(){
-  const list = document.getElementById('teacherNameList');
-  if (!list) return;
-  list.innerHTML = Object.keys(TEACHERS).map(name => `<option value="${name}">`).join('');
-})();
 refreshTeacherTabLock();
 
 // 세션 인증 상태 (기기당 유지, 새 세션에서는 다시 인증)

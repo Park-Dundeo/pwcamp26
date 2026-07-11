@@ -571,8 +571,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
   <div class="reset-modal">
     <h3>🔒 교사 로그인</h3>
     <div class="reset-sub">지도·교사 화면은 선생님만 볼 수 있어요<br>이름과 핸드폰 뒷자리 4자리를 입력해주세요</div>
-    <input class="gate-text-input" type="text" id="teacherNameInput" list="teacherNameList" autocomplete="off" placeholder="이름">
-    <datalist id="teacherNameList"></datalist>
+    <input class="gate-text-input" type="text" id="teacherNameInput" autocomplete="off" placeholder="이름">
     <input class="reset-pw-input" type="tel" id="teacherGatePwInput" maxlength="4"
       placeholder="핸드폰 뒷자리 4자리" onkeydown="if(event.key==='Enter')checkTeacherGate()">
     <div class="reset-err" id="teacherGateErr"></div>
@@ -1289,11 +1288,6 @@ function teacherLogout() {
   sessionStorage.removeItem('pw_teacher_name');
   refreshTeacherTabLock();
 }
-(function populateTeacherNameList(){
-  const list = document.getElementById('teacherNameList');
-  if (!list) return;
-  list.innerHTML = Object.keys(TEACHERS).map(name => `<option value="${name}">`).join('');
-})();
 refreshTeacherTabLock();
 
 // ── 초기화 모달 (테스트용, 교사/개발자 전용) ──
