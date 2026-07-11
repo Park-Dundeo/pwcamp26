@@ -166,10 +166,10 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
 <div class="tt-overlay" id="teacherGateOverlay">
   <div class="tt-modal">
     <h3>🔒 교사 로그인</h3>
-    <div class="tt-sub">이름과 핸드폰 뒷자리 4자리를 입력해주세요</div>
+    <div class="tt-sub">이름과 비밀번호를 입력해주세요</div>
     <input class="gate-text-input" type="text" id="teacherNameInput" autocomplete="off" placeholder="이름">
     <input class="tt-input" type="tel" id="teacherGatePwInput" maxlength="4"
-      placeholder="핸드폰 뒷자리 4자리" onkeydown="if(event.key==='Enter')checkTeacherGate()">
+      placeholder="••••" onkeydown="if(event.key==='Enter')checkTeacherGate()">
     <div class="tt-err" id="teacherGateErr"></div>
     <button class="tt-btn confirm" onclick="checkTeacherGate()">로그인</button>
     <button class="tt-btn cancel" onclick="closeTeacherGate()">취소</button>
@@ -294,7 +294,7 @@ async function checkTeacherGate(){
   const name = document.getElementById('teacherNameInput').value.trim();
   const phone4 = document.getElementById('teacherGatePwInput').value.trim();
   if (!name || !phone4) {
-    document.getElementById('teacherGateErr').textContent = '이름과 핸드폰 뒷자리를 모두 입력해주세요.';
+    document.getElementById('teacherGateErr').textContent = '이름과 비밀번호를 모두 입력해주세요.';
     return;
   }
   const hash = await sha256(phone4);
@@ -314,7 +314,7 @@ async function checkTeacherGate(){
   } else {
     const el = document.getElementById('teacherGatePwInput');
     el.classList.add('error');
-    document.getElementById('teacherGateErr').textContent = '이름 또는 핸드폰 뒷자리가 맞지 않아요.';
+    document.getElementById('teacherGateErr').textContent = '이름 또는 비밀번호가 맞지 않아요.';
     setTimeout(() => el.classList.remove('error'), 500);
   }
 }
