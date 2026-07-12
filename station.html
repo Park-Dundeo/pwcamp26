@@ -44,10 +44,18 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .block:last-child{margin-bottom:0;}
 .block p{font-size:13.5px;line-height:1.75;color:#343a40;}
 
-/* 30초 멘트 — 크게, 읽기 쉽게 */
+/* ① 시작 인사·스토리 — 크게, 읽기 쉽게 */
 .script-box{background:linear-gradient(160deg,#fffdf5,#fff);border:1.5px solid #ffe8a3;border-radius:10px;padding:16px;}
 .script-box p{font-size:15px;line-height:1.85;color:#1a2744;font-weight:500;}
-.script-timer{font-size:11px;color:var(--gold);font-weight:800;margin-bottom:8px;}
+
+/* ② 규칙 설명 */
+.rules-box{background:#EEF6FB;border-radius:10px;padding:14px 16px;}
+.rule-line{font-size:14px;line-height:1.8;color:#1a2744;font-weight:500;margin-bottom:6px;}
+.rule-line:last-child{margin-bottom:0;}
+.director-note{font-size:12px;color:var(--gray);margin-top:8px;font-style:italic;}
+
+/* ③ 시작 신호 */
+.signal-box{background:var(--navy);color:#fff;border-radius:10px;padding:14px 16px;font-size:15px;font-weight:700;text-align:center;}
 
 .pass-box{background:#E3FAF3;border:1.5px solid #96E6CF;border-radius:10px;padding:14px 16px;font-size:13px;color:#0B7A5C;line-height:1.7;}
 .safety-box{background:#fff5f5;border:1.5px solid #ffc9c9;border-radius:10px;padding:14px 16px;font-size:13px;color:#c92a2a;line-height:1.7;}
@@ -57,8 +65,13 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .owner-chip{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:20px;background:#E7F5FF;color:var(--blue);}
 .owner-chip.unset{background:#E4EFF7;color:var(--gray);}
 .setup-box{background:#EEF6FB;border-radius:10px;padding:12px 14px;font-size:13px;color:#343a40;line-height:1.7;}
-.rain-box{background:#E7F5FF;border:1.5px solid #a5d8ff;border-radius:10px;padding:12px 14px;font-size:13px;color:#1864ab;line-height:1.7;}
-.next-box{background:#FFF4D6;border:1.5px solid #FFD43B;border-radius:10px;padding:12px 14px;font-size:13px;color:#8A6410;line-height:1.7;font-style:italic;}
+.tip-line{margin-bottom:6px;}
+.tip-line:last-child{margin-bottom:0;}
+
+/* ④ 성공 시 · 카드 지급 */
+.clear-box{background:linear-gradient(160deg,#fffdf5,#fff);border:1.5px solid #ffe8a3;border-radius:10px;padding:16px;}
+.clear-box p{font-size:14.5px;line-height:1.8;color:#1a2744;font-weight:500;margin-bottom:10px;}
+.verse-fragment-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:12.5px;font-weight:800;padding:5px 12px;border-radius:20px;}
 
 .nav-row{display:flex;gap:8px;margin-top:4px;}
 .nav-btn{flex:1;padding:13px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;background:#fff;color:var(--navy);box-shadow:0 3px 14px rgba(20,29,56,.06);}
@@ -88,10 +101,24 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
   <a class="header-back" href="index.html">← 대시보드</a>
   <div class="header-tag">DAY 2 · STATION CARD</div>
   <div class="header-title">관문 담당자 카드</div>
-  <div class="header-sub">돌파의 순례길 — 7게임 · 지도조각 모으기</div>
+  <div class="header-sub">가나안 정복 — 7개 부스 · 8명 1조 기준</div>
 </header>
 
 <div class="content">
+
+  <div class="card" style="display:block;margin-bottom:16px;">
+    <div class="card-body" style="padding:16px 18px;">
+      <div class="section-lbl">🗺 완성 구절 — 여호수아 1:9</div>
+      <p style="font-size:14px;line-height:1.9;color:#1a2744;font-weight:600;margin-bottom:14px;">"강하고 담대하라 두려워하지 말며 놀라지 말라 네가 어디로 가든지 네 하나님 여호와가 너와 함께 하느니라"</p>
+      <div class="section-lbl">📌 진행자 공통 안내</div>
+      <div style="font-size:12.5px;line-height:1.8;color:#495057;">
+        · 대본은 참고용입니다. 자기 말투로 자연스럽게 바꿔 읽어도 좋아요.<br>
+        · 성공 대사 끝에 '뒷면 구절'을 꼭 짚어주면, 아이들이 구절에 관심을 갖습니다.<br>
+        · 시간이 촉박해도 카드는 꼭 지급하세요 (완성 경험이 중요).<br>
+        · 물 부스 진행자는 시작 전 '여벌옷·귀중품 보관' 안내를 한 번 더 해주세요.
+      </div>
+    </div>
+  </div>
 
   <div class="station-grid" id="stationGrid"></div>
 
@@ -118,94 +145,171 @@ const db = firebase.database();
 let roles = {};
 
 // ⚠️ 2026-07-12 결정(REQ-54): 기존 6관문+Final+우천대체 콘텐츠를 완전 교체 — 5개 실외 + 2개 실내 게임 7종.
-// 게임을 통과하면 조별로 지도조각을 1개씩 받고(7게임 = 조당 7조각), 다 모으면 마지막 상품의 위치가 공개됨.
-// ⚠️ 사용자가 준 "8게임(실외5+실내2)" 문구는 5+2=7이라 수치가 맞지 않아 우선 7게임 기준으로 진행 — 8번째 게임이 확인되면 추가 예정
+// 2026-07-12 REQ-58: 사용자가 제공한 공식 자료(가나안정복_진행자대본.pdf, 가나안정복_부스운영안내문.pdf)로
+// 스토리·규칙·시작신호·성공멘트·통과기준·준비물·운영팁을 실제 대본/안내문 원문으로 전면 교체.
+// 게임 클리어 시 지급되는 땅 조각 뒷면에는 여호수아 1:9 구절이 순서대로(station 1→7) 조각조각 나뉘어 있어,
+// 7조각을 다 모으면 "강하고 담대하라 두려워하지 말며 놀라지 말라 네가 어디로 가든지 네 하나님 여호와가 너와 함께 하느니라"가 완성됨.
+// 모든 진행 인원은 "여덟 명(8명)" 기준으로 작성된 공식 대본 그대로 유지.
+// ⚠️ 우천 대체안은 두 공식 문서 어디에도 없음 — 별도 확정 필요(REQUIREMENTS.md 미결 참고)
 const STATIONS = [
   {
-    id: 1, roleId: 'game1', label: '실외 1', name: '물총 성벽무너뜨리기', color: 'linear-gradient(135deg,#7a4a00,#f59f00)',
-    verse: '여호수아 6장 — 여리고성',
-    game: '물총으로 여리고 성벽(박스·종이벽) 무너뜨리기 — 성벽에 붙은 장벽 단어(두려움·비교·망설임·불순종·무기력·포기 등)를 정해진 선 뒤에서 물총으로 맞히기. 목표는 사람이 아니라 단어',
-    script: '여리고성은 무기가 아니라 나팔소리와 외침, 순종으로 무너졌어요. 오늘 물총으로 겨냥한 것도 옆 조가 아니라 우리 안에 있는 장벽이에요. 물줄기 하나하나가 "나는 이걸 돌파하겠다"는 선포입니다.',
-    pass: '제한시간 안에 장벽 단어 라벨을 정해진 개수 이상 맞히면 통과 + 조별 돌파 구호("우리는 ______을 돌파하겠습니다!") 한 번 외치기까지 완료 (탈락 없음, 맞힌 개수는 기록용)',
-    safety: '사람을 직접 겨냥하면 감점, 얼굴 방향으로 쏘지 않기, 정해진 선 뒤에서만 사격, 바닥 미끄럼 주의',
-    supplies: ['물총 (조원 수만큼)', '박스 또는 종이벽', '장벽 단어 라벨', '물통', '라인 테이프', '수건', '지도조각 카드'],
-    setup: '박스/종이벽으로 성벽을 쌓고 장벽 단어 라벨을 붙임. 물총에 미리 물을 채워 배부. 사격선은 라인 테이프로 표시',
-    rainPlan: '실내 진행 시 물총 대신 종이공/콩주머니 던지기로 대체하거나, 물 사용이 아예 어려우면 "믿음의 잔 지키기"(실내 게임 참고)로 전환',
-    nextMsg: '성벽 잘 무너뜨렸어요! 지도조각 나눠주시고, 물총에 물 다시 채워 다음 조 준비해주세요.',
+    id: 1, roleId: 'game1', label: '실외 1', name: '물총 성벽무너뜨리기', color: 'linear-gradient(135deg,#7a4a00,#f59f00)', water: true,
+    verse: '여호수아 6장 — 여리고 성 함락',
+    story: '눈앞에 보이는 이 성, 바로 여리고 성입니다! 이스라엘 백성은 이 성을 칼로 무너뜨리지 않았어요. 성 주위를 일곱 번 돌고 다 함께 함성을 질렀더니 성벽이 와르르 무너졌습니다. 우리도 그렇게 해볼까요?',
+    rules: [
+      '먼저 다 함께 이 부스 주위를 일곱 바퀴 돕니다. 돌면서 기합 넣으세요!',
+      '네 명씩 두 팀으로 나눠서, 이 선 뒤에서 물총으로 성벽을 무너뜨리세요.',
+      '제한 시간 안에 컵을 다 쓰러뜨리면 성공입니다!',
+    ],
+    directorNote: '일곱 바퀴 도는 것을 함께 세어준다. 함성 후 물총 지급.',
+    startSignal: '여리고 성을 향하여… 발사!',
+    clearMsg: '성벽이 무너졌습니다! 여리고를 정복했어요. 이 땅 조각 받으세요. 뒷면 구절은 "강하고 담대하라"입니다!',
+    verseFragment: '강하고 담대하라',
+    pass: '제한 시간 내 성벽(종이컵)을 모두 쓰러뜨리면 통과',
+    tip: [
+      '두 팀이 번갈아 도전해 더 빨리 무너뜨린 팀에 보너스를 주면 경쟁이 붙습니다.',
+      '컵을 살짝 겹쳐 쌓으면 잘 안 무너져 난이도가 올라갑니다.',
+      '물총 사거리가 짧으면 던지는 거리를 가깝게 조정하세요.',
+    ],
+    safety: 'WATER_COMMON',
+    supplies: ['종이컵 20~30개 (성벽용, 진행자가 미리 피라미드로 쌓아둠)', '물총 2~4개 (조원용)', '물총 리필용 물통 또는 대야', '컵을 올릴 탁자·평평한 받침'],
   },
   {
-    id: 2, roleId: 'game2', label: '실외 2', name: '스펀지 물 릴레이', color: 'linear-gradient(135deg,#0b3d91,#3b5bdb)',
-    verse: '출애굽 광야 여정 — 반석에서 물을 내신 하나님',
-    game: '스펀지에 물을 적셔 릴레이로 옮긴 뒤 짜서 조별 통에 채우기 — 조원이 순서대로 물통에서 스펀지를 적셔와 도착 통 위에서 짜내기',
-    script: '광야에서 목마른 백성에게 하나님은 반석에서 물을 내셨어요. 하지만 그 물이 진영까지 오려면 누군가는 실제로 길어 날라야 했죠. 오늘 이 스펀지 물 한 방울도 그냥 오지 않아요 — 우리가 직접 나르고 짜내야 채워집니다. 돌파도 땀 흘려 얻는 거예요.',
-    pass: '제한시간(3분) 안에 통에 모인 물의 양으로 판정 — 일정량 이상 통과 / 가장 많이 모은 조가 "물 릴레이왕"',
-    safety: '바닥 미끄럼 즉시 제거, 스펀지 짜다가 손 다치지 않게 주의, 뛰지 않고 빠르게 걷기만 허용',
-    supplies: ['스펀지 (조원 수만큼)', '출발용 대야', '도착용 조별 통', '계량컵 또는 눈금 있는 통', '수건', '라인 테이프', '지도조각 카드'],
-    setup: '출발선에 물 담은 대야, 도착선에 조별 통 배치. 라인 테이프로 이동 경로 표시',
-    rainPlan: '실내 진행 시 물 양을 최소화. 물 사용이 아예 어려우면 마른 스펀지를 옮기는 횟수로 판정하는 무물 버전으로 축소',
-    nextMsg: '물 릴레이 완료! 스펀지 헹궈서 다음 조 것으로 준비해주시고, 지도조각 나눠주세요.',
+    id: 2, roleId: 'game2', label: '실외 2', name: '스펀지 물 릴레이', color: 'linear-gradient(135deg,#0b3d91,#3b5bdb)', water: true,
+    verse: '여호수아 3장 — 요단강 도하',
+    story: '여기는 요단강입니다! 이스라엘 백성이 이 강 앞에 섰을 때, 하나님이 강물을 갈라 마른 땅으로 건너게 하셨어요. 오늘 여러분은 물을 옮겨 이 강을 건널 겁니다. 한 명도 빠짐없이, 함께요!',
+    rules: [
+      '여덟 명이 한 줄로 서세요. 맨 앞엔 물, 맨 뒤엔 이 통이 있습니다.',
+      '맨 앞사람이 스펀지에 물을 흠뻑 적셔서, 머리 위로 넘겨 뒷사람에게 전달합니다.',
+      '맨 뒷사람은 스펀지 물을 이 통에 짜 넣고, 빈 스펀지를 다시 앞으로 보내요.',
+      '이 선까지 물이 차오르면 통과! 옆으로 넘기기는 반칙, 꼭 머리 위로!',
+    ],
+    directorNote: '제한 시간 3분 타이머를 준비한다.',
+    startSignal: '요단강을 건너라! 시작!',
+    clearMsg: '물이 갈라졌습니다! 강을 건넜어요. 이 땅 조각 받으세요. 뒷면 구절은 "두려워하지 말며"입니다!',
+    verseFragment: '두려워하지 말며',
+    pass: '제한 시간(3분) 내 표시선까지 물을 채우면 통과',
+    tip: [
+      '머리 위로만 넘기게 하면 물이 몸에 흘러 더 재밌고, 옆으로 넘기기는 금지하세요.',
+      '스펀지 2개를 동시에 돌려 속도전으로 만들면 8명이 더 신나게 참여합니다.',
+      '제한 시간(예: 3분)을 두면 긴장감이 올라갑니다.',
+    ],
+    safety: 'WATER_COMMON',
+    supplies: ['스펀지 2~3개 (물 잘 머금는 큰 것)', '물이 담긴 큰 대야 1개 (출발점)', '표시선이 그어진 투명 통·페트병 1개 (도착점)', '여분의 물, 바닥 보호용 방수포'],
   },
   {
-    id: 3, roleId: 'game3', label: '실외 3', name: '물풍선 폭탄 돌리기', color: 'linear-gradient(135deg,#5c3a21,#8c5a33)',
-    verse: '갈라디아서 6장 2절 — "서로 짐을 지라"',
-    game: '원형으로 둘러앉아 음악에 맞춰 물풍선을 옆으로 계속 전달하다가, 음악이 멈췄을 때 풍선을 들고 있는 조원이 미니 미션(구호 외치기 등) 수행',
-    script: '짐은 한 사람이 계속 붙들고 있으라고 주어진 게 아니에요. 오늘 이 물풍선처럼, 잠깐 내게 맡겨진 것을 계속 움켜쥐려고만 하면 오히려 터져버리죠. 서로에게 흘려보내고 나누는 것 — 그게 우리가 배운 돌파의 방식입니다.',
-    pass: '정해진 라운드 종료 시 풍선을 들고 있는 조원이 미니 미션을 수행하면 통과 (풍선이 터져도 탈락 아님, 물벼락은 애교로 인정)',
-    safety: '억지로 세게 던지지 않고 옆으로 전달만 하기, 풍선으로 얼굴 겨냥 금지, 앉은 자리 미끄럼 주의',
-    supplies: ['물풍선 (다수, 사전 제작)', '스피커/음악 재생 기기', '방석 또는 돗자리', '수건', '지도조각 카드'],
-    setup: '조원들을 원형으로 앉히고 물풍선 1~2개 준비. 음악 재생 기기 세팅, 진행자는 랜덤하게 음악을 멈출 타이밍 준비',
-    rainPlan: '앉아서 하는 게임이라 실내 진행에 특히 적합 — 우천 시 오히려 우선 배치 추천',
-    nextMsg: '수고했어요! 터진 풍선 조각은 바로 정리해주시고, 지도조각 나눠주세요.',
+    id: 3, roleId: 'game3', label: '실외 3', name: '물풍선 폭탄 돌리기', color: 'linear-gradient(135deg,#5c3a21,#8c5a33)', water: true,
+    verse: '여호수아 10장 — 아모리 다섯 왕과의 전투',
+    story: '이번 상대는 만만치 않아요. 아모리의 다섯 왕이 연합해서 쳐들어왔거든요! 이 물풍선이 바로 폭탄입니다. 터지지 않게 조심조심 돌리면서, 끝까지 살아남아 주세요!',
+    rules: [
+      '여덟 명이 둥글게 원으로 서세요.',
+      '총 3바퀴를 돌면 되고, 중간에 물풍선이 터지면 실패입니다.',
+    ],
+    directorNote: '음악을 불규칙한 타이밍에 멈춘다(연출용). 예비 물풍선을 곁에 둔다.',
+    startSignal: '폭탄을 돌려라! 음악 스타트!',
+    clearMsg: '끝까지 살아남았네요! 아모리 왕들을 물리쳤어요. 이 땅 조각 받으세요. 뒷면 구절은 "놀라지 말라"입니다!',
+    verseFragment: '놀라지 말라',
+    pass: '총 3바퀴를 터뜨리지 않고 전달하면 통과',
+    tip: [
+      '물풍선을 살짝 헐렁하게 채우면 잘 터져서 긴장감·재미가 커집니다.',
+      '예비 물풍선을 넉넉히 두어 터질 때마다 바로 교체하세요.',
+    ],
+    safety: 'WATER_COMMON',
+    supplies: ['물풍선 여러 개 (예비 넉넉히, 미리 물 채워두기)', '음악 재생 기기 (블루투스 스피커·휴대폰)', '바닥 방수포 또는 야외 잔디밭'],
   },
   {
-    id: 4, roleId: 'game4', label: '실외 4', name: '몸으로 말해요', color: 'linear-gradient(135deg,#2b2d42,#495057)',
-    verse: '야고보서 2장 18절 — "행함으로 내 믿음을 네게 보이리라"',
-    game: '제시어 카드(성경 인물·캠프 관련 단어)를 몸짓으로만 설명해서 조원이 맞히기, 말이나 소리 내면 안 됨',
-    script: '믿음은 말로 선포하고 끝나는 게 아니라 삶으로 보여지는 거예요. 방금 여러분은 말 한마디 없이 몸짓만으로 뜻을 전했죠. 답답했지만 결국 통했어요. 우리 믿음도 그렇게, 말보다 행동으로 보여질 때 진짜 돌파의 증거가 됩니다.',
-    pass: '제한시간 내 정해진 개수 이상 맞히면 통과',
-    safety: '과격한 몸짓으로 주변 사람과 부딪히지 않도록 공간 확보',
-    supplies: ['제시어 카드', '타이머', '지도조각 카드'],
-    setup: '제시어 카드를 미리 준비하고, 진행자는 카드 순서를 숙지',
-    rainPlan: '실내에서도 동일하게 진행 가능 (장소 제약이 적은 게임)',
-    nextMsg: '몸짓 표현 잘했어요! 카드 순서 정리하고 지도조각 나눠준 뒤 다음 조 불러주세요.',
+    id: 4, roleId: 'game4', label: '실외 4', name: '몸으로 말해요', color: 'linear-gradient(135deg,#2b2d42,#495057)', water: false,
+    verse: '여호수아 9장 — 기브온과의 동맹',
+    story: '여기는 기브온입니다. 기브온 사람들은 이스라엘과 동맹을 맺어 함께하기로 했어요. 동맹의 핵심은 마음이 통하는 것! 말없이도 뜻이 통하는지 지금 확인해 봅시다.',
+    rules: [
+      '한 명이 나와서 제시어 카드를 뽑습니다. 말은 절대 하면 안 돼요. 몸짓으로만 설명합니다.',
+      '나머지 일곱 명이 맞히면, 다음 사람이 나와서 설명자가 됩니다.',
+      '제한 시간 3분 안에 다섯 개 이상 맞히면 통과예요.',
+      '너무 막히면 "패스"를 두 번까지 쓸 수 있습니다!',
+    ],
+    directorNote: '타이머를 3분 맞추고 정답 개수를 센다.',
+    startSignal: '동맹의 마음을 보여주세요. 시작!',
+    clearMsg: '말이 없어도 완벽하게 통했네요! 진짜 동맹입니다. 이 땅 조각 받으세요. 뒷면 구절은 "네가 어디로 가든지"입니다!',
+    verseFragment: '네가 어디로 가든지',
+    pass: '제한 시간(3분) 내 5개 이상 맞히면 통과 (개수 조정 가능)',
+    tip: [
+      '설명자를 계속 교대시켜 8명 모두 최소 한 번씩 나오게 하세요.',
+      "'패스' 카드를 2회까지 허용하면 막히는 구간에서 흐름이 끊기지 않습니다.",
+      '제시어 난이도를 섞어(쉬움/어려움) 배치하면 재미가 살아납니다.',
+    ],
+    safety: '과격한 몸짓으로 주변 사람과 부딪히지 않도록 공간을 확보해주세요.',
+    supplies: ['제시어 카드 (성경 인물·사건·물건 등, 10장 이상)', '타이머', '정답 기록용 종이'],
   },
   {
-    id: 5, roleId: 'game5', label: '실외 5', name: '물총 사격', color: 'linear-gradient(135deg,#0B4F43,#0CA678)',
-    verse: '사무엘상 17장 — 다윗과 골리앗의 물맷돌',
-    game: '물총으로 타겟(줄지어 세운 컵 또는 매단 풍선)을 겨냥해 쓰러뜨리거나 맞히기',
-    script: '다윗은 골리앗 앞에서 크고 무거운 무기 대신 물맷돌 하나로 정확히 조준했어요. 오늘 여러분의 물총도 마찬가지예요 — 중요한 건 물줄기의 힘이 아니라, 목표를 정확히 보고 침착하게 조준하는 것. 돌파는 그렇게 정확한 믿음의 조준에서 시작됩니다.',
-    pass: '제한시간 내 타겟을 정해진 개수 이상 명중시키면 통과',
-    safety: '사람을 향해 겨냥 금지, 얼굴 방향으로 쏘지 않기, 정해진 사격선 뒤에서만 진행',
-    supplies: ['물총 (조원 수만큼)', '타겟용 컵 또는 풍선', '받침대/줄', '물통', '수건', '지도조각 카드'],
-    setup: '타겟(컵탑 또는 매단 풍선)을 배치하고 사격선을 라인 테이프로 표시. 물총에 물 채워 배부',
-    rainPlan: '실내 진행 시 물총 대신 콩주머니 사격으로 대체',
-    nextMsg: '명중! 타겟 다시 세워주시고 물총 물 채운 뒤 지도조각 나눠주세요.',
+    id: 5, roleId: 'game5', label: '실외 5', name: '물총 사격', color: 'linear-gradient(135deg,#0B4F43,#0CA678)', water: true,
+    verse: '여호수아 13~19장 — 가나안 땅 분배',
+    story: '가나안을 정복한 뒤엔 각 지파에게 땅을 나눠줬어요. 여러분의 조준 실력만큼 넓은 땅을 차지하게 됩니다. 힘을 다해 조준하세요!',
+    rules: [
+      '여기 점수가 다른 표적들이 있어요. 가까운 건 낮은 점수, 먼 건 높은 점수입니다.',
+      '여덟 명이 순서대로 물총을 쏴서 표적을 맞히고 점수를 얻습니다.',
+      '여덟 명 점수를 다 합쳐서 목표 점수를 넘으면 통과예요.',
+      '얻은 점수가 높을수록 마지막 지도에서 더 넓은 땅을 차지합니다!',
+    ],
+    directorNote: '점수판에 조별 획득 점수를 기록한다.',
+    startSignal: '가나안 땅을 향하여… 조준, 발사!',
+    clearMsg: '훌륭한 사수들이네요! 넓은 땅을 차지했습니다. 이 땅 조각 받으세요. 뒷면 구절은 "네 하나님"입니다!',
+    verseFragment: '네 하나님',
+    pass: '조 합산 점수가 목표 점수 이상이면 통과',
+    tip: [
+      '매달린 종이컵을 물총으로 맞혀 넘어뜨리면 명중 판정이 명확합니다.',
+      '획득 총점만큼 마지막 지도에서 차지할 땅 크기를 배정하면 완성 게임과 연결됩니다.',
+      '물총 압력이 약하면 표적 거리를 좁게 조정하세요.',
+    ],
+    safety: 'WATER_COMMON',
+    supplies: ['점수판 표적 (구역별 점수 표시, 종이·과녁·매달린 컵 등)', '물총 2~4개', '물총 리필용 물통·대야', '점수 기록판'],
   },
   {
-    id: 6, roleId: 'game6', label: '실내 1', name: '그림 기억하기', color: 'linear-gradient(135deg,#0b3d91,#3b5bdb)',
-    verse: '여호수아 4장 — 요단강 12돌, "후에 너희 자손이 물으면 알게 하라"',
-    game: '스크린에 그림/사진을 짧게 보여준 뒤 화면을 끄고, 조원들이 함께 기억을 모아 그림을 재현하거나 관련 퀴즈를 맞히기',
-    script: '여호수아는 요단강을 건넌 자리에 돌 12개를 세우고 "후에 너희 자손이 물으면 이것이 무엇이냐 하거든 알게 하라"고 했어요. 기억은 그냥 잊지 않는 게 아니라, 다음 사람에게 전하기 위한 거예요. 오늘 본 것을 기억해내는 이 연습이, 하나님이 하신 일을 잊지 않고 전하는 연습이기도 합니다.',
-    pass: '제한시간 내 그림을 정확히 재현하거나 관련 퀴즈를 맞히면 통과',
-    safety: '특이 안전 요소 낮음',
-    supplies: ['스크린 또는 노트북/빔프로젝터', '기억 게임용 이미지 자료', '타이머', '지도조각 카드'],
-    setup: '스크린/노트북을 설치하고 이미지 슬라이드를 순서대로 준비',
-    rainPlan: '실내 게임이라 우천 영향 없음',
-    nextMsg: '잘 기억해냈어요! 다음 조를 위해 이미지 슬라이드를 처음으로 되돌려주시고 지도조각 나눠주세요.',
+    id: 6, roleId: 'game6', label: '실내 1', name: '그림 기억하기', color: 'linear-gradient(135deg,#0b3d91,#3b5bdb)', water: false,
+    verse: '민수기 13장 — 가나안 정탐',
+    story: '여기는 정탐꾼 훈련소입니다. 옛날 모세가 가나안 땅을 살피라고 정탐꾼을 보냈어요. 이제 여러분이 그 정탐꾼입니다. 화면 속 가나안 땅을 눈에 담고, 정보를 정확히 가져와야 합니다!',
+    rules: [
+      '지금부터 스크린에 가나안 땅 그림을 딱 30초만 띄웁니다.',
+      '30초가 지나면 화면을 끌 거예요. 그때부터 본 것들을 답안지에 최대한 많이 적으면 됩니다.',
+      '여덟 명이 왼쪽·오른쪽 나눠서 기억하면 훨씬 많이 캐낼 수 있어요!',
+    ],
+    directorNote: '스크린에 그림을 30초간 띄운 뒤 끈다. 답안 작성 시간을 준다.',
+    startSignal: '자, 정탐 시작! 30초, 눈에 다 담으세요!',
+    clearMsg: '훌륭한 정탐꾼들이네요! 정보를 이만큼 캐왔습니다. 이 땅 조각 받으세요. 뒷면 구절은 "여호와가"입니다!',
+    verseFragment: '여호와가',
+    pass: '그림 요소 10개 중 6개 이상 맞히면 통과 (난이도 조정 가능)',
+    tip: [
+      '스크린이라 뒷자리도 잘 보이니, 8명이 화면 앞에 모이게 배치하세요.',
+      "'왼쪽/오른쪽/위/아래 나눠 보기' 작전을 힌트로 주면 협동이 살아납니다.",
+      '너무 쉬우면 노출 시간을 20초로 줄이거나 요소 개수를 늘리세요.',
+    ],
+    safety: '특이 안전 요소 낮음.',
+    supplies: ['스크린·빔프로젝터 (또는 큰 모니터)', '가나안 땅 그림 이미지 (요소 10개 이상 포함)', '조별 답안지, 필기구', '진행자용 정답표, 타이머'],
   },
   {
-    id: 7, roleId: 'game7', label: '실내 2', name: '믿음의 잔 지키기', color: 'linear-gradient(135deg,#0a4d68,#0CA678)',
-    verse: '여호수아 1장 7절 — "좌로나 우로나 치우치지 말라"',
-    game: '컵 위에 탁구공을 올리고, 정해진 시간 동안 흔들리거나 부딪혀도 공을 떨어뜨리지 않고 이동/방어하기 (2인 1조 대결 또는 개인 미션)',
-    script: '탁구공은 아주 가볍지만 작은 흔들림에도 쉽게 떨어져요. 우리 믿음도 그렇습니다 — 크게 넘어지는 것보다, 작은 흔들림에 좌로나 우로나 치우치는 게 더 흔한 일이에요. 흔들려도 쏟지 않는 것, 그게 오늘 이 게임이 연습시키는 돌파예요.',
-    pass: '제한시간 종료까지 공을 떨어뜨리지 않으면 통과 (2인 대결 방식이면 상대보다 오래 버틴 조가 승)',
-    safety: '뛰지 않기, 컵을 얼굴 높이 이상으로 들지 않기',
-    supplies: ['컵 (조원 수만큼)', '탁구공', '타이머', '표시 테이프', '지도조각 카드'],
-    setup: '경기장 라인을 테이프로 표시하고, 컵과 탁구공을 배부',
-    rainPlan: '실내 게임이라 우천 영향 없음 — 다른 물 게임이 실내로 옮겨야 할 때 대체 게임으로도 활용 가능',
-    nextMsg: '끝까지 잘 지켰어요! 컵·탁구공 소독 후 다음 조 것으로 교체하고 지도조각 나눠주세요.',
+    id: 7, roleId: 'game7', label: '실내 2', name: '믿음의 잔 지키기', color: 'linear-gradient(135deg,#0a4d68,#0CA678)', water: false,
+    verse: '여호수아 14장 — 갈렙의 믿음',
+    story: '여기는 갈렙의 자리입니다. 갈렙은 무려 45년 동안 믿음을 잃지 않고 끝까지 지켜, 마침내 헤브론 땅을 얻었어요. 여러분도 흔들리지 말고 "믿음의 잔"을 하나씩 채워 지켜보세요!',
+    rules: [
+      '탁자 위 이 컵들이 바로 "믿음의 잔"입니다.',
+      '여덟 명이 순서대로, 손 위에 얹은 컵 안에 탁구공을 담아 저기 저 꼬깔까지 돌고 오세요.',
+      '중간에 탁구공을 떨어뜨리면 그 주자부터 다시 시작이라는 사실!!!',
+    ],
+    directorNote: '8명이 모두 진행하고, 전원 성공까지 걸린 시간을 재서 기록한다.',
+    startSignal: '믿음의 잔을 지켜라! 시작!',
+    clearMsg: '끝까지 믿음을 지켰네요, 갈렙처럼요! 마지막 땅 조각 받으세요. 뒷면 구절은 "너와 함께 하느니라"! 이제 일곱 조각을 다 모았으니, 본부로 가서 지도를 완성하고 정복을 선포하세요!',
+    verseFragment: '너와 함께 하느니라',
+    pass: '탁구공을 떨어뜨리지 않고 8명 모두 완주 — 성공까지 걸린 시간을 기록 (완주 자체가 통과 기준)',
+    tip: [
+      '모두 뛰지 않고 진행할 수 있도록 도와주세요.',
+      '중간에 탁구공을 떨어뜨리면 그 주자부터 다시 시작임을 미리 안내하세요.',
+    ],
+    safety: '뛰지 않고 진행하도록 안내해주세요.',
+    supplies: ['종이컵 또는 플라스틱 컵 6~10개 (믿음의 잔)', '탁구공 여러 개 (예비 넉넉히)', '컵을 놓을 탁자, 던지는 선 표시 테이프'],
   },
 ];
+
+// 물 부스(실외 1·2·3·5) 공통 안전 안내 — 부스운영안내문.pdf "물 부스 공통 안전 사항" 원문
+const WATER_SAFETY_TEXT = '참가자 여벌옷·수건 지참 사전 공지(필수). 전자기기·안경·귀중품 보관함을 부스 입구에 비치. 미끄럽지 않은 바닥(잔디·흙)에 배치하고 뛰지 않도록 안내. 물풍선·물총·종이컵 등 소모품은 예상량의 1.5~2배 준비.';
 
 let current = 0;
 
@@ -226,12 +330,13 @@ function selectStation(i) {
 function renderCard(s) {
   const area = document.getElementById('cardArea');
   const ownerName = roles[s.roleId]?.name;
+  const safetyText = s.safety === 'WATER_COMMON' ? WATER_SAFETY_TEXT : s.safety;
   area.innerHTML = `
     <div class="card visible">
       <div class="card-top" style="background:${s.color};">
-        <div class="card-num">STATION ${s.label}</div>
+        <div class="card-num">STATION ${s.label}${s.water ? ' · 💧물 부스' : ''}</div>
         <div class="card-name">${s.name}</div>
-        <div class="card-verse">📖 ${s.verse}</div>
+        <div class="card-verse">📖 테마: ${s.verse}</div>
       </div>
       <div class="card-body">
         <div class="block">
@@ -239,39 +344,42 @@ function renderCard(s) {
           <span class="owner-chip ${ownerName ? '' : 'unset'}">${ownerName ? '👤 ' + esc(ownerName) : '담당자 미정 (teacher.html 역할표에서 입력)'}</span>
         </div>
         <div class="block">
-          <div class="section-lbl">🎮 게임</div>
-          <p>${s.game}</p>
+          <div class="section-lbl">① 시작 인사 · 스토리 (그대로 읽어주세요)</div>
+          <div class="script-box"><p>“${s.story}”</p></div>
         </div>
         <div class="block">
-          <div class="section-lbl">🧩 세팅 방법</div>
-          <div class="setup-box">${s.setup}</div>
-        </div>
-        <div class="block">
-          <div class="section-lbl">🎙 30초 영적 해석 멘트 (게임 종료 직후 읽어주세요)</div>
-          <div class="script-box">
-            <div class="script-timer">⏱ 약 30초 분량</div>
-            <p>${s.script}</p>
+          <div class="section-lbl">② 규칙 설명</div>
+          <div class="rules-box">
+            ${s.rules.map(r => `<p class="rule-line">“${r}”</p>`).join('')}
+            ${s.directorNote ? `<div class="director-note">▸ ${s.directorNote}</div>` : ''}
           </div>
+        </div>
+        <div class="block">
+          <div class="section-lbl">③ 시작 신호</div>
+          <div class="signal-box">“${s.startSignal}”</div>
         </div>
         <div class="block">
           <div class="section-lbl">✅ 통과 기준</div>
           <div class="pass-box">${s.pass}</div>
         </div>
         <div class="block">
-          <div class="section-lbl">⚠️ 안전 주의사항</div>
-          <div class="safety-box">${s.safety}</div>
+          <div class="section-lbl">④ 성공 시 · 카드 지급</div>
+          <div class="clear-box">
+            <p>“${s.clearMsg}”</p>
+            <div class="verse-fragment-tag">🏳 이 부스가 주는 구절 조각: “${s.verseFragment}”</div>
+          </div>
         </div>
         <div class="block">
-          <div class="section-lbl">🌧 우천 시 대체 운영</div>
-          <div class="rain-box">${s.rainPlan}</div>
+          <div class="section-lbl">💡 운영 팁</div>
+          <div class="setup-box">${s.tip.map(t => `<div class="tip-line">· ${t}</div>`).join('')}</div>
+        </div>
+        <div class="block">
+          <div class="section-lbl">⚠️ 안전 주의사항</div>
+          <div class="safety-box">${safetyText}</div>
         </div>
         <div class="block">
           <div class="section-lbl">🧰 준비물</div>
-          <div class="supply-tags">${s.supplies.map(x => `<span class="supply-tag">${x}</span>`).join('')}</div>
-        </div>
-        <div class="block">
-          <div class="section-lbl">📢 종료 후 다음 조 안내 멘트</div>
-          <div class="next-box">"${s.nextMsg}"</div>
+          <div class="supply-tags">${s.supplies.map(x => `<span class="supply-tag">${esc(x)}</span>`).join('')}</div>
         </div>
         <div class="nav-row">
           <button class="nav-btn" onclick="stepStation(-1)">← 이전 관문</button>

@@ -109,53 +109,52 @@ const GROUPS = [
     { id: 'm1-print',  name: '로드뷰 스크린샷 인쇄물', qty: '6장', note: 'REQ-03 확정 후 인쇄' },
   ]},
   { tag: '지도조각', name: '지도조각 제작 (게임당 1개 × 7게임 × 6조 = 42조각)', items: [
-    { id: 'map-cut',   name: '지도 원본 인쇄 · 코팅 · 재단', qty: '6조 × 7조각 = 42장', note: '목요일까지 준비 — ⚠️ 사용자가 "8게임/48조각"이라 했으나 실제 나열된 게임은 7개라 42조각으로 우선 진행, 8번째 게임 확인 시 재조정 필요' },
+    { id: 'map-cut',   name: '지도 원본 인쇄 · 코팅 · 재단', qty: '6조 × 7조각 = 42장', note: '뒷면에 여호수아 1:9 구절을 station.html 순서대로(강하고 담대하라→…→너와 함께 하느니라) 조각조각 인쇄' },
     { id: 'map-bag',   name: '조별 지도조각 보관 봉투', qty: '6개' },
+    { id: 'map-flag',  name: '조 깃발 (완성한 지도 위에 꽂아 정복 선포용)', qty: '6개' },
     { id: 'map-prize', name: '마지막 상품 (과자·음료수, 1등 조 제공)', qty: '1세트' },
   ]},
-  { tag: '실외1', name: '물총 성벽무너뜨리기', items: [
-    { id: 'g1-gun',    name: '물총', qty: '조원 수만큼' },
-    { id: 'g1-wall',   name: '박스 또는 종이벽', qty: '1개 (대형)' },
-    { id: 'g1-label',  name: '장벽 단어 라벨', qty: '10종' },
-    { id: 'g1-water',  name: '물', qty: '충분히' },
-    { id: 'g1-tape',   name: '라인 테이프', qty: '1롤' },
-    { id: 'g1-towel',  name: '수건', qty: '3장 이상' },
+  { tag: '실외1', name: '여리고 성 — 물총 성벽무너뜨리기 💧', items: [
+    { id: 'g1-cup',    name: '종이컵 (성벽용, 피라미드로 쌓기)', qty: '20~30개' },
+    { id: 'g1-gun',    name: '물총 (조원용)', qty: '2~4개' },
+    { id: 'g1-water',  name: '물총 리필용 물통 또는 대야', qty: '1개' },
+    { id: 'g1-table',  name: '컵을 올릴 탁자·평평한 받침', qty: '1개' },
   ]},
-  { tag: '실외2', name: '스펀지 물 릴레이', items: [
-    { id: 'g2-sponge', name: '스펀지', qty: '조원 수만큼' },
-    { id: 'g2-basin',  name: '출발용 대야', qty: '1~2개' },
-    { id: 'g2-bucket', name: '도착용 조별 통', qty: '6개' },
-    { id: 'g2-gauge',  name: '계량컵 또는 눈금 있는 통', qty: '1개' },
-    { id: 'g2-towel',  name: '수건', qty: '3장 이상' },
-    { id: 'g2-tape',   name: '라인 테이프', qty: '1롤' },
+  { tag: '실외2', name: '요단강 도하 — 스펀지 물 릴레이 💧', items: [
+    { id: 'g2-sponge', name: '스펀지 (물 잘 머금는 큰 것)', qty: '2~3개' },
+    { id: 'g2-basin',  name: '물이 담긴 큰 대야 (출발점)', qty: '1개' },
+    { id: 'g2-bucket', name: '표시선 그어진 투명 통·페트병 (도착점)', qty: '1개' },
+    { id: 'g2-water',  name: '여분의 물', qty: '충분히' },
+    { id: 'g2-mat',    name: '바닥 보호용 방수포', qty: '1장' },
   ]},
-  { tag: '실외3', name: '물풍선 폭탄 돌리기', items: [
-    { id: 'g3-balloon', name: '물풍선', qty: '다수 (사전 제작)' },
-    { id: 'g3-speaker', name: '스피커/음악 재생 기기', qty: '1개' },
-    { id: 'g3-mat',      name: '방석 또는 돗자리', qty: '조원 수만큼' },
-    { id: 'g3-towel',    name: '수건', qty: '2장 이상' },
+  { tag: '실외3', name: '아모리 다섯 왕과의 전투 — 물풍선 폭탄 돌리기 💧', items: [
+    { id: 'g3-balloon', name: '물풍선 (예비 넉넉히, 미리 물 채워두기)', qty: '다수' },
+    { id: 'g3-speaker', name: '음악 재생 기기 (블루투스 스피커·휴대폰)', qty: '1개' },
+    { id: 'g3-mat',      name: '바닥 방수포 또는 야외 잔디밭', qty: '1개' },
   ]},
-  { tag: '실외4', name: '몸으로 말해요', items: [
-    { id: 'g4-cards', name: '제시어 카드', qty: '1세트', note: '제작 필요' },
+  { tag: '실외4', name: '기브온 동맹 — 몸으로 말해요', items: [
+    { id: 'g4-cards', name: '제시어 카드 (성경 인물·사건·물건 등)', qty: '10장 이상', note: '제작 필요' },
     { id: 'g4-timer', name: '타이머', qty: '1개' },
+    { id: 'g4-sheet', name: '정답 기록용 종이', qty: '1장' },
   ]},
-  { tag: '실외5', name: '물총 사격', items: [
-    { id: 'g5-gun',    name: '물총', qty: '조원 수만큼' },
-    { id: 'g5-target', name: '타겟용 컵 또는 풍선', qty: '다수' },
-    { id: 'g5-stand',  name: '받침대/줄', qty: '1세트' },
-    { id: 'g5-water',  name: '물', qty: '충분히' },
-    { id: 'g5-towel',  name: '수건', qty: '2장 이상' },
+  { tag: '실외5', name: '가나안 땅 분배 — 물총 조준 사격 💧', items: [
+    { id: 'g5-target', name: '점수판 표적 (구역별 점수 표시, 종이·과녁·매달린 컵 등)', qty: '1세트', note: '제작 필요' },
+    { id: 'g5-gun',    name: '물총', qty: '2~4개' },
+    { id: 'g5-water',  name: '물총 리필용 물통·대야', qty: '1개' },
+    { id: 'g5-score',  name: '점수 기록판', qty: '1개' },
   ]},
-  { tag: '실내1', name: '그림 기억하기', items: [
-    { id: 'g6-screen', name: '스크린 또는 노트북/빔프로젝터', qty: '1세트' },
-    { id: 'g6-image',  name: '기억 게임용 이미지 자료', qty: '1세트', note: '제작 필요' },
-    { id: 'g6-timer',  name: '타이머', qty: '1개' },
+  { tag: '실내1', name: '정탐꾼 파견 — 그림 기억하기 (스크린)', items: [
+    { id: 'g6-screen', name: '스크린·빔프로젝터 (또는 큰 모니터)', qty: '1세트' },
+    { id: 'g6-image',  name: '가나안 땅 그림 이미지 (요소 10개 이상 포함)', qty: '1세트', note: '제작 필요' },
+    { id: 'g6-sheet',  name: '조별 답안지, 필기구', qty: '6조 분량' },
+    { id: 'g6-key',    name: '진행자용 정답표, 타이머', qty: '1세트' },
   ]},
-  { tag: '실내2', name: '믿음의 잔 지키기', items: [
-    { id: 'g7-cup',    name: '컵', qty: '조원 수만큼' },
-    { id: 'g7-ball',   name: '탁구공', qty: '조원 수만큼 (예비 포함)' },
-    { id: 'g7-timer',  name: '타이머', qty: '1개' },
-    { id: 'g7-tape',   name: '표시 테이프', qty: '1롤' },
+  { tag: '실내2', name: '갈렙의 믿음 — 믿음의 잔 지키기 (탁구공)', items: [
+    { id: 'g7-cup',    name: '종이컵 또는 플라스틱 컵 (믿음의 잔)', qty: '6~10개' },
+    { id: 'g7-ball',   name: '탁구공 (예비 넉넉히)', qty: '다수' },
+    { id: 'g7-table',  name: '컵을 놓을 탁자', qty: '1개' },
+    { id: 'g7-tape',   name: '던지는 선 표시 테이프', qty: '1롤' },
+    { id: 'g7-cone',   name: '돌아올 꼬깔', qty: '1개' },
   ]},
 ];
 
