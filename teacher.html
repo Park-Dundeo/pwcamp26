@@ -139,14 +139,16 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
     </div>
   </div>
 
-  <!-- 4. 교통비/식비 기준 + 늦는 조 대응 -->
+  <!-- 4. 교통비/식비 기준 + 늦는 조 대응 + 우천 대체 -->
   <div class="section">
-    <div class="section-top"><div class="n">05</div><div class="t">💳 교통비·식비 기준 / 늦는 조 대응</div></div>
+    <div class="section-top"><div class="n">05</div><div class="t">💳 교통비·식비 기준 / 늦는 조 대응 / 우천 대체</div></div>
     <div class="section-body policy-box">
       <div class="policy-lbl">교통비·식비 기준 (지급 금액 · 방식 · 정산 방법)</div>
       <textarea id="policyTransport" placeholder="예: 조별 교통카드 2만원 충전, 식비는 1인 8천원 현금 지급, 영수증 제출 불필요" onchange="savePolicy('transport', this.value)"></textarea>
       <div class="policy-lbl">늦는 조 대응 (지각 판정 기준 · 연락 담당 · 합류 방식)</div>
       <textarea id="policyLate" placeholder="예: 집결 시간 15분 초과 시 지각 처리, 총괄교사가 연락, 축소된 미션으로 합류" onchange="savePolicy('lateTeam', this.value)"></textarea>
+      <div class="policy-lbl">🌧 우천 대체 계획 (상영관 · 상영시간 · 차량 배정)</div>
+      <textarea id="policyRain" placeholder="예: OO영화관 <다윗> OO시 상영분 예약, 교사 차량 O대로 분승 이동, 차량별 인원 배정표는..." onchange="savePolicy('rainPlan', this.value)"></textarea>
     </div>
   </div>
 
@@ -182,7 +184,7 @@ const SITUATIONS = [
   { icon: '🔋', name: '휴대폰 배터리가 없을 때', action: '인솔교사 휴대폰으로 대체 연락, 조원과 이동 유지', link: 'emergency.html#battery' },
   { icon: '🍽', name: '식당 입장이 어려울 때', action: '인근 대체 식당으로 즉시 이동, 총괄교사에게 보고', link: 'emergency.html#restaurant' },
   { icon: '🩹', name: '학생이 다쳤을 때', action: '경상은 현장 응급처치, 중상은 즉시 활동 중단 후 보건 담당 호출', link: 'emergency.html#injury' },
-  { icon: '🌧', name: '비가 올 때', action: '우천 대체 동선/실내 배치로 즉시 전환', link: 'emergency.html#rain' },
+  { icon: '🌧', name: '비가 올 때', action: '영화 <다윗> 관람으로 전환, 교사 차량 전체 동원 이동', link: 'emergency.html#rain' },
   { icon: '🙋', name: '견학 담당 선생님이 늦을 때', action: '인솔교사가 임시 대기 안내, 인접 견학지 담당교사에게 협조 요청', link: 'emergency.html#guide-late' },
   { icon: '📝', name: '학생이 보고서를 장난스럽게 썼을 때', action: '관리자가 반려 처리 + 재작성 안내 문구, 반복 시 인솔교사 직접 지도', link: 'emergency.html#joke-report' },
   { icon: '⏳', name: '관리자 승인이 늦을 때', action: '학생은 대기 유지, 인솔교사가 관리자에게 직접 승인 요청', link: 'emergency.html#approval-late' },
@@ -281,8 +283,10 @@ db.ref('teacherDoc/policy').on('value', snap => {
   const p = snap.val() || {};
   const tEl = document.getElementById('policyTransport');
   const lEl = document.getElementById('policyLate');
+  const rEl = document.getElementById('policyRain');
   if (document.activeElement !== tEl) tEl.value = p.transport || '';
   if (document.activeElement !== lEl) lEl.value = p.lateTeam || '';
+  if (document.activeElement !== rEl) rEl.value = p.rainPlan || '';
 });
 
 renderRoles();
