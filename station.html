@@ -44,18 +44,32 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .block:last-child{margin-bottom:0;}
 .block p{font-size:13.5px;line-height:1.75;color:#343a40;}
 
+/* ── 🎙 대본 존 (그대로 읽는 부분 — ①②③④ 전체를 하나의 존으로 시각적으로 묶음) ── */
+.script-zone{border-left:4px solid var(--gold);padding-left:14px;margin-bottom:18px;}
+.script-zone-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold);color:var(--navy);font-size:11.5px;font-weight:800;letter-spacing:.3px;padding:6px 14px;border-radius:20px;margin-bottom:14px;}
+
 /* ① 시작 인사·스토리 — 크게, 읽기 쉽게 */
 .script-box{background:linear-gradient(160deg,#fffdf5,#fff);border:1.5px solid #ffe8a3;border-radius:10px;padding:16px;}
 .script-box p{font-size:15px;line-height:1.85;color:#1a2744;font-weight:500;}
 
 /* ② 규칙 설명 */
-.rules-box{background:#EEF6FB;border-radius:10px;padding:14px 16px;}
+.rules-box{background:linear-gradient(160deg,#fffdf5,#fff);border:1.5px solid #ffe8a3;border-radius:10px;padding:14px 16px;}
 .rule-line{font-size:14px;line-height:1.8;color:#1a2744;font-weight:500;margin-bottom:6px;}
 .rule-line:last-child{margin-bottom:0;}
-.director-note{font-size:12px;color:var(--gray);margin-top:8px;font-style:italic;}
+.director-note{display:flex;gap:6px;align-items:flex-start;font-size:11.5px;color:#8A6410;background:#FFF8E6;border:1px dashed #FFD43B;border-radius:8px;padding:8px 10px;margin-top:10px;line-height:1.6;}
+.director-note b{flex-shrink:0;}
 
 /* ③ 시작 신호 */
 .signal-box{background:var(--navy);color:#fff;border-radius:10px;padding:14px 16px;font-size:15px;font-weight:700;text-align:center;}
+
+/* ④ 성공 시 · 카드 지급 */
+.clear-box{background:linear-gradient(160deg,#fffdf5,#fff);border:1.5px solid #ffe8a3;border-radius:10px;padding:16px;}
+.clear-box p{font-size:14.5px;line-height:1.8;color:#1a2744;font-weight:500;margin-bottom:10px;}
+.verse-fragment-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:12.5px;font-weight:800;padding:5px 12px;border-radius:20px;}
+
+/* ── 📋 정보 존 (진행자 참고용 — 안 읽어도 됨) ── */
+.info-zone{border-left:4px solid var(--blue);padding-left:14px;}
+.info-zone-badge{display:inline-flex;align-items:center;gap:6px;background:var(--sky,#E7F5FF);color:var(--blue);font-size:11.5px;font-weight:800;letter-spacing:.3px;padding:6px 14px;border-radius:20px;margin-bottom:14px;}
 
 .pass-box{background:#E3FAF3;border:1.5px solid #96E6CF;border-radius:10px;padding:14px 16px;font-size:13px;color:#0B7A5C;line-height:1.7;}
 .safety-box{background:#fff5f5;border:1.5px solid #ffc9c9;border-radius:10px;padding:14px 16px;font-size:13px;color:#c92a2a;line-height:1.7;}
@@ -67,11 +81,6 @@ body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Apple SD Gothic
 .setup-box{background:#EEF6FB;border-radius:10px;padding:12px 14px;font-size:13px;color:#343a40;line-height:1.7;}
 .tip-line{margin-bottom:6px;}
 .tip-line:last-child{margin-bottom:0;}
-
-/* ④ 성공 시 · 카드 지급 */
-.clear-box{background:linear-gradient(160deg,#fffdf5,#fff);border:1.5px solid #ffe8a3;border-radius:10px;padding:16px;}
-.clear-box p{font-size:14.5px;line-height:1.8;color:#1a2744;font-weight:500;margin-bottom:10px;}
-.verse-fragment-tag{display:inline-block;background:var(--gold);color:var(--navy);font-size:12.5px;font-weight:800;padding:5px 12px;border-radius:20px;}
 
 .nav-row{display:flex;gap:8px;margin-top:4px;}
 .nav-btn{flex:1;padding:13px;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;background:#fff;color:var(--navy);box-shadow:0 3px 14px rgba(20,29,56,.06);}
@@ -111,11 +120,17 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
       <div class="section-lbl">🗺 완성 구절 — 여호수아 1:9</div>
       <p style="font-size:14px;line-height:1.9;color:#1a2744;font-weight:600;margin-bottom:14px;">"강하고 담대하라 두려워하지 말며 놀라지 말라 네가 어디로 가든지 네 하나님 여호와가 너와 함께 하느니라"</p>
       <div class="section-lbl">📌 진행자 공통 안내</div>
-      <div style="font-size:12.5px;line-height:1.8;color:#495057;">
+      <div style="font-size:12.5px;line-height:1.8;color:#495057;margin-bottom:14px;">
         · 대본은 참고용입니다. 자기 말투로 자연스럽게 바꿔 읽어도 좋아요.<br>
         · 성공 대사 끝에 '뒷면 구절'을 꼭 짚어주면, 아이들이 구절에 관심을 갖습니다.<br>
         · 시간이 촉박해도 카드는 꼭 지급하세요 (완성 경험이 중요).<br>
         · 물 부스 진행자는 시작 전 '여벌옷·귀중품 보관' 안내를 한 번 더 해주세요.
+      </div>
+      <div class="section-lbl">🧭 동선 · 순번 (전체 운영 체크리스트)</div>
+      <div style="font-size:12.5px;line-height:1.8;color:#495057;">
+        · 여러 조가 동시에 돌 경우, 조별 시작 부스를 다르게 배정해 겹치지 않게 합니다.<br>
+        · 한 부스당 권장 소요 시간(7~10분)을 정하고 진행자가 관리합니다.<br>
+        · 물 부스와 실내 부스를 번갈아 돌게 하면 옷이 마를 시간이 생겨 쾌적합니다.
       </div>
     </div>
   </div>
@@ -272,7 +287,7 @@ const STATIONS = [
       '30초가 지나면 화면을 끌 거예요. 그때부터 본 것들을 답안지에 최대한 많이 적으면 됩니다.',
       '여덟 명이 왼쪽·오른쪽 나눠서 기억하면 훨씬 많이 캐낼 수 있어요!',
     ],
-    directorNote: '스크린에 그림을 30초간 띄운 뒤 끈다. 답안 작성 시간을 준다.',
+    directorNote: '스크린에 그림을 30초간 띄운 뒤 끈다. 답안 작성 시간을 준다. 역할을 나눠(받아쓰는 사람 + 떠올리는 사람) 협동하도록 유도한다.',
     startSignal: '자, 정탐 시작! 30초, 눈에 다 담으세요!',
     clearMsg: '훌륭한 정탐꾼들이네요! 정보를 이만큼 캐왔습니다. 이 땅 조각 받으세요. 뒷면 구절은 "여호와가"입니다!',
     verseFragment: '여호와가',
@@ -343,44 +358,53 @@ function renderCard(s) {
           <div class="section-lbl">🙋 담당자</div>
           <span class="owner-chip ${ownerName ? '' : 'unset'}">${ownerName ? '👤 ' + esc(ownerName) : '담당자 미정 (teacher.html 역할표에서 입력)'}</span>
         </div>
-        <div class="block">
-          <div class="section-lbl">① 시작 인사 · 스토리 (그대로 읽어주세요)</div>
-          <div class="script-box"><p>“${s.story}”</p></div>
-        </div>
-        <div class="block">
-          <div class="section-lbl">② 규칙 설명</div>
-          <div class="rules-box">
-            ${s.rules.map(r => `<p class="rule-line">“${r}”</p>`).join('')}
-            ${s.directorNote ? `<div class="director-note">▸ ${s.directorNote}</div>` : ''}
+
+        <div class="script-zone">
+          <div class="script-zone-badge">🎙 대본 — 이 안은 그대로 읽어주세요</div>
+          <div class="block">
+            <div class="section-lbl">① 시작 인사 · 스토리</div>
+            <div class="script-box"><p>“${s.story}”</p></div>
+          </div>
+          <div class="block">
+            <div class="section-lbl">② 규칙 설명</div>
+            <div class="rules-box">
+              ${s.rules.map(r => `<p class="rule-line">“${r}”</p>`).join('')}
+              ${s.directorNote ? `<div class="director-note"><b>▸ 진행자 행동 (읽지 않음)</b><span>${s.directorNote}</span></div>` : ''}
+            </div>
+          </div>
+          <div class="block">
+            <div class="section-lbl">③ 시작 신호</div>
+            <div class="signal-box">“${s.startSignal}”</div>
+          </div>
+          <div class="block">
+            <div class="section-lbl">④ 성공 시 · 카드 지급</div>
+            <div class="clear-box">
+              <p>“${s.clearMsg}”</p>
+              <div class="verse-fragment-tag">🏳 이 부스가 주는 구절 조각: “${s.verseFragment}”</div>
+            </div>
           </div>
         </div>
-        <div class="block">
-          <div class="section-lbl">③ 시작 신호</div>
-          <div class="signal-box">“${s.startSignal}”</div>
-        </div>
-        <div class="block">
-          <div class="section-lbl">✅ 통과 기준</div>
-          <div class="pass-box">${s.pass}</div>
-        </div>
-        <div class="block">
-          <div class="section-lbl">④ 성공 시 · 카드 지급</div>
-          <div class="clear-box">
-            <p>“${s.clearMsg}”</p>
-            <div class="verse-fragment-tag">🏳 이 부스가 주는 구절 조각: “${s.verseFragment}”</div>
+
+        <div class="info-zone">
+          <div class="info-zone-badge">📋 진행 정보 — 진행자 참고용 (안 읽어도 됨)</div>
+          <div class="block">
+            <div class="section-lbl">✅ 통과 기준</div>
+            <div class="pass-box">${s.pass}</div>
+          </div>
+          <div class="block">
+            <div class="section-lbl">💡 운영 팁</div>
+            <div class="setup-box">${s.tip.map(t => `<div class="tip-line">· ${t}</div>`).join('')}</div>
+          </div>
+          <div class="block">
+            <div class="section-lbl">⚠️ 안전 주의사항</div>
+            <div class="safety-box">${safetyText}</div>
+          </div>
+          <div class="block">
+            <div class="section-lbl">🧰 준비물</div>
+            <div class="supply-tags">${s.supplies.map(x => `<span class="supply-tag">${esc(x)}</span>`).join('')}</div>
           </div>
         </div>
-        <div class="block">
-          <div class="section-lbl">💡 운영 팁</div>
-          <div class="setup-box">${s.tip.map(t => `<div class="tip-line">· ${t}</div>`).join('')}</div>
-        </div>
-        <div class="block">
-          <div class="section-lbl">⚠️ 안전 주의사항</div>
-          <div class="safety-box">${safetyText}</div>
-        </div>
-        <div class="block">
-          <div class="section-lbl">🧰 준비물</div>
-          <div class="supply-tags">${s.supplies.map(x => `<span class="supply-tag">${esc(x)}</span>`).join('')}</div>
-        </div>
+
         <div class="nav-row">
           <button class="nav-btn" onclick="stepStation(-1)">← 이전 관문</button>
           <button class="nav-btn" onclick="stepStation(1)">다음 관문 →</button>
