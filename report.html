@@ -175,20 +175,15 @@ function renderTeamPage(t, d){
   } else if (!m2ok) {
     inner = `<div class="rp-pending">🕐 정탐 보고서가 아직 관리자 승인 대기 중입니다.</div>`;
   } else {
+    // REQ-61: guide.html 나눔 질문 기반 동적 문항(answers 배열). 레거시 데이터(REQ-17, barrier/faith/prayer 3필드)는 하위호환 렌더링
+    const reportFields = Array.isArray(m2.answers)
+      ? m2.answers.map((a,i) => `<div class="rp-field"><div class="rf-lbl">Q${i+1}. ${esc(a.question)}</div><div class="rf-txt">${esc(a.answer)}</div></div>`).join('')
+      : `<div class="rp-field"><div class="rf-lbl">🧱 우리가 본 장벽</div><div class="rf-txt">${esc(m2.barrier)}</div></div>
+         <div class="rp-field"><div class="rf-lbl">✨ 우리가 발견한 믿음</div><div class="rf-txt">${esc(m2.faith)}</div></div>
+         <div class="rp-field"><div class="rf-lbl">🙏 우리의 돌파기도</div><div class="rf-txt">${esc(m2.prayer)}</div></div>`;
     inner = `
       ${m1ok ? `<div class="rp-photo-wrap"><img class="rp-photo" src="${m1.photoData}"></div><div class="rp-photo-cap" style="margin-bottom:16px;">📷 경유지 인증샷</div>` : ''}
-      <div class="rp-field">
-        <div class="rf-lbl">🧱 우리가 본 장벽</div>
-        <div class="rf-txt">${esc(m2.barrier)}</div>
-      </div>
-      <div class="rp-field">
-        <div class="rf-lbl">✨ 우리가 발견한 믿음</div>
-        <div class="rf-txt">${esc(m2.faith)}</div>
-      </div>
-      <div class="rp-field">
-        <div class="rf-lbl">🙏 우리의 돌파기도</div>
-        <div class="rf-txt">${esc(m2.prayer)}</div>
-      </div>`;
+      ${reportFields}`;
   }
 
   return `<div class="report-page" id="page-${t}" data-team="${t}">
@@ -261,9 +256,14 @@ function buildLLMText(){
     lines.push(`- 미션1(경유지 인증샷): ${statusLabel(m1?.status)}${m1?.uploadedAt ? ` / 제출 시각 ${fmtDate(m1.uploadedAt)}` : ''}${m1?.photoData ? ' / 사진 있음(이 텍스트에는 미포함, report.html에서 직접 확인)' : ''}`);
     if (m2) {
       lines.push(`- 미션2(정탐 보고서): ${statusLabel(m2.status)} / 제출 시각 ${fmtDate(m2.submittedAt)}`);
-      lines.push(`  - 우리가 본 장벽: ${m2.barrier || '(내용 없음)'}`);
-      lines.push(`  - 우리가 발견한 믿음: ${m2.faith || '(내용 없음)'}`);
-      lines.push(`  - 우리의 돌파기도: ${m2.prayer || '(내용 없음)'}`);
+      if (Array.isArray(m2.answers)) {
+        m2.answers.forEach((a,i) => lines.push(`  - Q${i+1}. ${a.question}: ${a.answer || '(내용 없음)'}`));
+      } else {
+        // 레거시 데이터(REQ-17, barrier/faith/prayer 3필드)
+        lines.push(`  - 우리가 본 장벽: ${m2.barrier || '(내용 없음)'}`);
+        lines.push(`  - 우리가 발견한 믿음: ${m2.faith || '(내용 없음)'}`);
+        lines.push(`  - 우리의 돌파기도: ${m2.prayer || '(내용 없음)'}`);
+      }
       if (m2.status === 'rejected' && m2.reviewNote) lines.push(`  - 반려 사유: ${m2.reviewNote}`);
     } else {
       lines.push('- 미션2(정탐 보고서): 미제출');

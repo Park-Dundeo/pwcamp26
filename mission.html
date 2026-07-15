@@ -467,23 +467,9 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
           <a class="nvr" id="mapNaverLink2" href="#" target="_blank">🗺 네이버지도</a>
         </div>
 
-        <a id="m2GuideLink" href="guide.html" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--blue);text-decoration:none;background:#E7F5FF;padding:8px 14px;border-radius:20px;margin-bottom:16px;">📖 이 장소의 견학 안내 보기 →</a>
+        <a id="m2GuideLink" href="guide.html" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--blue);text-decoration:none;background:#E7F5FF;padding:8px 14px;border-radius:20px;margin-bottom:16px;">📖 이 장소의 견학 안내·나눔 질문 자세히 보기 →</a>
         <div id="m2Form">
-          <div class="report-group">
-            <label class="report-label">🧱 우리가 본 장벽</label>
-            <textarea class="report-input" id="barrierText"
-              placeholder="이 장소에서 사람들이 마주했던 두려움, 고난, 아픔, 불가능은 무엇이었나요?"></textarea>
-          </div>
-          <div class="report-group">
-            <label class="report-label">✨ 우리가 발견한 믿음</label>
-            <textarea class="report-input" id="faithText"
-              placeholder="그 장벽 앞에서 누군가는 무엇을 붙들고 견디고 나아갔나요? 믿음, 용기, 헌신의 흔적을 적어주세요."></textarea>
-          </div>
-          <div class="report-group">
-            <label class="report-label">🙏 우리의 돌파기도</label>
-            <textarea class="report-input" id="prayerText"
-              placeholder="우리 조가 이번 수련회에서 하나님 앞에 돌파하고 싶은 것은 무엇인가요? 한 문장 기도로 작성해주세요."></textarea>
-          </div>
+          <div id="m2Questions"></div>
           <button class="submit-btn primary" id="reportBtn" onclick="submitMission2()">
             📝 정탐 보고서 제출하기
           </button>
@@ -602,6 +588,23 @@ const DEST_POINTS = {
   '서대문형무소': { lat: 37.574400, lng: 126.956000 },
 };
 
+// ── 견학지 나눔 질문 (REQ-61) — guide.html의 COURSES[course].questions와 동일 원본 ──
+// ⚠️ guide.html에도 같은 질문 배열이 있음 — 질문 변경 시 반드시 두 파일 함께 수정할 것
+// 1·2·3조=전쟁기념관(course c), 4·5·6조=서대문형무소(course b)
+const COURSE_QUESTIONS = {
+  c: [
+    '6.25 전쟁에서 대한민국을 도왔던 나라들이 얼마나 될까요?',
+    '그 도움은 세상적으로는 각 나라가 가진 정치적, 경제적 셈이 있으리라 짐작할 수도 있습니다. 그러나 궁극적으로는 하나님의 섭리가 아닐 수 없습니다.',
+    '여호수아에게도 비슷한 일들이 있었습니다. 기브온 주민들의 이야기를 기억해 보세요. 그들은 여전히 여호와의 제단에 물을 긷고 나무를 패는 자들로 성경은 이야기합니다.',
+    '이제 한국은 더 이상 가난한 거지들의 나라가 아닙니다. 하나님이 우리에게 주신 축복을 우리 세대가 누리고 있음을 이야기 나눠 보세요.',
+  ],
+  b: [
+    '도마(안중근) 어머니의 편지를 찾아보세요.',
+    '내용을 읽어보고 감동이 되는 점을 나눠 보세요.',
+    '여호수아의 선언과 어떤 점이 닮아 있는지 생각해 보고 그리스도인으로서 나의 삶을 결단해 보세요.',
+  ],
+};
+
 // ── 조별 비밀번호 퀴즈 (REQ-07 확정) ──
 // 정답은 소스에서 바로 보이지 않도록 SHA-256 해시로 저장 (정규화 후 해시 비교)
 // 새 정답 추가/변경 시: 브라우저 콘솔에서 sha256(normalizeAnswer('정답')).then(console.log) 실행 후 결과 붙여넣기
@@ -664,9 +667,7 @@ function resetMissionUI() {
   document.getElementById('m2Done').style.display = 'none';
   document.getElementById('m2Pending').style.display = 'none';
   document.getElementById('m2Rejected').style.display = 'none';
-  document.getElementById('barrierText').value = '';
-  document.getElementById('faithText').value = '';
-  document.getElementById('prayerText').value = '';
+  document.querySelectorAll('#m2Questions textarea').forEach(t => t.value = '');
   const rb = document.getElementById('reportBtn');
   rb.disabled = false; rb.textContent = '📝 정탐 보고서 제출하기';
 
@@ -732,7 +733,18 @@ function fillMissionDestChips(num) {
     document.getElementById('mapKakaoLink2').href = `https://map.kakao.com/link/to/${encodeURIComponent(info.dest)},${destPt.lat},${destPt.lng}`;
     document.getElementById('mapNaverLink2').href = `https://map.naver.com/v5/search/${encodeURIComponent(info.dest)}`;
   }
+  renderMission2Questions(course);
   renderPoseSample(num);
+}
+
+// ── 정탐 보고서 질문 렌더링 (REQ-61) — guide.html 견학 코스별 나눔 질문을 그대로 사용 ──
+function renderMission2Questions(course) {
+  const qs = COURSE_QUESTIONS[course] || [];
+  document.getElementById('m2Questions').innerHTML = qs.map((q, i) => `
+    <div class="report-group">
+      <label class="report-label">Q${i + 1}. ${q}</label>
+      <textarea class="report-input" data-q="${i}" placeholder="우리 조의 생각을 적어주세요"></textarea>
+    </div>`).join('');
 }
 
 // ── 조별 샘플 포즈 (REQ-42, 실제 참고 사진) ──
@@ -1069,19 +1081,22 @@ function resetUploadUI() {
   selectedFile = null;
 }
 
-// ── 미션2 제출 (제출 시 '승인 대기' 상태로, 관리자 승인 후 완료 처리) ──
+// ── 미션2 제출 (제출 시 '승인 대기' 상태로, 관리자 승인 후 완료 처리) — REQ-61: guide.html 나눔 질문 기반 동적 문항 ──
 async function submitMission2() {
   if (!currentTeam) return;
-  const barrier = document.getElementById('barrierText').value.trim();
-  const faith = document.getElementById('faithText').value.trim();
-  const prayer = document.getElementById('prayerText').value.trim();
-  if (!barrier || !faith || !prayer) { showToast('세 항목 모두 입력해주세요!'); return; }
+  const course = currentTeam <= 3 ? 'c' : 'b';
+  const qs = COURSE_QUESTIONS[course] || [];
+  const answers = Array.from(document.querySelectorAll('#m2Questions textarea')).map((t, i) => ({
+    question: qs[i] || '',
+    answer: t.value.trim(),
+  }));
+  if (answers.some(a => !a.answer)) { showToast('모든 질문에 답해주세요!'); return; }
   const btn = document.getElementById('reportBtn');
   btn.disabled = true;
   btn.textContent = '제출 중...';
   try {
     await db.ref(`submissions/team${currentTeam}/mission2`).set({
-      barrier, faith, prayer,
+      answers,
       submittedAt: firebase.database.ServerValue.TIMESTAMP,
       status: 'pending',
       reviewedAt: null,

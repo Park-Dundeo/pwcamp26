@@ -503,11 +503,15 @@ function renderDetail(t) {
   html+=`<hr class="divider">
          <div class="detail-section">📝 미션 2 — 정탐 보고서</div>`;
   if(m2?.submittedAt){
+    // REQ-61: guide.html 나눔 질문 기반 동적 문항(answers 배열). 레거시 데이터(REQ-17, barrier/faith/prayer 3필드)는 하위호환 렌더링
+    const reportRows = Array.isArray(m2.answers)
+      ? m2.answers.map((a,i) => `<div class="report-row"><div class="lbl">Q${i+1}. ${esc(a.question)}</div><div class="val">${esc(a.answer)}</div></div>`).join('')
+      : `<div class="report-row"><div class="lbl">🧱 우리가 본 장벽</div><div class="val">${esc(m2.barrier)}</div></div>
+         <div class="report-row"><div class="lbl">✨ 우리가 발견한 믿음</div><div class="val">${esc(m2.faith)}</div></div>
+         <div class="report-row"><div class="lbl">🙏 우리의 돌파기도</div><div class="val">${esc(m2.prayer)}</div></div>`;
     html+=`${badge(m2.status)}
       <div class="report-box">
-      <div class="report-row"><div class="lbl">🧱 우리가 본 장벽</div><div class="val">${esc(m2.barrier)}</div></div>
-      <div class="report-row"><div class="lbl">✨ 우리가 발견한 믿음</div><div class="val">${esc(m2.faith)}</div></div>
-      <div class="report-row"><div class="lbl">🙏 우리의 돌파기도</div><div class="val">${esc(m2.prayer)}</div></div>
+      ${reportRows}
     </div>
     <div class="submit-time" style="margin-top:8px;">제출: ${fmt(m2.submittedAt)}</div>
     ${actions(t,2,m2.status)}`;
@@ -554,7 +558,8 @@ function updateFeed(){
       items.push({team:t,type:'photo',url:d.mission1.photoData,time:d.mission1.uploadedAt,status:d.mission1.status});
     }
     if(d.mission2?.submittedAt){
-      items.push({team:t,type:'report',barrier:d.mission2.barrier,time:d.mission2.submittedAt,status:d.mission2.status});
+      const snippet = Array.isArray(d.mission2.answers) ? (d.mission2.answers[0]?.answer || '') : (d.mission2.barrier || '');
+      items.push({team:t,type:'report',snippet,time:d.mission2.submittedAt,status:d.mission2.status});
     }
   }
   // "검토 대기만" 필터 (캠프 당일 승인 처리용)
@@ -588,7 +593,7 @@ function updateFeed(){
         <div class="feed-content">
           <div class="feed-team">${it.team}조 · 미션2 정탐보고서${statusTag(it.status)}</div>
           <div class="feed-dest">${info.dest}</div>
-          <div class="feed-text">"${esc(it.barrier)}"</div>
+          <div class="feed-text">"${esc(it.snippet)}"</div>
           <div class="feed-time">${fmt(it.time)}</div>
         </div>
       </div>`;
