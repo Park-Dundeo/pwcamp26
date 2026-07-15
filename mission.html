@@ -469,6 +469,17 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--blue) !i
 
         <a id="m2GuideLink" href="guide.html" target="_blank" style="display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--blue);text-decoration:none;background:#E7F5FF;padding:8px 14px;border-radius:20px;margin-bottom:16px;">📖 이 장소의 견학 안내·나눔 질문 자세히 보기 →</a>
         <div id="m2Form">
+          <div id="m2PhotoArea" style="display:none;">
+            <label class="report-label" id="m2PhotoLabel">📸 인증샷</label>
+            <div class="upload-zone" id="uploadZone2" onclick="triggerFileInput2()">
+              <div class="upload-icon" id="uploadIcon2">📷</div>
+              <div class="upload-text" id="uploadText2">사진 선택 또는 여기 탭</div>
+              <div class="upload-hint" id="uploadHint2">압축 후 업로드 · 최대 10MB</div>
+              <img id="previewImg2" class="preview-img">
+            </div>
+            <input type="file" id="photoInput2" accept="image/*"
+              style="display:none" onchange="handleFileSelect2(this)">
+          </div>
           <div id="m2Questions"></div>
           <button class="submit-btn primary" id="reportBtn" onclick="submitMission2()">
             📝 정탐 보고서 제출하기
@@ -605,6 +616,14 @@ const COURSE_QUESTIONS = {
   ],
 };
 
+// ── 견학지 인증샷 안내 (REQ-62) — guide.html의 COURSES[course].photo와 동일 원본 ──
+// ⚠️ guide.html에도 같은 안내문이 있음 — 문구 변경 시 반드시 두 파일 함께 수정할 것
+// course c(전쟁기념관, 1·2·3조)는 guide.html에도 photo 안내가 없어(null) 인증샷 요구 없음
+const COURSE_PHOTO = {
+  c: null,
+  b: '서대문 형무소 바로 앞에는 독립문이 전시되어 있습니다. 그곳에서 사진을 찍고 오세요.',
+};
+
 // ── 조별 비밀번호 퀴즈 (REQ-07 확정) ──
 // 정답은 소스에서 바로 보이지 않도록 SHA-256 해시로 저장 (정규화 후 해시 비교)
 // 새 정답 추가/변경 시: 브라우저 콘솔에서 sha256(normalizeAnswer('정답')).then(console.log) 실행 후 결과 붙여넣기
@@ -630,6 +649,7 @@ async function sha256(s) {
 
 let currentTeam = null;
 let selectedFile = null;
+let selectedFile2 = null; // 미션2 인증샷 (REQ-62)
 let statusRef = null;
 let statusListener = null;
 let m1PrevStatus = null;
@@ -668,6 +688,7 @@ function resetMissionUI() {
   document.getElementById('m2Pending').style.display = 'none';
   document.getElementById('m2Rejected').style.display = 'none';
   document.querySelectorAll('#m2Questions textarea').forEach(t => t.value = '');
+  resetMission2PhotoUI();
   const rb = document.getElementById('reportBtn');
   rb.disabled = false; rb.textContent = '📝 정탐 보고서 제출하기';
 
@@ -734,6 +755,7 @@ function fillMissionDestChips(num) {
     document.getElementById('mapNaverLink2').href = `https://map.naver.com/v5/search/${encodeURIComponent(info.dest)}`;
   }
   renderMission2Questions(course);
+  renderMission2Photo(course);
   renderPoseSample(num);
 }
 
@@ -745,6 +767,30 @@ function renderMission2Questions(course) {
       <label class="report-label">Q${i + 1}. ${q}</label>
       <textarea class="report-input" data-q="${i}" placeholder="우리 조의 생각을 적어주세요"></textarea>
     </div>`).join('');
+}
+
+// ── 정탐 보고서 인증샷 안내 표시 (REQ-62) — guide.html에 인증샷 안내가 있는 코스만 노출 ──
+function renderMission2Photo(course) {
+  const photoNote = COURSE_PHOTO[course];
+  const area = document.getElementById('m2PhotoArea');
+  if (photoNote) {
+    area.style.display = 'block';
+    document.getElementById('m2PhotoLabel').textContent = `📸 인증샷 — ${photoNote}`;
+  } else {
+    area.style.display = 'none';
+  }
+}
+
+function resetMission2PhotoUI() {
+  selectedFile2 = null;
+  const zone = document.getElementById('uploadZone2');
+  zone.classList.remove('has-preview');
+  document.getElementById('uploadIcon2').style.display = 'block';
+  document.getElementById('uploadText2').style.display = 'block';
+  document.getElementById('uploadHint2').style.display = 'block';
+  const prev = document.getElementById('previewImg2');
+  prev.src = ''; prev.style.display = 'none';
+  document.getElementById('photoInput2').value = '';
 }
 
 // ── 조별 샘플 포즈 (REQ-42, 실제 참고 사진) ──
@@ -1004,6 +1050,28 @@ function handleFileSelect(input) {
   reader.readAsDataURL(file);
 }
 
+// ── 미션2 인증샷 선택 (REQ-62, guide.html 코스 안내에 인증샷이 있는 조만 해당) ──
+function triggerFileInput2() {
+  document.getElementById('photoInput2').click();
+}
+
+function handleFileSelect2(input) {
+  const file = input.files[0];
+  if (!file) return;
+  selectedFile2 = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('previewImg2');
+    img.src = e.target.result;
+    img.style.display = 'block';
+    document.getElementById('uploadZone2').classList.add('has-preview');
+    document.getElementById('uploadIcon2').style.display = 'none';
+    document.getElementById('uploadText2').style.display = 'none';
+    document.getElementById('uploadHint2').style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
 // ── 이미지 압축 → base64 ──
 async function compressToBase64(file) {
   return new Promise(resolve => {
@@ -1081,7 +1149,7 @@ function resetUploadUI() {
   selectedFile = null;
 }
 
-// ── 미션2 제출 (제출 시 '승인 대기' 상태로, 관리자 승인 후 완료 처리) — REQ-61: guide.html 나눔 질문 기반 동적 문항 ──
+// ── 미션2 제출 (제출 시 '승인 대기' 상태로, 관리자 승인 후 완료 처리) — REQ-61: 나눔 질문 / REQ-62: 인증샷 ──
 async function submitMission2() {
   if (!currentTeam) return;
   const course = currentTeam <= 3 ? 'c' : 'b';
@@ -1091,17 +1159,24 @@ async function submitMission2() {
     answer: t.value.trim(),
   }));
   if (answers.some(a => !a.answer)) { showToast('모든 질문에 답해주세요!'); return; }
+  const needsPhoto = !!COURSE_PHOTO[course];
+  if (needsPhoto && !selectedFile2) { showToast('인증샷을 먼저 선택해주세요!'); return; }
   const btn = document.getElementById('reportBtn');
   btn.disabled = true;
-  btn.textContent = '제출 중...';
+  btn.textContent = needsPhoto ? '사진 압축 중...' : '제출 중...';
   try {
-    await db.ref(`submissions/team${currentTeam}/mission2`).set({
+    const payload = {
       answers,
       submittedAt: firebase.database.ServerValue.TIMESTAMP,
       status: 'pending',
       reviewedAt: null,
       reviewNote: null,
-    });
+    };
+    if (needsPhoto) {
+      payload.photoData = await compressToBase64(selectedFile2);
+    }
+    btn.textContent = '제출 중...';
+    await db.ref(`submissions/team${currentTeam}/mission2`).set(payload);
     showToast('📤 제출 완료! 관리자 확인을 기다려주세요');
   } catch(e) {
     btn.disabled = false;

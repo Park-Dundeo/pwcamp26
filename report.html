@@ -183,6 +183,7 @@ function renderTeamPage(t, d){
          <div class="rp-field"><div class="rf-lbl">🙏 우리의 돌파기도</div><div class="rf-txt">${esc(m2.prayer)}</div></div>`;
     inner = `
       ${m1ok ? `<div class="rp-photo-wrap"><img class="rp-photo" src="${m1.photoData}"></div><div class="rp-photo-cap" style="margin-bottom:16px;">📷 경유지 인증샷</div>` : ''}
+      ${m2.photoData ? `<div class="rp-photo-wrap"><img class="rp-photo" src="${m2.photoData}"></div><div class="rp-photo-cap" style="margin-bottom:16px;">📷 견학지 인증샷</div>` : ''}
       ${reportFields}`;
   }
 
@@ -255,7 +256,7 @@ function buildLLMText(){
     lines.push(`## ${t}조 — 목적지: ${info.dest}`);
     lines.push(`- 미션1(경유지 인증샷): ${statusLabel(m1?.status)}${m1?.uploadedAt ? ` / 제출 시각 ${fmtDate(m1.uploadedAt)}` : ''}${m1?.photoData ? ' / 사진 있음(이 텍스트에는 미포함, report.html에서 직접 확인)' : ''}`);
     if (m2) {
-      lines.push(`- 미션2(정탐 보고서): ${statusLabel(m2.status)} / 제출 시각 ${fmtDate(m2.submittedAt)}`);
+      lines.push(`- 미션2(정탐 보고서): ${statusLabel(m2.status)} / 제출 시각 ${fmtDate(m2.submittedAt)}${m2.photoData ? ' / 인증샷 있음(이 텍스트에는 미포함, report.html에서 직접 확인)' : ''}`);
       if (Array.isArray(m2.answers)) {
         m2.answers.forEach((a,i) => lines.push(`  - Q${i+1}. ${a.question}: ${a.answer || '(내용 없음)'}`));
       } else {

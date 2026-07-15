@@ -510,6 +510,7 @@ function renderDetail(t) {
          <div class="report-row"><div class="lbl">✨ 우리가 발견한 믿음</div><div class="val">${esc(m2.faith)}</div></div>
          <div class="report-row"><div class="lbl">🙏 우리의 돌파기도</div><div class="val">${esc(m2.prayer)}</div></div>`;
     html+=`${badge(m2.status)}
+      ${m2.photoData ? `<img class="detail-photo" src="${m2.photoData}" loading="lazy">` : ''}
       <div class="report-box">
       ${reportRows}
     </div>
