@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>호이안 → 다낭 여행 계획표</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f6f1e6;
+    --paper-line:#c9bfa6;
+    --ink:#2c2620;
+    --ink-soft:#5a5044;
+    --stamp:#a3372a;
+  }
+  *{box-sizing:border-box; font-family:'JetBrains Mono', monospace;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      linear-gradient(var(--paper), var(--paper)),
+      repeating-linear-gradient(0deg, transparent, transparent 27px, rgba(44,38,32,0.035) 28px);
+    color:var(--ink);
+    padding:0;
+  }
+  .sheet{
+    max-width:840px;
+    margin:0 auto;
+    padding:56px 44px 80px;
+  }
+
+  .head{
+    border-bottom:3px double var(--ink);
+    padding-bottom:20px;
+    margin-bottom:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    flex-wrap:wrap;
+    gap:14px;
+  }
+  .head h1{
+    font-weight:700;
+    font-size:26px;
+    margin:0 0 6px;
+    letter-spacing:-0.01em;
+  }
+  .head .route{
+    font-size:12px;
+    letter-spacing:0.08em;
+    color:var(--ink-soft);
+  }
+  .head .stamp{
+    font-size:11px;
+    text-align:right;
+    color:var(--stamp);
+    border:1.5px solid var(--stamp);
+    padding:6px 10px;
+    transform:rotate(-3deg);
+    line-height:1.5;
+    white-space:nowrap;
+  }
+
+  .daynote{
+    font-size:11.5px;
+    color:var(--stamp);
+    margin:14px 0 22px;
+  }
+  .daynote b{ color:var(--ink); }
+
+  .tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-bottom:2px;
+    border-bottom:1.5px solid var(--ink);
+    padding-bottom:0;
+  }
+  .tab{
+    appearance:none;
+    border:1px solid var(--paper-line);
+    border-bottom:none;
+    background:transparent;
+    color:var(--ink-soft);
+    font-size:12px;
+    font-weight:500;
+    padding:9px 14px;
+    cursor:pointer;
+    border-radius:6px 6px 0 0;
+    transform:translateY(1px);
+  }
+  .tab .d{ display:block; font-size:10px; opacity:0.7; margin-top:2px; }
+  .tab.active{
+    background:var(--paper);
+    color:var(--ink);
+    border-color:var(--ink);
+    font-weight:700;
+    transform:translateY(2px);
+  }
+  .tab.tbd{ opacity:0.6; }
+  .tab.tbd.active{ opacity:1; }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:0;
+  }
+  colgroup col.c-time{ width:15%; }
+  colgroup col.c-plan{ width:35%; }
+  colgroup col.c-place{ width:30%; }
+  colgroup col.c-move{ width:20%; }
+
+  thead th{
+    text-align:left;
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    border-bottom:1.5px solid var(--ink);
+    padding:10px 10px 10px 0;
+  }
+
+  tbody[data-day]{ display:none; }
+  tbody[data-day].active{ display:table-row-group; }
+
+  tbody tr.entry td{
+    border-bottom:1px solid var(--paper-line);
+    padding:14px 10px 14px 0;
+    vertical-align:top;
+    font-size:13.5px;
+  }
+  tbody tr.entry:last-child td{ border-bottom:1.5px solid var(--ink); }
+
+  td.time{
+    font-size:13px;
+    color:var(--ink);
+    font-weight:600;
+    white-space:nowrap;
+  }
+  td.plan{
+    font-weight:600;
+    color:var(--ink);
+  }
+  td.plan .memo{
+    display:block;
+    margin-top:3px;
+    font-weight:400;
+    font-size:12px;
+    color:var(--ink-soft);
+  }
+  td.place{
+    color:var(--ink-soft);
+    font-size:13px;
+    line-height:1.6;
+  }
+  td.place a{ color:var(--stamp); text-decoration:none; border-bottom:1px solid rgba(163,55,42,0.4); }
+  td.place a:hover{ color:var(--ink); border-bottom-color:var(--ink); }
+  td.move{
+    font-size:12px;
+    color:var(--ink-soft);
+    line-height:1.7;
+    white-space:nowrap;
+  }
+  td.move .grab{ color:var(--stamp); font-weight:600; }
+  td.move .walk{ color:var(--ink-soft); font-weight:600; }
+  td.move .same{ opacity:0.5; font-style:italic; }
+  .note{
+    display:inline-block;
+    margin-top:8px;
+    font-size:12px;
+    font-style:italic;
+    opacity:0.6;
+  }
+
+  tr.entry.tbd td{
+    color:var(--ink-soft);
+    font-style:italic;
+  }
+  tr.entry.tbd td.time,
+  tr.entry.tbd td.plan{
+    opacity:0.55;
+  }
+
+  .foot{
+    margin-top:34px;
+    padding-top:16px;
+    border-top:1px solid var(--paper-line);
+    display:flex;
+    justify-content:space-between;
+    font-size:11px;
+    color:var(--ink-soft);
+    letter-spacing:0.05em;
+  }
+
+  tr.print-day-title{ display:none; }
+
+  @page{
+    size: A4;
+    margin: 10mm 12mm;
+  }
+  @media print{
+    body{ background-image:none; }
+    .sheet{ padding:0; max-width:none; width:100%; margin:0; }
+    .tabs{ display:none; }
+    .head{ padding-bottom:8px; margin-bottom:2px; }
+    .head h1{ font-size:19px; margin:0 0 3px; }
+    .head .route{ font-size:10px; }
+    .head .stamp{ font-size:9px; padding:4px 7px; }
+    .daynote{ font-size:9px; margin:6px 0 8px; }
+    thead th{ font-size:9px; padding:4px 6px 4px 0; }
+    thead{ display: table-header-group; }
+    tbody[data-day]{ display:table-row-group; }
+    tbody[data-day]{ page-break-before: always; break-before: page; }
+    tbody[data-day]:first-of-type{ page-break-before: avoid; break-before: avoid; }
+    tbody tr.entry td{ padding:11px 8px 11px 0; font-size:12px; }
+    td.plan .memo{ font-size:10.5px; margin-top:2px; }
+    td.move{ font-size:11px; line-height:1.5; }
+    tr.print-day-title{
+      display: table-row;
+    }
+    tr.print-day-title td{
+      font-weight:700;
+      font-size:12px;
+      letter-spacing:0.05em;
+      color: var(--stamp);
+      border-bottom:1.5px solid var(--ink);
+      padding:2px 0 8px;
+    }
+  }
+  @media (max-width:600px){
+    .sheet{ padding:32px 20px 60px; }
+    .head{ flex-direction:column; align-items:flex-start; gap:14px; }
+    thead{ display:none; }
+    tbody tr.entry td{ display:block; border-bottom:none; padding:2px 0; }
+    tbody tr.entry{ display:block; padding:12px 0; border-bottom:1px solid var(--paper-line); }
+    td.time{ font-size:12px; color:var(--stamp); }
+    td.plan{ padding-top:2px !important; }
+    td.place{ padding-top:2px !important; }
+    td.move{ padding-top:4px !important; }
+    td.move::before{ content:"이동: "; opacity:0.6; }
+  }
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="head">
+    <div>
+      <h1>호이안 → 다낭 여행 계획표</h1>
+      <div class="route">2026.08.07 – 08.12 · HOI AN — ĐÀ NẴNG</div>
+    </div>
+    <div class="stamp" id="stampBox">DAY 1 / 5<br>08.07 · 08:00 – 22:00</div>
+  </div>
+  <div class="daynote">2026년 8월 7일부터 8월 11일까지 다낭·호이안 일정, 8.12 새벽 귀국편으로 마무리됩니다. (Day 4 마사지·저녁은 미정 / 이동시간은 대략적인 추정치예요)</div>
+
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-day="1">DAY 1<span class="d">08.07</span></button>
+    <button class="tab" data-day="2">DAY 2<span class="d">08.08</span></button>
+    <button class="tab" data-day="3">DAY 3<span class="d">08.09</span></button>
+    <button class="tab" data-day="4">DAY 4<span class="d">08.10</span></button>
+    <button class="tab" data-day="5">DAY 5<span class="d">08.11</span></button>
+  </div>
+
+  <table>
+    <colgroup>
+      <col class="c-time"><col class="c-plan"><col class="c-place"><col class="c-move">
+    </colgroup>
+    <thead>
+      <tr><th>시간</th><th>일정</th><th>장소</th><th>이동</th></tr>
+    </thead>
+
+    <tbody data-day="1" class="active">
+      <tr class="print-day-title"><td colspan="4">DAY 1 · 2026.08.07 (호이안)</td></tr>
+      <tr class="entry">
+        <td class="time">08:00</td>
+        <td class="plan">기상</td>
+        <td class="place"><span class="pin">●</span><a href="https://www.google.com/maps/search/?api=1&query=The+Pearl+Hoi+An" target="_blank" rel="noopener noreferrer">The Pearl Hoi An</a></td>
+        <td class="move"><span class="same">시작 지점</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">08:00 – 10:00</td>
+        <td class="plan">조식 및 준비</td>
+        <td class="place">—</td>
+        <td class="move">—</td>
+      </tr>
+      <tr class="entry">
+        <td class="time">10:00 – 12:00</td>
+        <td class="plan">수영장 &amp; 체크아웃</td>
+        <td class="place">—</td>
+        <td class="move">—</td>
+      </tr>
+      <tr class="entry">
+        <td class="time">12:00 – 13:00</td>
+        <td class="plan">점심</td>
+        <td class="place">호텔 풀바 또는 <a href="https://www.google.com/maps/search/?api=1&query=An+Bang+Beach+Hoi+An" target="_blank" rel="noopener noreferrer">안방비치</a> 주변 식당</td>
+        <td class="move"><span class="walk">🚶 5분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">13:00 – 15:00</td>
+        <td class="plan">수영 및 준비</td>
+        <td class="place">리조트</td>
+        <td class="move"><span class="walk">🚶 5분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">15:30 – 17:00</td>
+        <td class="plan">마사지</td>
+        <td class="place"><span class="pin">●</span><a href="https://www.google.com/maps/search/?api=1&query=Sunshine+Spa+Hoi+An" target="_blank" rel="noopener noreferrer">Sunshine Spa</a></td>
+        <td class="move"><span class="walk">🚶 도보</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">17:00 – 17:30</td>
+        <td class="plan">식당으로 무료 드롭</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Sunshine+Spa+Hoi+An" target="_blank" rel="noopener noreferrer">Sunshine Spa</a> → 올드타운</td>
+        <td class="move"><span class="grab">🚐 무료 드롭</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">17:30 – 18:30</td>
+        <td class="plan">저녁</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Nha+Hang+QQ+Hoi+An" target="_blank" rel="noopener noreferrer">Nhà Hàng QQ</a> 또는 <a href="https://www.google.com/maps/search/?api=1&query=Morning+Glory+Original+Hoi+An" target="_blank" rel="noopener noreferrer">Morning Glory Original</a></td>
+        <td class="move"><span class="walk">🚶 3분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">18:30 – 19:30</td>
+        <td class="plan">올드타운 구경</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Japanese+Covered+Bridge+Hoi+An" target="_blank" rel="noopener noreferrer">일본교</a> → <a href="https://www.google.com/maps/search/?api=1&query=Thu+Bon+River+Hoi+An" target="_blank" rel="noopener noreferrer">투본강</a> → <a href="https://www.google.com/maps/search/?api=1&query=Hoi+An+Night+Market" target="_blank" rel="noopener noreferrer">야시장</a> → <a href="https://www.google.com/maps/search/?api=1&query=Hoi+An+Lantern+Street" target="_blank" rel="noopener noreferrer">랜턴거리</a></td>
+        <td class="move"><span class="walk">🚶 도보권</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">19:30 – 20:00</td>
+        <td class="plan">더펄호이안 이동
+          <span class="memo">맡겨둔 짐 픽업</span>
+        </td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=The+Pearl+Hoi+An" target="_blank" rel="noopener noreferrer">The Pearl Hoi An</a></td>
+        <td class="move"><span class="grab">🚗 약 15분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">20:00 – 21:00</td>
+        <td class="plan">그랩으로 다낭 이동</td>
+        <td class="place"><span class="pin">●</span><a href="https://www.google.com/maps/search/?api=1&query=Rosamia+Da+Nang+Hotel" target="_blank" rel="noopener noreferrer">Rosamia Da Nang Hotel</a></td>
+        <td class="move"><span class="grab">🚗 약 45분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">21:00 –</td>
+        <td class="plan">자유시간</td>
+        <td class="place">호텔</td>
+        <td class="move">—</td>
+      </tr>
+    </tbody>
+
+    <tbody data-day="2">
+      <tr class="print-day-title"><td colspan="4">DAY 2 · 2026.08.08 (다낭)</td></tr>
+      <tr class="entry">
+        <td class="time">08:00 – 09:30</td>
+        <td class="plan">조식</td>
+        <td class="place">호텔</td>
+        <td class="move"><span class="same">하루 시작</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">09:30 – 13:00</td>
+        <td class="plan">수영장 &amp; 비치</td>
+        <td class="place">Rosamia Da Nang Hotel</td>
+        <td class="move">—</td>
+      </tr>
+      <tr class="entry">
+        <td class="time">13:00 – 14:00</td>
+        <td class="plan">준비</td>
+        <td class="place">호텔</td>
+        <td class="move">—</td>
+      </tr>
+      <tr class="entry">
+        <td class="time">14:00 – 15:00</td>
+        <td class="plan">점심</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=%EB%B6%84%EC%9C%A0+%EC%A7%9C%EC%98%A4%EB%B0%94+Da+Nang" target="_blank" rel="noopener noreferrer">분짜 짜오바</a></td>
+        <td class="move"><span class="grab">🚗 약 10~15분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">15:00 – 15:30</td>
+        <td class="plan">다낭대성당 사진</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Da+Nang+Cathedral" target="_blank" rel="noopener noreferrer">Da Nang Cathedral</a></td>
+        <td class="move"><span class="walk">🚶 5~10분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">15:30 – 17:00</td>
+        <td class="plan">한시장 및 주변 구경</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Han+Market+Da+Nang" target="_blank" rel="noopener noreferrer">한시장 (Han Market)</a></td>
+        <td class="move"><span class="walk">🚶 8분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">17:30 – 19:00</td>
+        <td class="plan">마사지</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Onda+Spa+Da+Nang" target="_blank" rel="noopener noreferrer">온다스파</a></td>
+        <td class="move"><span class="grab">🚗 약 15분</span> (시내 → 미케)</td>
+      </tr>
+      <tr class="entry">
+        <td class="time">19:30 – 20:30</td>
+        <td class="plan">저녁</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Moc+quan+Seafood+Da+Nang" target="_blank" rel="noopener noreferrer">Mộc quán Seafood (목식당)</a></td>
+        <td class="move">—</td>
+      </tr>
+      <tr class="entry tbd">
+        <td class="time">20:30 –</td>
+        <td class="plan">호텔에 짐 놓고 자유시간
+          <span class="memo">야식은 하이코이닭날개? (선택)</span>
+        </td>
+        <td class="place">호텔 / <a href="https://www.google.com/maps/search/?api=1&query=%ED%95%98%EC%9D%B4%EC%BD%94%EC%9D%B4%EB%8B%AD%EB%82%A0%EA%B0%9C+Da+Nang" target="_blank" rel="noopener noreferrer">하이코이닭날개</a></td>
+        <td class="move">—</td>
+      </tr>
+    </tbody>
+
+    <tbody data-day="3">
+      <tr class="print-day-title"><td colspan="4">DAY 3 · 2026.08.09 (다낭)</td></tr>
+      <tr class="entry">
+        <td class="time">08:30 – 09:30</td>
+        <td class="plan">기상 및 준비
+          <span class="memo">조식 안 먹음</span>
+        </td>
+        <td class="place">호텔</td>
+        <td class="move"><span class="same">하루 시작</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">09:30 – 10:30</td>
+        <td class="plan">아침</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Pho+Thao+Da+Nang" target="_blank" rel="noopener noreferrer">Phở Thảo</a> / <a href="https://www.google.com/maps/search/?api=1&query=%ED%8F%AC%EB%B0%95%ED%95%98%EC%9D%B4+Da+Nang" target="_blank" rel="noopener noreferrer">포박하이</a> / <a href="https://www.google.com/maps/search/?api=1&query=%ED%8D%BC%EA%BE%B8+%ED%95%98%EB%85%B8%EC%9D%B4+Da+Nang" target="_blank" rel="noopener noreferrer">퍼꾸 하노이</a> 중 택1</td>
+        <td class="move"><span class="grab">🚗 약 10~15분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">10:30 – 11:30</td>
+        <td class="plan">콩카페에서 휴식</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Cong+Caphe+Da+Nang" target="_blank" rel="noopener noreferrer">콩카페 (Cộng Càphê)</a></td>
+        <td class="move"><span class="walk">🚶 5분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">11:30 – 12:00</td>
+        <td class="plan">반미코티엔 사서 호텔로</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=%EB%B0%98%EB%AF%B8%EC%BD%94%ED%8B%B0%EC%97%94+Da+Nang" target="_blank" rel="noopener noreferrer">반미코티엔</a></td>
+        <td class="move"><span class="grab">🚗 약 10~15분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">12:30 – 16:00</td>
+        <td class="plan">호텔 수영장 &amp; 미케비치</td>
+        <td class="place">호텔</td>
+        <td class="move">—</td>
+      </tr>
+      <tr class="entry">
+        <td class="time">16:00 – 17:00</td>
+        <td class="plan">준비</td>
+        <td class="place">호텔</td>
+        <td class="move">—</td>
+      </tr>
+      <tr class="entry">
+        <td class="time">17:30 – 19:00</td>
+        <td class="plan">저녁</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=%EB%8B%A4%EB%82%B9+%EB%B2%B1%EA%BE%B8%EC%98%A8" target="_blank" rel="noopener noreferrer">다낭 벱꾸온</a></td>
+        <td class="move"><span class="walk">🚶 도보</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">20:00 –</td>
+        <td class="plan">용다리 불쇼 구경, 선짜 야시장 및 자유</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Dragon+Bridge+Da+Nang" target="_blank" rel="noopener noreferrer">Dragon Bridge</a> · <a href="https://www.google.com/maps/search/?api=1&query=Son+Tra+Night+Market+Da+Nang" target="_blank" rel="noopener noreferrer">선짜 야시장</a></td>
+        <td class="move"><span class="walk">🚶 도보</span></td>
+      </tr>
+    </tbody>
+
+    <tbody data-day="4">
+      <tr class="print-day-title"><td colspan="4">DAY 4 · 2026.08.10 (다낭)</td></tr>
+      <tr class="entry">
+        <td class="time">08:30 – 09:30</td>
+        <td class="plan">아침
+          <span class="memo">조식 안 먹음, 주변 쌀국수집 아무데나</span>
+        </td>
+        <td class="place">호텔 근처</td>
+        <td class="move"><span class="walk">🚶 도보권</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">09:30 – 11:00</td>
+        <td class="plan">롯데마트 다낭</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Lotte+Mart+Da+Nang" target="_blank" rel="noopener noreferrer">Lotte Mart Da Nang</a></td>
+        <td class="move"><span class="grab">🚗 약 15분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">11:00 – 12:30</td>
+        <td class="plan">점심</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Quan+Phu+Hong+Da+Nang" target="_blank" rel="noopener noreferrer">Quán Phú Hồng</a></td>
+        <td class="move"><span class="grab">🚗 약 15분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">12:30 – 16:00</td>
+        <td class="plan">호텔 수영 &amp; 바다</td>
+        <td class="place">호텔</td>
+        <td class="move"><span class="grab">🚗 약 10분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">16:00 – 17:00</td>
+        <td class="plan">준비</td>
+        <td class="place">호텔</td>
+        <td class="move">—</td>
+      </tr>
+      <tr class="entry tbd">
+        <td class="time">17:30 – 19:00</td>
+        <td class="plan">마사지 (미정)</td>
+        <td class="place">-</td>
+        <td class="move">-</td>
+      </tr>
+      <tr class="entry tbd">
+        <td class="time">19:00 – 20:00</td>
+        <td class="plan">저녁 (미정)</td>
+        <td class="place">-</td>
+        <td class="move">-</td>
+      </tr>
+      <tr class="entry tbd">
+        <td class="time">20:00 –</td>
+        <td class="plan">미정</td>
+        <td class="place">-</td>
+        <td class="move">-</td>
+      </tr>
+    </tbody>
+
+    <tbody data-day="5">
+      <tr class="print-day-title"><td colspan="4">DAY 5 · 2026.08.11 (바나힐 → 공항)</td></tr>
+      <tr class="entry">
+        <td class="time">07:30 – 09:00</td>
+        <td class="plan">조식</td>
+        <td class="place">호텔</td>
+        <td class="move"><span class="same">하루 시작</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">09:00 – 12:00</td>
+        <td class="plan">수영장에서 놀기</td>
+        <td class="place">Rosamia Da Nang Hotel</td>
+        <td class="move">—</td>
+      </tr>
+      <tr class="entry">
+        <td class="time">12:00</td>
+        <td class="plan">체크아웃</td>
+        <td class="place">호텔</td>
+        <td class="move">—</td>
+      </tr>
+      <tr class="entry">
+        <td class="time">12:00 – 13:00</td>
+        <td class="plan">점심</td>
+        <td class="place">호텔 근처 <a href="https://www.google.com/maps/search/?api=1&query=Nha+Bep+Cua+Pho+My+Khe+Da+Nang" target="_blank" rel="noopener noreferrer">냐벱 쌀국수전문점</a></td>
+        <td class="move"><span class="walk">🚶 7분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">13:00 – 14:00</td>
+        <td class="plan">바나힐 이동
+          <span class="memo">렌터카/드라이버 하루 대절</span>
+        </td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Ba+Na+Hills+Da+Nang" target="_blank" rel="noopener noreferrer">Bà Nà Hills</a></td>
+        <td class="move"><span class="grab">🚗 약 45분~1시간</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">14:00 – 14:30</td>
+        <td class="plan">케이블카 탑승 &amp; 입장</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Ba+Na+Hills+Cable+Car" target="_blank" rel="noopener noreferrer">바나힐 케이블카</a></td>
+        <td class="move">—</td>
+      </tr>
+      <tr class="entry">
+        <td class="time">14:30 – 15:00</td>
+        <td class="plan">골든브릿지 사진</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Golden+Bridge+Ba+Na+Hills" target="_blank" rel="noopener noreferrer">Golden Bridge</a></td>
+        <td class="move"><span class="walk">🚶 도보권</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">15:00 – 16:00</td>
+        <td class="plan">알파인 코스터</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Alpine+Coaster+Ba+Na+Hills" target="_blank" rel="noopener noreferrer">Alpine Coaster</a> (Fantasy Park B1)</td>
+        <td class="move"><span class="walk">🚶 10분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">16:00 – 17:00</td>
+        <td class="plan">주변 구경</td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=French+Village+Ba+Na+Hills" target="_blank" rel="noopener noreferrer">French Village</a> 일대</td>
+        <td class="move"><span class="walk">🚶 도보권</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">17:00 – 17:30</td>
+        <td class="plan">하산 준비 &amp; 케이블카 하산</td>
+        <td class="place">바나힐 → 다낭</td>
+        <td class="move">—</td>
+      </tr>
+      <tr class="entry">
+        <td class="time">17:30 – 18:30</td>
+        <td class="plan">다낭 복귀</td>
+        <td class="place">호텔 / 짐 보관 장소</td>
+        <td class="move"><span class="grab">🚗 약 45분~1시간</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">18:30 – 20:00</td>
+        <td class="plan">저녁</td>
+        <td class="place">다낭</td>
+        <td class="move">—</td>
+      </tr>
+      <tr class="entry">
+        <td class="time">20:00 – 22:00</td>
+        <td class="plan">자유시간 &amp; 짐 정리</td>
+        <td class="place">호텔</td>
+        <td class="move">—</td>
+      </tr>
+      <tr class="entry">
+        <td class="time">22:00 – 22:30</td>
+        <td class="plan">다낭공항(DAD) 도착 &amp; 체크인
+          <span class="memo">국제선 기준 출발 2.5~3시간 전 권장</span>
+        </td>
+        <td class="place"><a href="https://www.google.com/maps/search/?api=1&query=Da+Nang+International+Airport" target="_blank" rel="noopener noreferrer">Da Nang International Airport</a></td>
+        <td class="move"><span class="grab">🚗 약 15분</span></td>
+      </tr>
+      <tr class="entry">
+        <td class="time">01:25</td>
+        <td class="plan">인천행 출발</td>
+        <td class="place">—</td>
+        <td class="move"><span class="walk">🚶 공항 내</span></td>
+      </tr>
+    </tbody>
+
+  </table>
+
+  <div class="foot">
+    <span>DAY 1–5 · 08.07 – 08.11 확정</span>
+    <span id="footRight">08.12 인천 도착 08:15</span>
+  </div>
+
+</div>
+
+<script>
+  const dayDates = {1:"08.07",2:"08.08",3:"08.09",4:"08.10",5:"08.11"};
+  const tabs = document.querySelectorAll('.tab');
+  const bodies = document.querySelectorAll('tbody[data-day]');
+  const stampBox = document.getElementById('stampBox');
+
+  tabs.forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      const day = tab.getAttribute('data-day');
+      tabs.forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      bodies.forEach(b=>{
+        b.classList.toggle('active', b.getAttribute('data-day') === day);
+      });
+      stampBox.innerHTML = `DAY ${day} / 5<br>${dayDates[day]}`;
+    });
+  });
+</script>
+
+</body>
+</html>
