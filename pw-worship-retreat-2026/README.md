@@ -29,7 +29,7 @@ pw-worship-retreat-2026/
 ## 완성 문서
 
 - [1차 기획안 (md, 소스)](기획안/1차_기획안.md)
-- [1차 기획안 (docx, 공유용)](기획안/PW_Worship_Retreat_2026_1차_기획안.docx)
+- [1차 기획안 (pdf, 공유용)](기획안/PW_Worship_Retreat_2026_1차_기획안.pdf)
 
 ## 현재 상태 (2026-07-24 기준)
 
